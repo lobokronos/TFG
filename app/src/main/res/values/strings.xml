@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Prueba_Firebase</string>
+    <string name="app_name">Proyecto Final</string>
     <string name="numEmpleado">Nº de empleado</string>
     <string name="password">Contraseña</string>
     <string name="textoBoton">Iniciar Sesion</string>

@@ -7,7 +7,7 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyectofinal.databinding.ActivityHomeBinding
 
-class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, View.OnClickListener {
     private lateinit var binding: ActivityHomeBinding
     private var firstItem = true
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,6 +17,7 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(binding.root)
 
         actions()
+        binding.btnCalendario.setOnClickListener(this)
     }
 
     private fun actions() {
@@ -41,4 +42,12 @@ class HomeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 override fun onNothingSelected(parent: AdapterView<*>?) {
 
 }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            binding.btnCalendario.id ->{
+                startActivity(Intent(this, CalendarActivity::class.java))
+            }
+        }
+    }
 }

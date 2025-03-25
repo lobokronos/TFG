@@ -16,9 +16,6 @@
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".MenuActivity"
-            android:exported="false" />
-        <activity
             android:name=".UnsubscribeActivity"
             android:exported="false" />
         <activity
@@ -29,12 +26,6 @@
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".BossHomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainJefeActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
