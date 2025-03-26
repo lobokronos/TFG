@@ -10,6 +10,6 @@ import com.kizitonwose.calendar.view.ViewContainer
 
 class DayViewContainer(view: View) : ViewContainer(view) {
 
-    val textView:TextView=view.findViewById(R.id.calendarDayText)
+    val dayNumber:TextView=view.findViewById(R.id.calendarDayText)
 
 }
