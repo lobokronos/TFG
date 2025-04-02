@@ -1,0 +1,44 @@
+<!--Este será el layout que cargará el Navigation Drawer y el contenido de la página-->
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BaseActivity"> <!-- Hace referencia al activity en el que va a trabajar,
+                                        no afecta al código, por lo que es un elemento de ayuda simplemente y
+                                        se podría quitar sin problema.-->
+
+    <!--LinearLayout para definir el estilo de la página -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Toolbar que contendrá posteriormente el menú y el encabezado de página -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/naranjaPersonalizado" />
+
+        <!--Utilizamos un FrameLayout para cargar el contenido de la activity correspondiente en
+            la que nos vayamos a encontrar-->
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <!-- Aquí cargamos el elemento Navigation Drawer, el cual obtendrá el encabezado del
+        menu_header(layout) y el despleggable del menú con las opciones del drawer_menu(layout) -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/menu_header"
+        app:menu="@menu/drawer_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>
+
+

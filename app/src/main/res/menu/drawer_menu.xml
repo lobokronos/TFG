@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<!--En este layout editamos las opciones que va a tener el menu desplegable del Drawer-->
+    <item
+        android:id="@+id/menu_home"
+        android:title="@string/menu_home"/>
+    <item
+        android:id="@+id/menu_profile"
+        android:title="@string/menu_profile"/>
+    <item
+        android:id="@+id/menu_calendar"
+        android:title="@string/menu_calendar"/>
+    <item
+        android:id="@+id/menu_addQuit"
+        android:title="@string/menu_addQuit"/>
+    <item
+        android:id="@+id/menu_closeSession"
+        android:title="@string/menu_quitSession"/>
+
+</menu>

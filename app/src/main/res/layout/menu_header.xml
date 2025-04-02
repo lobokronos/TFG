@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Aquí definimos el encabezado del desplegable del menú -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:background="@color/naranjaPersonalizado"
+    android:padding="0dp">
+    <!-- Insertamos una imagen del logo de la empresa y un texto con el nombre del usuario-->
+    <ImageView
+        android:id="@+id/header_image"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:src="@drawable/logo_menudos"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/headerProfileText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bienvenido Rubén"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"/>
+</LinearLayout>
