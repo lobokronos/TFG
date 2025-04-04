@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.botonLogin.setOnClickListener(this)
     }
     private fun iniciarSesion(numEmp: Long, pass: String) {
-        db.collection("users").document("q7qwmqlrnuMYKvEQnU9P").get()
+
+        db.collection("users").document(numEmp.toString()).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val numEmple = document.getLong("numEmple")
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.botonLogin.id ->{
                 val numEmpleado=binding.editWorkerNumber.text.toString().toLong()
                 val contrasena=binding.editPass.text.toString()
+                db.collection("users").get()
                 iniciarSesion(numEmpleado,contrasena)
             }
         }

@@ -10,11 +10,38 @@
     <string name="menu_profile">Mi Perfil</string>
     <string name="menu_addQuit">Añadir/Quitar empleado</string>
     <string name="menu_quitSession">Cerrar Sesión</string>
-    <string name="spinnerMenu"> </string>
-    <string-array name="menu">
-        <item>Inicio</item>
-        <item>Mi Calendario</item>
-        <item>Dar de Alta</item>
-        <item>Dar de Baja</item>
+
+    <string name="add_employee">Agregar un empleado</string>
+    <string name="delete_employee">Borrar un empleado</string>
+    <string name="name">Nombre del nuevo empleado</string>
+    <string name="surname">Apellidos del nuevo empleado</string>
+
+    <string name="employee_number">Numero de empleado</string>
+    <string name="email">Email de empresa</string>
+    <string name="choose_section">¿A qué sección pertenece?</string>
+    <string name="choose_position">¿Qué puesto ocupa?</string>
+    <string name="pass_adversiting">* La contraseña del empleado será la misma que su numero de empleado. Deberá cambiarla al iniciar sesión por primera vez.</string>
+
+    <string name="spinnerSections"> </string>
+    <string-array name="Sections">
+        <item> ----- </item>
+        <item>Sala</item>
+        <item>Charcutería</item>
+        <item>Pescadería</item>
+        <item>Frutería</item>
+        <item>Carnicería</item>
+        <item>Panadería</item>
     </string-array>
+    <string name="spinnerJob"> </string>
+    <string-array name="Rol">
+        <item> ----- </item>
+        <item>Jefe de sección</item>
+        <item>Empleado</item>
+    </string-array>
+    <string name="btnAdd">Agregar empleado</string>
+    <string name="titleSearch">Introduce el número del empleado</string>
+    <string name="btnDelete">Eliminar empleado</string>
+    <string name="congrats">Empleado creado correctamente</string>
+
+
 </resources>

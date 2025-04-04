@@ -30,9 +30,6 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
     }
 
 
-
-
-
     override fun onClick(v: View?) {
         when(v?.id){
             binding.btnCalendario.id ->{
