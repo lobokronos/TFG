@@ -6,60 +6,57 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyectofinal.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db = FirebaseFirestore.getInstance()
+        auth=FirebaseAuth.getInstance()
         acciones()
     }
+
     private fun acciones(){
-        binding.botonLogin.setOnClickListener(this)
+        binding.btnLogin.setOnClickListener(this)
     }
-    private fun iniciarSesion(numEmp: Long, pass: String) {
 
-        db.collection("users").document(numEmp.toString()).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val numEmple = document.getLong("numEmple")
-                    val passwd = document.getString("password")
-                    val nombre = document.getString("nombre")
-
-                    println("numEmple: $numEmple, passwd: $passwd, nombre: $nombre")
-
-                    if (passwd == pass && numEmple == numEmp) {
-                        val intent = Intent(this.applicationContext, HomeActivity::class.java)
-                        val bundle = Bundle()
-                        bundle.putString("nombre", nombre)
-                        intent.putExtra("datos", bundle)
-                        startActivity(intent)
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            "El nº de empleado o la contraseña no coinciden",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-
-            }
-    }
 
     override fun onClick(v: View?) {
         when (v?.id){
-            binding.botonLogin.id ->{
-                val numEmpleado=binding.editWorkerNumber.text.toString().toLong()
-                val contrasena=binding.editPass.text.toString()
-                db.collection("users").get()
-                iniciarSesion(numEmpleado,contrasena)
+            binding.btnLogin.id ->{
+                val email=binding.editEmployeeMail.text.toString()
+                val password=binding.editPass.text.toString()
+
+                if (email.isEmpty()){
+                    Snackbar.make(binding.root,"Ingrese un email",Snackbar.LENGTH_SHORT).show()
+                }
+                if (password.isEmpty())
+                    Snackbar.make(binding.root,"Ingrese la contraseña",Snackbar.LENGTH_SHORT).show()
+                else{
+                    loginUser(email,password)
+                }
             }
+        }
+    }
+
+    private fun loginUser(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task->
+            if(task.isSuccessful){
+                val intent = Intent(applicationContext,HomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                Snackbar.make(binding.root,"Ha ocurrido un error",Snackbar.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener{ e->
+            Snackbar.make(binding.root,"{${e.message}}",Snackbar.LENGTH_SHORT).show()
+
         }
     }
 }

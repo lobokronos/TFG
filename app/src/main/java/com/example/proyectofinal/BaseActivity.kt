@@ -81,7 +81,7 @@ open class BaseActivity : AppCompatActivity() {
         return when(title){
             "com.example.proyectofinal.HomeActivity" ->getString(R.string.menu_home)
             "com.example.proyectofinal.CalendarActivity" ->getString(R.string.menu_calendar)
-            "com.example.proyectofinal.AddQuitEmployeeActivityActivity" ->getString(R.string.menu_addQuit)
+            "com.example.proyectofinal.AddQuitEmployeeActivity" ->getString(R.string.menu_addQuit)
             "com.example.proyectofinal.ProfileActivity" ->getString(R.string.menu_profile)
             else->"No Title"
         }

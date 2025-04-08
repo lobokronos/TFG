@@ -33,31 +33,32 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/cabeceraUser"
+        android:id="@+id/headerUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/numEmpleado"
         android:layout_marginLeft="35dp"
-        app:layout_constraintBottom_toTopOf="@+id/editWorkerNumber"
+        app:layout_constraintBottom_toTopOf="@+id/editEmployeeMail"
         app:layout_constraintStart_toStartOf="@+id/viewContainer"
         app:layout_constraintTop_toTopOf="@+id/viewContainer" />
 
     <TextView
-        android:id="@+id/cabezeraPass"
+        android:id="@+id/headerPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/password"
         android:layout_marginLeft="35dp"
         app:layout_constraintBottom_toTopOf="@+id/editPass"
         app:layout_constraintStart_toStartOf="@+id/viewContainer"
-        app:layout_constraintTop_toBottomOf="@+id/editWorkerNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/editEmployeeMail" />
 
     <EditText
-        android:id="@+id/editWorkerNumber"
+        android:id="@+id/editEmployeeMail"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:hint="Nº de Empleado"
+        android:hint="Email"
+        android:textColor="@color/textColor"
         android:padding="8dp"
         android:layout_marginTop="35dp"
         app:layout_constraintEnd_toEndOf="@+id/viewContainer"
@@ -67,17 +68,19 @@
     <EditText
         android:id="@+id/editPass"
         android:layout_width="230dp"
+        android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:hint="Password"
+        android:inputType="textPassword"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/viewContainer"
         app:layout_constraintEnd_toEndOf="@+id/viewContainer"
         app:layout_constraintStart_toStartOf="@+id/viewContainer"
-        app:layout_constraintTop_toBottomOf="@+id/editWorkerNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/editEmployeeMail" />
 
     <Button
-        android:id="@+id/botonLogin"
+        android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="130dp"

@@ -42,6 +42,7 @@
     <string name="titleSearch">Introduce el número del empleado</string>
     <string name="btnDelete">Eliminar empleado</string>
     <string name="congrats">Empleado creado correctamente</string>
+    <string name="find">Buscar</string>
 
 
 </resources>

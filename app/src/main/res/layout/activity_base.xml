@@ -20,6 +20,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:navigationIconTint="@color/toolbarColor"
+            app:titleTextAppearance="@style/toolbarTitleStyle"
             android:background="@color/naranjaPersonalizado" />
 
         <!--Utilizamos un FrameLayout para cargar el contenido de la activity correspondiente en

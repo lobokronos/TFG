@@ -2,9 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#808080</color>
     <color name="naranjaPersonalizado">#F39305</color>
     <color name="naranjaPersonalOscuro">#DD8604</color>
     <color name="colorFondo">#F9FFE5</color>
-    <color name="gray">#808080</color>
+    <color name="textColor">#FF000000</color>
+    <color name="toolbarColor">#FFFFFFFF</color>
+
 
 </resources>

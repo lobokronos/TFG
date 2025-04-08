@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyectofinal.databinding.ActivityHomeBinding
 
-class HomeActivity : BaseActivity(), View.OnClickListener {
+class HomeActivity : BaseActivity(){
     private lateinit var binding: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -26,15 +26,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
 
 
 
-        binding.btnCalendario.setOnClickListener(this)
+
     }
 
-
-    override fun onClick(v: View?) {
-        when(v?.id){
-            binding.btnCalendario.id ->{
-                startActivity(Intent(this, CalendarActivity::class.java))
-            }
-        }
-    }
 }

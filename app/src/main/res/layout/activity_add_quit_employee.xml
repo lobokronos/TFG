@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:outlineSpotShadowColor="@color/black"
-        android:outlineAmbientShadowColor="@color/black"
+        android:outlineSpotShadowColor="@color/textColor"
+        android:outlineAmbientShadowColor="@color/textColor"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,14 +26,14 @@
             android:layout_height="wrap_content"
             android:paddingEnd="20sp"
             android:text="Agregar Empleado"
-            android:textColor="@color/black"/>
+            android:textColor="@color/textColor"/>
 
         <RadioButton
             android:id="@+id/deleteEmployee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Borrar Empleado"
-            android:textColor="@color/black"/>
+            android:textColor="@color/textColor"/>
 
     </RadioGroup>
 
