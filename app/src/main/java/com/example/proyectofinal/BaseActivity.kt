@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.proyectofinal.databinding.ActivityBaseBinding
+import com.google.firebase.auth.FirebaseAuth
 
 /**Esta clase tipo "Base" contiene el código que da forma al Navigation Drawer y será heredada por cada una de las activities
  * de la app. Contiene la configuración tanto del ToolBar superior, extrayendo los nombres de cada activity en la que se encuentra
@@ -19,6 +20,8 @@ import com.example.proyectofinal.databinding.ActivityBaseBinding
 
 open class BaseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBaseBinding
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBaseBinding.inflate(layoutInflater)
@@ -26,7 +29,7 @@ open class BaseActivity : AppCompatActivity() {
 
         //Esta linea configura la barra de herramientas principal superior
         setSupportActionBar(binding.toolbar)
-
+        auth=FirebaseAuth.getInstance()
         /** Aquí se crea el icono del menú, el cual abre o cierra el navigation drawer. Necesita 5 parametros por defecto**/
         val toggle = ActionBarDrawerToggle(
             this,   //Contexto de la app
@@ -63,6 +66,11 @@ open class BaseActivity : AppCompatActivity() {
 
                 R.id.menu_addQuit -> {
                     startActivity(Intent(this, AddQuitEmployeeActivity::class.java))//Lleva hacia Agregar/Quitar Empleado
+                }
+
+                R.id.menu_closeSession -> {
+                auth.signOut()
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
             }
                 binding.drawerLayout.closeDrawers()

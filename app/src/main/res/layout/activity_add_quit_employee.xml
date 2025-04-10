@@ -25,14 +25,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="20sp"
-            android:text="Agregar Empleado"
+            android:text="@string/rBtnAdd"
             android:textColor="@color/textColor"/>
 
         <RadioButton
             android:id="@+id/deleteEmployee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Borrar Empleado"
+            android:text="@string/rBtnDelete"
             android:textColor="@color/textColor"/>
 
     </RadioGroup>

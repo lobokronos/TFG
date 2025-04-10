@@ -33,7 +33,7 @@
         android:id="@+id/editNumber"
         android:layout_width="200sp"
         android:layout_height="40sp"
-        android:hint="0000000"
+        android:hint="@string/hintSearchNumber"
         android:textColor="@color/textColor"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"

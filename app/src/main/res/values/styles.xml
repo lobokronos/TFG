@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Aquí definimos conjuntos de estilos que aplicaremos en la app a elementos que no son personalizables desde su propio
+        layout-->
+<resources>
+
+    <style name="toolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+
+    <style name="toolbarMenuColor" parent="Widget.AppCompat.Toolbar">
+        <item name="android:tint">#FFFFFFFF</item>
+    </style>
+
+    <style name="titleTextStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+</resources>
