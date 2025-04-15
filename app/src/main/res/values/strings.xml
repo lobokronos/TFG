@@ -94,5 +94,26 @@
     <string name="btnNewPass">Restablecer contraseña</string>
     <!-- ********************************************************************************************* -->
 
+    <!-- activity_calendar.xml -->
+    <string name="titleSectionCalendar">Sección</string>
+    <string name="employee_selection">Selecciona empleado</string>
+    <string name="btn_schedule_card">Editar horario</string>
+    <string name="btn_notes_card">Editar notas</string>
+    <!-- ********************************************************************************************* -->
+
+    <!-- layout_card_schedule.xml -->
+    <string name="turn_assignment">¿Que turno quieres asignar?</string>
+    <string name="radio_morning">Mañana</string>
+    <string name="radio_afternoon">Tarde</string>
+    <string name="radio_free">Libre</string>
+    <string name="btn_save">Guardar</string>
+    <!-- ********************************************************************************************* -->
+
+    <!-- layout_card_schedule.xml -->
+   <string name="notesTitle">Anotaciones</string>
+   <string name="dailyNotes">Anotaciones de hoy:</string>
+   <string name="newNote">Nueva anotación:</string>
+   <string name="saveNote">Guardar</string>
+    <!-- ********************************************************************************************* -->
 
 </resources>

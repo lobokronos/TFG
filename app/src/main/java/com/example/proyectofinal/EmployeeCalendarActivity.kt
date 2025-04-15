@@ -1,12 +1,9 @@
 package com.example.proyectofinal
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -15,23 +12,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import com.example.proyectofinal.databinding.ActivityCalendarBinding
-import com.example.proyectofinal.databinding.ActivityHomeBinding
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
-import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.MonthScrollListener
 import java.time.LocalDate
-import java.time.Year
-import java.time.YearMonth
 import java.time.YearMonth.now
 import java.time.format.TextStyle
 import java.util.Locale
 
-
-class CalendarActivity : BaseActivity(), View.OnClickListener {
+class EmployeeCalendarActivity : BaseActivity() {
     private lateinit var binding: ActivityCalendarBinding
     private var selectedDate: LocalDate?=null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,13 +34,7 @@ class CalendarActivity : BaseActivity(), View.OnClickListener {
         val frameContent=findViewById<FrameLayout>(R.id.content_frame)
         frameContent.addView(binding.root)
 
-        actions()
         buildCalendar()
-    }
-
-    private fun actions() {
-        binding.btnEditSchedule.setOnClickListener(this)
-        binding.btnEditNotes.setOnClickListener(this)
     }
 
     /**A traves de esta función generamos o cargamos el calendario completo con sus propiedades en la pantalla*/
@@ -108,30 +94,14 @@ class CalendarActivity : BaseActivity(), View.OnClickListener {
                 container.day = data
                 container.dayNumber.text = data.date.dayOfMonth.toString()
 
-                    if (data.date.monthValue == currentMonth.monthValue) {
-                        container.dayNumber.setTextColor(Color.BLACK)
-                    } else {
-                        container.dayNumber.setTextColor(Color.GRAY)
-                    }
+                if (data.date.monthValue == currentMonth.monthValue) {
+
+                    container.dayNumber.setTextColor(Color.BLACK)
+                } else {
+                    container.dayNumber.setTextColor(Color.GRAY)
                 }
             }
-
         }
 
-    override fun onClick(v: View?) {
-        when(v?.id){
-            binding.btnEditSchedule.id ->{
-                binding.scheduleCardView.visibility=View.VISIBLE
-                binding.notesCardView.visibility=View.GONE
-            }
-            binding.btnEditNotes.id ->{
-                binding.scheduleCardView.visibility=View.GONE
-                binding.notesCardView.visibility=View.VISIBLE
-            }
-        }
     }
 }
-
-
-
-

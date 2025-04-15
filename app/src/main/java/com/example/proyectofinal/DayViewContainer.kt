@@ -1,15 +1,52 @@
 package com.example.proyectofinal
 
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.ViewContainer
+import java.time.LocalDate
 
 /**Esta clase recoge el TextView generado en el layout "calendar_day_layout" para poder mostrarlo posteriormente en la clase
  * donde generamos el calendario. Este textview contiene el numero del día.
  */
 
-class DayViewContainer(view: View) : ViewContainer(view) {
+class DayViewContainer(
+    view: View,
+    private val selectedDateText: TextView,
+    private val calendarView: CalendarView,
+    private var selectedDate: LocalDate?
+) : ViewContainer(view) {
 
-    val dayNumber:TextView=view.findViewById(R.id.calendarDayText)
+    val dayNumber: TextView = view.findViewById(R.id.calendarDayText)
+    lateinit var day: CalendarDay
 
+    init {
+        view.setOnClickListener {
+            val date = day.date
+            val text = "Fecha: ${date.dayOfMonth}/${date.monthValue}/${date.year}"
+            selectedDateText.text = text
+
+            if (day.position == DayPosition.MonthDate) {  //Si la fecha pulsada está dentro del mes actual mostrado...
+                val currentSelectedDate = selectedDate
+
+                if (currentSelectedDate == day.date) {  //Si el usuario vuelve a pulsar la misma fecha...deselecciona
+                    selectedDate = null
+                    dayNumber.setBackgroundColor(Color.TRANSPARENT)
+                    calendarView.notifyDateChanged(day.date)
+                } else {                              //Si no es la misma fecha...selecciona
+                    selectedDate = day.date
+                    calendarView.notifyDateChanged(day.date)
+                    dayNumber.setTextColor(Color.WHITE)
+                    dayNumber.setBackgroundColor(Color.CYAN)
+                    if (currentSelectedDate != null) {
+                        calendarView.notifyDateChanged(currentSelectedDate)
+                    }
+
+                }
+            }
+        }
+    }
 }
