@@ -101,19 +101,26 @@
     <string name="btn_notes_card">Editar notas</string>
     <!-- ********************************************************************************************* -->
 
-    <!-- layout_card_schedule.xml -->
-    <string name="turn_assignment">¿Que turno quieres asignar?</string>
+    <!-- dialog_schedule_notes.xml -->
+    <string name="turn_assignment">Asigna un turno</string>
+    <string-array name="Turns">
+        <item> ----- </item>
+        <item>Mañana</item>
+        <item>Tarde</item>
+        <item>Festivo</item>
+        <item>Libre</item>
+        <item>Borrar turno</item>
+    </string-array>
     <string name="radio_morning">Mañana</string>
     <string name="radio_afternoon">Tarde</string>
     <string name="radio_free">Libre</string>
+    <string name="radio_festive">Fiesta</string>
     <string name="btn_save">Guardar</string>
-    <!-- ********************************************************************************************* -->
-
-    <!-- layout_card_schedule.xml -->
    <string name="notesTitle">Anotaciones</string>
    <string name="dailyNotes">Anotaciones de hoy:</string>
    <string name="newNote">Nueva anotación:</string>
    <string name="saveNote">Guardar</string>
+   <string name="remember">Recuerda que tus anotaciones podrán ser vistas por el jefe de tienda. No escribas nada de caracter personal</string>
     <!-- ********************************************************************************************* -->
 
 </resources>

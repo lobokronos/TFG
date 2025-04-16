@@ -1,5 +1,6 @@
 package com.example.proyectofinal
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -7,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import com.example.proyectofinal.databinding.ActivityCalendarBinding
+import com.example.proyectofinal.databinding.DialogScheduleNotesBinding
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -86,9 +89,26 @@ class EmployeeCalendarActivity : BaseActivity() {
 
             /**Esta función crea el diseño de cada día*/
             override fun create(view: View): DayViewContainer {
-                return DayViewContainer(view,binding.selectedDateText,binding.calendarView,selectedDate)                                   //Asigna la vista de día a un contenedor
+                return DayViewContainer(view,binding.selectedDateText,binding.calendarView,selectedDate,::showScheduleDialog)                                   //Asigna la vista de día a un contenedor
             }
+            private fun showScheduleDialog(context: Context, date:LocalDate){
+                val dialogBinding= DialogScheduleNotesBinding.inflate(layoutInflater)
 
+                val scheduleDialog= AlertDialog.Builder(context)
+                scheduleDialog.setView(dialogBinding.root).create()
+
+                val pickedDate="$${date.dayOfMonth}/${date.monthValue}/${date.year}"
+
+                dialogBinding.btnSave.setOnClickListener {
+
+                    // Aqui va la lógica de guardar los campos requeridos
+
+                }
+
+                scheduleDialog.show()
+
+
+            }
             /**Este método decide que mostrar en cada día del calendario utilizando el contenedor del dia actual y la fecha actual*/
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.day = data

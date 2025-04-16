@@ -1,5 +1,6 @@
 package com.example.proyectofinal
 
+import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.widget.TextView
@@ -17,7 +18,8 @@ class DayViewContainer(
     view: View,
     private val selectedDateText: TextView,
     private val calendarView: CalendarView,
-    private var selectedDate: LocalDate?
+    private var selectedDate: LocalDate?,
+    private val showScheduleDialog:(Context, LocalDate) ->Unit
 ) : ViewContainer(view) {
 
     val dayNumber: TextView = view.findViewById(R.id.calendarDayText)
@@ -44,6 +46,8 @@ class DayViewContainer(
                     if (currentSelectedDate != null) {
                         calendarView.notifyDateChanged(currentSelectedDate)
                     }
+
+                    showScheduleDialog(view.context,date)  //Llamada a la funcion de la clase Clanedar para mostrar el dialogo
 
                 }
             }
