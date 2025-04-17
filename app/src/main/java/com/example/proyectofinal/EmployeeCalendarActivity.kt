@@ -5,16 +5,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
-import com.example.proyectofinal.databinding.ActivityCalendarBinding
-import com.example.proyectofinal.databinding.DialogScheduleNotesBinding
+import com.example.proyectofinal.databinding.ActivityEmployeeCalendarBinding
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -26,27 +21,47 @@ import java.time.YearMonth.now
 import java.time.format.TextStyle
 import java.util.Locale
 
-class EmployeeCalendarActivity : BaseActivity() {
-    private lateinit var binding: ActivityCalendarBinding
-    private var selectedDate: LocalDate?=null
+class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
+    AdapterView.OnItemSelectedListener {
+    private lateinit var binding: ActivityEmployeeCalendarBinding
+    private var selectedDate: LocalDate? = null
+    private lateinit var pickedDate: String
+    private var selectedPosition: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        binding = ActivityCalendarBinding.inflate(layoutInflater)
+        binding = ActivityEmployeeCalendarBinding.inflate(layoutInflater)
 
-        val frameContent=findViewById<FrameLayout>(R.id.content_frame)
+        val frameContent = findViewById<FrameLayout>(R.id.content_frame)
         frameContent.addView(binding.root)
 
+        variables()
         buildCalendar()
+        actions()
+
+
+    }
+
+    private fun actions() {
+        binding.btnSave.setOnClickListener(this)
+        binding.spinnerNoteType.onItemSelectedListener = this
+    }
+
+    private fun variables(){
+        binding.notesContainer.visibility=View.INVISIBLE
     }
 
     /**A traves de esta función generamos o cargamos el calendario completo con sus propiedades en la pantalla*/
     private fun buildCalendar() {
 
-        val currentMonth = now()                                                // esta variable guarda el valor del mes actual
-        val startMonth = currentMonth.minusMonths(100)           //Retrocede X meses para establecer el mes de inicio del calendario
-        val endMonth = currentMonth.plusMonths(100)                 //Avanza X meses para establecer el mes final del calendario
-        val firstDayOfWeek = firstDayOfWeekFromLocale()                         // Obtiene el primer día de la semana segun la configuracion horaria del dispositivo (Lunes)
+        val currentMonth =
+            now()                                                // esta variable guarda el valor del mes actual
+        val startMonth =
+            currentMonth.minusMonths(100)           //Retrocede X meses para establecer el mes de inicio del calendario
+        val endMonth =
+            currentMonth.plusMonths(100)                 //Avanza X meses para establecer el mes final del calendario
+        val firstDayOfWeek =
+            firstDayOfWeekFromLocale()                         // Obtiene el primer día de la semana segun la configuracion horaria del dispositivo (Lunes)
 
         val titlesContainer = findViewById<ViewGroup>(R.id.titlesContainer)
         val children = titlesContainer.children.toList()
@@ -56,18 +71,23 @@ class EmployeeCalendarActivity : BaseActivity() {
             val dayOfWeek = daysOfWeek()[i]
             val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
             textView.text = title
-            if (textView.text=="dom"){
+            if (textView.text == "dom") {
                 textView.setTextColor(Color.WHITE)
                 textView.setBackgroundColor(Color.RED)
-            }else{
+            } else {
                 textView.setTextColor(Color.WHITE)
                 textView.setBackgroundColor(Color.BLUE)
             }
         }
 
-        binding.calendarView.scrollPaged = true                                 // Permite hacer scroll entre los meses
+        binding.calendarView.scrollPaged =
+            true                                 // Permite hacer scroll entre los meses
 
-        binding.calendarView.setup(startMonth, endMonth, firstDayOfWeek)        // Configura el calendario con el rango de meses y el primer dia de la semana)
+        binding.calendarView.setup(
+            startMonth,
+            endMonth,
+            firstDayOfWeek
+        )        // Configura el calendario con el rango de meses y el primer dia de la semana)
         binding.calendarView.scrollToMonth(currentMonth)                        // Cuando se abre la pantalla, muestra el mes actual por defecto
 
         /**Con la llamada al metodo monthScrollListener vamos a conseguir que escuche el mes en el que esta cuando Scrolleamos. Le decimos que es un objeto de tipo
@@ -78,7 +98,9 @@ class EmployeeCalendarActivity : BaseActivity() {
          */
         binding.calendarView.monthScrollListener = object : MonthScrollListener {
             override fun invoke(month: CalendarMonth) {
-                val monthName = month.yearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).uppercase()
+                val monthName =
+                    month.yearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+                        .uppercase()
                 binding.monthTitle.text = monthName
             }
         }
@@ -89,26 +111,16 @@ class EmployeeCalendarActivity : BaseActivity() {
 
             /**Esta función crea el diseño de cada día*/
             override fun create(view: View): DayViewContainer {
-                return DayViewContainer(view,binding.selectedDateText,binding.calendarView,selectedDate,::showScheduleDialog)                                   //Asigna la vista de día a un contenedor
+                return DayViewContainer(
+                    view,
+                    binding.selectedDateText,
+                    binding.calendarView,
+                    selectedDate,
+                    ::showNotesElements
+                )                                   //Asigna la vista de día a un contenedor
             }
-            private fun showScheduleDialog(context: Context, date:LocalDate){
-                val dialogBinding= DialogScheduleNotesBinding.inflate(layoutInflater)
-
-                val scheduleDialog= AlertDialog.Builder(context)
-                scheduleDialog.setView(dialogBinding.root).create()
-
-                val pickedDate="$${date.dayOfMonth}/${date.monthValue}/${date.year}"
-
-                dialogBinding.btnSave.setOnClickListener {
-
-                    // Aqui va la lógica de guardar los campos requeridos
-
-                }
-
-                scheduleDialog.show()
 
 
-            }
             /**Este método decide que mostrar en cada día del calendario utilizando el contenedor del dia actual y la fecha actual*/
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.day = data
@@ -124,4 +136,42 @@ class EmployeeCalendarActivity : BaseActivity() {
         }
 
     }
+
+    private fun showNotesElements(context: Context, date: LocalDate) {
+
+        binding.notesContainer.visibility = View.VISIBLE
+
+
+
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+
+        }
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        selectedPosition = p2
+        when (selectedPosition) {
+            0-> {
+                binding.noteContainerSelected.visibility=View.INVISIBLE
+            }
+
+            1 -> {
+                binding.noteContainerSelected.visibility=View.VISIBLE
+                binding.typeTitleText.text=getString(R.string.privateNote)
+                binding.noteInstructionsText.text=getString(R.string.instructionsPrivate)
+            }
+
+            2 -> {
+                binding.noteContainerSelected.visibility=View.VISIBLE
+                binding.typeTitleText.text=getString(R.string.publicNote)
+                binding.noteInstructionsText.text=getString(R.string.instructionsPublic)
+            }
+        }
+    }
+
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 }

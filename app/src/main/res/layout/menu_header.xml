@@ -19,7 +19,6 @@
         android:id="@+id/headerProfileText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bienvenido Rubén"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"

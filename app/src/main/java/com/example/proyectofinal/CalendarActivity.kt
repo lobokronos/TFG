@@ -30,7 +30,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 
-class CalendarActivity : BaseActivity(), View.OnClickListener, AdapterView.OnItemSelectedListener,
+class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     RadioGroup.OnCheckedChangeListener {
     private lateinit var binding: ActivityCalendarBinding
     private var selectedDate: LocalDate?=null
@@ -59,11 +59,6 @@ class CalendarActivity : BaseActivity(), View.OnClickListener, AdapterView.OnIte
     private fun actions() {
         binding.spinnerSections.onItemSelectedListener=this
         binding.spinnerEmployeeSelected.onItemSelectedListener=this
-        binding.btnEditSchedule.setOnClickListener(this)
-        binding.btnEditNotes.setOnClickListener(this)
-        binding.includeScheduleCard.radioGroup.setOnCheckedChangeListener(this)
-        binding.includeScheduleCard.btnSave.setOnClickListener(this)
-        binding.includeNotesCard.btnSave.setOnClickListener(this)
     }
 
     private fun variables(){
@@ -211,7 +206,6 @@ class CalendarActivity : BaseActivity(), View.OnClickListener, AdapterView.OnIte
 
                 //Ahora toca sacar la palabra que define el turno:
 
-
                     db.collection("turnos").document(idData).collection(numEmple).document("turno")
                         .get().addOnSuccessListener { doc ->
                         val idTurn =
@@ -228,20 +222,7 @@ class CalendarActivity : BaseActivity(), View.OnClickListener, AdapterView.OnIte
         binding.calendarView.notifyDateChanged(LocalDate.now())
     }
 
-/**Deprecado**/
-    override fun onClick(v: View?) {
-        when(v?.id){
-            binding.btnEditSchedule.id ->{
-                binding.scheduleCardView.visibility=View.VISIBLE
-                binding.notesCardView.visibility=View.GONE
-            }
-            binding.btnEditNotes.id ->{
-                binding.scheduleCardView.visibility=View.GONE
-                binding.notesCardView.visibility=View.VISIBLE
-            }
 
-        }
-    }
 
     private fun loadSpinnerEmployee(section:String){
         db=FirebaseFirestore.getInstance()

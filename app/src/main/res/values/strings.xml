@@ -123,4 +123,21 @@
    <string name="remember">Recuerda que tus anotaciones podrán ser vistas por el jefe de tienda. No escribas nada de caracter personal</string>
     <!-- ********************************************************************************************* -->
 
+    <!-- dialog_notes_employee.xml -->
+    <string name="cardviewTitle">Anotaciones/Propuestas</string>
+    <string name="titleSpinner">¿Que tipo de anotación vas a escribir?</string>
+    <string-array name="Notes">
+        <item> ----- </item>
+        <item>Nota privada</item>
+        <item>Peticion/Sugerencia</item>
+    </string-array>
+    <string name="privateNote">Nota privada</string>
+    <string name="publicNote">Peticion/Sugerencia</string>
+    <string name="noteTextViewHint">Escribe algo aquí</string>
+    <string name="instructionsPublic">Esta sugerencia será enviada al jefe de tienda. Cuando la revise, podrás ver que el color del número del día cambiará</string>
+    <string name="instructionsPrivate">Este tipo de nota es solo para tí, nadie mas podrá verla.</string>
+    <string name="btnSavePublic">Guardar</string>
+    <string name="btnSavePrivate">Guardar</string>
+
+    <!-- ********************************************************************************************* -->
 </resources>

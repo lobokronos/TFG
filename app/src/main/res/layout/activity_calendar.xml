@@ -119,60 +119,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="206dp" />
-
-        <Button
-            android:id="@+id/btnEditSchedule"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30sp"
-            android:text="@string/btn_schedule_card"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selectedDateText" />
-
-        <Button
-            android:id="@+id/btn_editNotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_notes_card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/btnEditSchedule" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/scheduleCardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnEditSchedule">
-
-        <include
-            android:id="@+id/includeScheduleCard"
-            layout="@layout/layout_card_schedule"/>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/notesCardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnEditSchedule">
-
-            <include
-                android:id="@+id/includeNotesCard"
-                layout="@layout/layout_card_notes"/>
-        </androidx.cardview.widget.CardView>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

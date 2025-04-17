@@ -19,7 +19,7 @@ class DayViewContainer(
     private val selectedDateText: TextView,
     private val calendarView: CalendarView,
     private var selectedDate: LocalDate?,
-    private val showScheduleDialog:(Context, LocalDate) ->Unit
+    private val functionShowElements:(Context, LocalDate) ->Unit //Este parámetro recoge la función de carga del dialog (CalendarActivity) y la de los container de notas del EmployeeCalendarActivity (Containers)
 ) : ViewContainer(view) {
 
     val dayNumber: TextView = view.findViewById(R.id.calendarDayText)
@@ -47,7 +47,8 @@ class DayViewContainer(
                         calendarView.notifyDateChanged(currentSelectedDate)
                     }
 
-                    showScheduleDialog(view.context,date)  //Llamada a la funcion de la clase Clanedar para mostrar el dialogo
+                    functionShowElements(view.context,date)  //Llamada a la funcion de la clase Clanedar para mostrar el dialogo o
+                                                             //de la clase EmployeeCalendar para mostrar los container según que activity acceda.
 
                 }
             }
