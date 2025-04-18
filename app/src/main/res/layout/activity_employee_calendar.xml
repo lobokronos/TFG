@@ -23,7 +23,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <!--Este LinearLayout mete los encabezados de los dias de la semana -->
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -60,16 +59,87 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
+    <TextView
+        android:id="@+id/profileNotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profileNotes"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="30sp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectedDateText" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerShowExistPublicNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/profileNotes">
+
+        <TextView
+            android:id="@+id/textShowPublic"
+            android:layout_width="280sp"
+            android:layout_height="wrap_content"
+            android:hint="Sin peticiones/Sugerencias"
+            android:textColor="@color/textColor"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/deletePublic"
+            android:layout_width="wrap_content"
+            android:layout_height="40sp"
+            android:text="@string/btnDeleteNote"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerShowExistPrivateNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/containerShowExistPublicNotes"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/textShowPrivate"
+            android:layout_width="280sp"
+            android:layout_height="wrap_content"
+            android:hint="Sin anotaciónes privadas"
+            android:textColor="@color/textColor"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/deletePrivate"
+            android:layout_width="wrap_content"
+            android:layout_height="40sp"
+            android:text="@string/btnDeleteNote"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/notesContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorFondo"
         android:orientation="vertical"
         android:padding="15sp"
-        android:visibility="gone"
-        android:background="@color/colorFondo"
-        android:layout_marginTop="30sp"
-        app:layout_constraintTop_toBottomOf="@+id/selectedDateText">
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/containerShowExistPrivateNotes">
 
         <TextView
             android:id="@+id/textView12"
@@ -90,7 +160,6 @@
             android:entries="@array/Notes"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/noteContainerSelected"
@@ -116,7 +185,7 @@
                 android:id="@+id/editNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15sp"
+                android:hint="@string/noteTextViewHint"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/typeTitleText" />
 
@@ -131,7 +200,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editNotes" />
 
-
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
@@ -143,6 +211,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/noteInstructionsText" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

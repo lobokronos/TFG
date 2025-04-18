@@ -41,8 +41,8 @@ class DayViewContainer(
                 } else {                              //Si no es la misma fecha...selecciona
                     selectedDate = day.date
                     calendarView.notifyDateChanged(day.date)
-                    dayNumber.setTextColor(Color.WHITE)
-                    dayNumber.setBackgroundColor(Color.CYAN)
+                    //dayNumber.setTextColor(Color.WHITE)
+                    //dayNumber.setBackgroundColor(Color.CYAN)
                     if (currentSelectedDate != null) {
                         calendarView.notifyDateChanged(currentSelectedDate)
                     }

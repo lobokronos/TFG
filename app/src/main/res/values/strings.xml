@@ -125,6 +125,7 @@
 
     <!-- dialog_notes_employee.xml -->
     <string name="cardviewTitle">Anotaciones/Propuestas</string>
+    <string name="profileNotes">Mis anotaciones</string>
     <string name="titleSpinner">¿Que tipo de anotación vas a escribir?</string>
     <string-array name="Notes">
         <item> ----- </item>
@@ -136,8 +137,8 @@
     <string name="noteTextViewHint">Escribe algo aquí</string>
     <string name="instructionsPublic">Esta sugerencia será enviada al jefe de tienda. Cuando la revise, podrás ver que el color del número del día cambiará</string>
     <string name="instructionsPrivate">Este tipo de nota es solo para tí, nadie mas podrá verla.</string>
-    <string name="btnSavePublic">Guardar</string>
-    <string name="btnSavePrivate">Guardar</string>
+    <string name="btnDeleteNote">Borrar</string>
+    <string name="btnSaveNote">Guardar</string>
 
     <!-- ********************************************************************************************* -->
 </resources>
