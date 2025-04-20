@@ -15,4 +15,9 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">25sp</item>
     </style>
+<!-- Estilo para definir el desplegable de los items (color de cada elemento desplegado-->
+    <style name="spinnerTextColor">
+        <item name="android:textColor">#000000</item>
+        <item name="android:dropDownSelector">#000000</item>
+    </style>
 </resources>

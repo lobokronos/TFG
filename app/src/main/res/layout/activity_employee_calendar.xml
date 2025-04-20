@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:textSize="18dp"
         android:textStyle="bold"
+        android:textColor="@color/textColor"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -55,6 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30sp"
         android:textSize="18sp"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
@@ -156,6 +158,9 @@
             android:id="@+id/spinnerNoteType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/spinner_background_edited"
+            android:popupBackground="@color/colorFondo"
+            android:theme="@style/spinnerTextColor"
             android:layout_marginTop="10sp"
             android:entries="@array/Notes"
             app:layout_constraintStart_toStartOf="parent"

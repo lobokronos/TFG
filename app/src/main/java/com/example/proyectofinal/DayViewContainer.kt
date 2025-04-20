@@ -2,7 +2,9 @@ package com.example.proyectofinal
 
 import android.content.Context
 import android.graphics.Color
+import android.media.Image
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -23,12 +25,13 @@ class DayViewContainer(
 ) : ViewContainer(view) {
 
     val dayNumber: TextView = view.findViewById(R.id.calendarDayText)
+    val icon=view.findViewById<ImageView>(R.id.infoIcon)
     lateinit var day: CalendarDay
 
     init {
         view.setOnClickListener {
             val date = day.date
-            val text = "Fecha: ${date.dayOfMonth}/${date.monthValue}/${date.year}"
+            val text = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
             selectedDateText.text = text
 
             if (day.position == DayPosition.MonthDate) {  //Si la fecha pulsada está dentro del mes actual mostrado...
@@ -41,8 +44,8 @@ class DayViewContainer(
                 } else {                              //Si no es la misma fecha...selecciona
                     selectedDate = day.date
                     calendarView.notifyDateChanged(day.date)
-                    //dayNumber.setTextColor(Color.WHITE)
-                    //dayNumber.setBackgroundColor(Color.CYAN)
+                    dayNumber.setTextColor(Color.WHITE)
+                    dayNumber.setBackgroundColor(Color.CYAN)
                     if (currentSelectedDate != null) {
                         calendarView.notifyDateChanged(currentSelectedDate)
                     }

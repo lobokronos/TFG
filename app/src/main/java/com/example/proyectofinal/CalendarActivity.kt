@@ -231,12 +231,18 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             for(doc in document){
                 name= doc.getString("nombre").toString()
                 var numEmpleLong=doc.getLong("numEmple")
+                var rol=doc.getString("rol")
                 numEmple=numEmpleLong.toString()
-                employees.add("$numEmple: $name")
+                if(rol=="Jefe de sección"){
+                    employees.add(" $numEmple: $name (Jefe)" )
+                }else{
+                    employees.add("$numEmple: $name")
+                }
+
             }
 
-            val adapter=ArrayAdapter(this,android.R.layout.simple_spinner_item,employees)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            val adapter=ArrayAdapter(this,R.layout.spinner_edited_item,employees)
+            adapter.setDropDownViewResource(R.layout.spinner_edited_item)
             binding.spinnerEmployeeSelected.adapter=adapter
         }.addOnFailureListener{
             Snackbar.make(binding.root,"Error al cargar empleados",Snackbar.LENGTH_SHORT).show()
@@ -248,11 +254,37 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         binding.spinnerSections.id -> {
             selectedSection = p0.getItemAtPosition(p2).toString()
             loadSpinnerEmployee(selectedSection)
+            val sectionIcon = when (selectedSection) {
+                "Sala" -> R.drawable.salaicon
+                "Charcutería" -> R.drawable.charcuicon
+                "Pescadería" -> R.drawable.pescadoicon
+                "Frutería" -> R.drawable.frutaicon
+                "Carnicería" -> R.drawable.carneicon
+                "Panadería" -> R.drawable.panicon
+                else -> null
+            }
+            if (sectionIcon != null) {
+                binding.iconEmployeeSelected.setImageResource(sectionIcon)
+                binding.iconEmployeeSelected.visibility = View.VISIBLE
+            } else {
+                binding.iconEmployeeSelected.visibility = View.GONE
+            }
         }
+
+
         binding.spinnerEmployeeSelected.id -> {
             selectedEmployee = p0.getItemAtPosition(p2).toString()
-            numEmple=selectedEmployee.split(":")[0].trim()
+            numEmple = selectedEmployee.split(":")[0].trim()
             loadEmployeeTurns(numEmple)
+            val employeeName = selectedEmployee.split(":")[1].trim()
+            val isBoss = selectedEmployee.trim().endsWith("(Jefe)")
+            binding.employeeSelectedText.text = employeeName
+
+            if (isBoss) {
+                binding.crownImage.visibility = View.VISIBLE
+            } else {
+                binding.crownImage.visibility = View.GONE
+            }
             binding.calendarView.notifyCalendarChanged()
         }
     }
