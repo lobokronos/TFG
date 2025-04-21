@@ -99,6 +99,7 @@
     <string name="employee_selection">Selecciona empleado</string>
     <string name="btn_schedule_card">Editar horario</string>
     <string name="btn_notes_card">Editar notas</string>
+    <string name="otherScheduleTitle">Resto de turnos de la sección</string>
     <!-- ********************************************************************************************* -->
 
     <!-- dialog_schedule_notes.xml -->
@@ -117,9 +118,9 @@
     <string name="radio_festive">Fiesta</string>
     <string name="btn_save">Guardar</string>
    <string name="notesTitle">Anotaciones</string>
-   <string name="dailyNotes">Anotaciones de hoy:</string>
-   <string name="newNote">Nueva anotación:</string>
-   <string name="saveNote">Guardar</string>
+   <string name="dailyNotes">Peticiones/Sugerencias:</string>
+   <string name="btnAcceptNote">Aceptar</string>
+   <string name="btnRejectNote">Rechazar</string>
    <string name="remember">Recuerda que tus anotaciones podrán ser vistas por el jefe de tienda. No escribas nada de caracter personal</string>
     <!-- ********************************************************************************************* -->
 

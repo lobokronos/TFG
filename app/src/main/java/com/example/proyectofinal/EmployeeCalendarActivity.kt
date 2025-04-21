@@ -167,16 +167,11 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                 val showPublicDate=statusPublicEmp[data.date]
                 val showPrivateIcons=privateNoteList[data.date]
                 val icon=container.icon
-
                 when (recoveredTurn) {
                     "Mañana" -> { container.dayNumber.setBackgroundColor(Color.YELLOW) }
-
                     "Tarde" -> { container.dayNumber.setBackgroundColor(Color.BLUE) }
-
                     "Fiesta" -> { container.dayNumber.setBackgroundColor(Color.RED) }
-
                     "Libre" -> { container.dayNumber.setBackgroundColor(Color.GREEN) }
-
                     else -> {
                         container.dayNumber.setBackgroundColor(Color.TRANSPARENT)
                     }
@@ -198,7 +193,8 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
     }
 
 //Context aparece en gris porque aqui no se utiliza, pero en la función del dialogo de CalendarActivity si la usamos, por lo que habra que meterla aquí igualmente para que pueda funcionar la función genérica del DayViewContainer.
-    private fun showNotesElements(context: Context, date: LocalDate) { binding.notesContainer.visibility = View.VISIBLE
+    private fun showNotesElements(context: Context, date: LocalDate) {
+        binding.notesContainer.visibility = View.VISIBLE
         pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}"
         val dbNotes =
             db.collection("turnos").document(pickedDate).collection(numEmple).document("notas")
@@ -215,10 +211,10 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         dbNotes.collection("public").document("notaPublica").get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val privateText = document.getString("nota")
+                    val publicText = document.getString("nota")
                     status = document.getString("estado").toString()
                     binding.containerShowExistPublicNotes.visibility = View.VISIBLE
-                    val finalPublicText = "${privateText} (${status})"
+                    val finalPublicText = "${publicText} (${status})"
                     binding.textShowPublic.text = finalPublicText
 
                 } else {
@@ -244,8 +240,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
 
                     db.collection("turnos").document(idData).collection(numEmple).document("turno")
                         .get().addOnSuccessListener { doc ->
-                            val idTurn =
-                                doc.getString("turno") //Hacemos una entrada a la base de datos para recoger el String del turno y guardarlo en una variable
+                            val idTurn = doc.getString("turno") //Hacemos una entrada a la base de datos para recoger el String del turno y guardarlo en una variable
                             if (idTurn != null) {       //Necesitamos contener la excepción de que idTurn no sea nulo, si no no dejará construir la siguiente linea
                                 employeeTurns[rebuildLocalDate] = idTurn //Asignamos el valor a la fecha en la Lista mutable (Clave->rebuildLocaldate(11-0-25) / valor-> idTurn("Mañana"))
                                 binding.calendarView.notifyDateChanged(rebuildLocalDate) //Refrescamos el calendario para que se posicione sobre nuestra fecha, para posteriormente incluirla colores
@@ -387,7 +382,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                 //Primero generamos un dialogo al pulsar el boton como medida de seguridad, para evitar que el usuario borre
                 //por error una nota. Si en el dialogo se pulsa si, se borra, si no se cierra y no pasa nada.
                 builder.setMessage("¿Estas seguro de querer borrar esta nota?")
-                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog, wich ->
+                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog,wich ->
                         db.collection("turnos").document(pickedDate).collection(numEmple)
                             .document("notas")
                             .collection("private").document("notaPrivada").delete()

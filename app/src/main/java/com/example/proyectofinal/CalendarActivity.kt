@@ -31,7 +31,7 @@ import java.util.Locale
 
 
 class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
-    RadioGroup.OnCheckedChangeListener {
+    View.OnClickListener {
     private lateinit var binding: ActivityCalendarBinding
     private var selectedDate: LocalDate?=null
     private lateinit var db: FirebaseFirestore
@@ -41,8 +41,12 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     private lateinit var numEmple:String
     private lateinit var turn:String
     private var employeeTurns:MutableMap<LocalDate,String> =mutableMapOf()
+    private late
+    private var statusPublicEmp:MutableMap <LocalDate, String> = mutableMapOf()
     private lateinit var selectedSection:String
     private lateinit var selectedEmployee:String
+    private var status:String=""
+    private lateinit var builder: AlertDialog.Builder
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -59,13 +63,16 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     private fun actions() {
         binding.spinnerSections.onItemSelectedListener=this
         binding.spinnerEmployeeSelected.onItemSelectedListener=this
+        binding.btnSave.setOnClickListener(this)
+        binding.btnAccept.setOnClickListener(this)
+        binding.btnReject.setOnClickListener(this)
+        binding.spinnerTurns.onItemSelectedListener=this
     }
 
     private fun variables(){
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
-
+        builder = AlertDialog.Builder(this)
     }
 
     /**A traves de esta función generamos o cargamos el calendario completo con sus propiedades en la pantalla*/
@@ -117,7 +124,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
             /**Esta función crea el diseño de cada día*/
             override fun create(view: View): DayViewContainer {
-                return DayViewContainer(view,binding.selectedDateText,binding.calendarView,selectedDate,::showScheduleDialog)                                   //Asigna la vista de día a un contenedor
+                return DayViewContainer(view,binding.selectedDateText,binding.calendarView,selectedDate,::showScheduleNotesItems)                                   //Asigna la vista de día a un contenedor
             }
 
             /**Este método decide que mostrar en cada día del calendario utilizando el contenedor del dia actual y la fecha actual*/
@@ -131,8 +138,9 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                         container.dayNumber.setTextColor(Color.GRAY)
                     }
                 //Utilizamos la lista calve-valor que contiene la fecha/turno para ir pintando cada dia de un color cuando el método bind los construya
-                val recoveredTurn=employeeTurns[data.date]
-                Log.d("TURNO", "Pintando: ${data.date} -> ${employeeTurns[data.date]}")
+                val recoveredTurn = employeeTurns[data.date]
+                val showPublicDate=statusPublicEmp[data.date]
+
                 when(recoveredTurn){
                     "Mañana"->{container.dayNumber.setBackgroundColor(Color.YELLOW)}
                     "Tarde"->{container.dayNumber.setBackgroundColor(Color.BLUE)}
@@ -141,8 +149,21 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     "Borrar turno"->{
                         db.collection("turnos").document(pickedDate).collection(numEmple).document("turno").delete()
                         container.dayNumber.setBackgroundColor(Color.TRANSPARENT)}
+
                     else ->{container.dayNumber.setBackgroundColor(Color.TRANSPARENT)}
                 }
+                when(showPublicDate){
+                    "pendiente"->{ container.dayNumber.setTextColor(Color.MAGENTA) }
+                    "aceptado" -> {
+                        container.dayNumber.setTextColor(Color.GREEN)
+                        binding.btnAccept.visibility = View.GONE
+                        binding.btnReject.visibility = View.GONE}
+                    "rechazado" ->{
+                        container.dayNumber.setTextColor(Color.RED)
+                        binding.btnAccept.visibility = View.GONE
+                        binding.btnReject.visibility = View.GONE}
+                }
+
                 }
             }
 
@@ -151,42 +172,109 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     /** En esta función se implementa la lógica para guardar los turnos seleccionados en la base de datos**/
 
-    private fun showScheduleDialog(context: Context, date:LocalDate){
 
-        val dialogBinding=DialogScheduleNotesBinding.inflate(layoutInflater)
 
-        val scheduleDialog= AlertDialog.Builder(context).setView(dialogBinding.root).create()
-
-        pickedDate="${date.dayOfMonth}-${date.monthValue}-${date.year}"
-
-        dialogBinding.spinnerTurns.onItemSelectedListener= object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                when(p0?.id){
-                    dialogBinding.spinnerTurns.id->{
-                        turn=p0.getItemAtPosition(p2).toString()
-                    }
+    private fun showScheduleNotesItems(context: Context, date:LocalDate) {
+        binding.allContainer.visibility=View.VISIBLE
+        pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}"
+        loadsectionTurns(date)
+        val dbNotes = db.collection("turnos").document(pickedDate).collection(numEmple).document("notas")
+        dbNotes.collection("public").document("notaPublica").get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val publicText = document.getString("nota")
+                    status = document.getString("estado").toString()
+                    binding.publicNotesContainer.visibility = View.VISIBLE
+                    val finalPublicText = "${publicText}"
+                    binding.publicNoteText.text = finalPublicText
+                } else {
+                    binding.publicNotesContainer.visibility = View.GONE
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        val sectionNumber = when (selectedSection) { //Volvemos a darle valor a sectionNumber, ya que en esta cardView no hay un Spinner que proporcione el valor necesario
+                "Sala" -> "1"
+                "Charcutería" -> "2"
+                "Pescadería" -> "3"
+                "Frutería" -> "4"
+                "Carnicería" -> "5"
+                "Panadería" -> "6"
+                else -> "0"
+            }
+        var finalSheduleList=""
+        val numEmpleList= mutableListOf<String>()
+        db.collection("secciones").document(sectionNumber).collection("Empleados").get().addOnSuccessListener { find->
+            for(document in find){
+                val numberDoc=document.id
+                numEmpleList.add(numberDoc)
             }
         }
-        dialogBinding.btnSave.setOnClickListener {
-            val createDoc= hashMapOf("created" to true)
-            db.collection("turnos").document(pickedDate).set(createDoc)
-            val schedule= hashMapOf("turno" to turn)
-        db.collection("turnos").document(pickedDate).collection(numEmple).document("turno").set(schedule)
-        val savedDate=pickedDate.split("-")
-            val savedLocalDate=LocalDate.of(savedDate[2].toInt(),savedDate[1].toInt(),savedDate[0].toInt())
-            employeeTurns[savedLocalDate]=turn
-            binding.calendarView.notifyDateChanged(savedLocalDate)
-        //Faltan las notas
-        scheduleDialog.dismiss()
+        db.collection("secciones").document(sectionNumber).collection("Jefe de seccion").get().addOnSuccessListener { find ->
+            for (document in find) {
+                val numberDoc = document.id
+                numEmpleList.add(numberDoc)
+            }
         }
+        for(numEmpleVal in numEmpleList) {
+            db.collection("users").document(numEmpleVal).get()
+                .addOnSuccessListener { documentUser ->
+                    val name = documentUser.getString("nombre")
+                    val surname = documentUser.getString("apellidos")
+                    val section = documentUser.getString("seccion")
 
-        scheduleDialog.show()
+                    db.collection("turnos").document(pickedDate).collection(numEmpleVal)
+                        .document("turno").get().addOnSuccessListener { documentSchedule ->
+                            val scheduleDoc = documentSchedule.getString("turno") ?: "Sin turno"
+                            if (selectedSection == section) {
+                                finalSheduleList += "\n ${name} ${surname} - TURNO: ${scheduleDoc}"
+                                binding.showOtherSchedule.text=finalSheduleList
+                            }
+
+
+                        }
+                }
+        }
     }
 
+    private fun loadsectionTurns(date: LocalDate){
+        pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}"
+        var finalSheduleList=""
+        val numEmpleList= mutableListOf<String>()
+        db.collection("secciones").document(selectedSection).collection("Empleados").get().addOnSuccessListener { find->
+            for(document in find){
+                val numberDoc=document.id
+                numEmpleList.add(numberDoc)
+            }
+        }
+        db.collection("secciones").document(selectedSection).collection("Jefe de seccion").get().addOnSuccessListener { find ->
+                for (document in find) {
+                    val numberDoc = document.id
+                    numEmpleList.add(numberDoc)
+                }
+            }
+        for(numEmpleVal in numEmpleList) {
+            db.collection("users").document(numEmpleVal).get()
+                .addOnSuccessListener { documentUser ->
+                    val name = documentUser.getString("nombre")
+                    val surname = documentUser.getString("apellidos")
+                    val section = documentUser.getString("seccion")
 
+                    db.collection("turnos").document(pickedDate).collection(numEmpleVal)
+                        .document("turno").get().addOnSuccessListener { documentSchedule ->
+                        val scheduleDoc = documentSchedule.getString("turno") ?: "Sin turno"
+                        if (selectedSection == section) {
+                            finalSheduleList += "\n ${name} ${surname} - TURNO: ${scheduleDoc}"
+                            binding.showOtherSchedule.text=finalSheduleList
+                        }
+
+
+                    }
+                }
+        }
+
+
+
+
+}
     private fun loadEmployeeTurns(numEmple:String){
         employeeTurns.clear()       //Primero limpiamos la lista por si contiene datos anteriores
         db.collection("turnos").get().addOnSuccessListener { document -> //Iniciamos la recogida de datos de los turnos
@@ -216,14 +304,22 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                             binding.calendarView.notifyDateChanged(rebuildLocalDate) //Refrescamos el calendario para que se posicione sobre nuestra fecha, para posteriormente incluirla colores
                         }
                     }
+                //Aqui cargamos las sugerencias del día
+                db.collection("turnos").document(idData).collection(numEmple).document("notas")
+                    .collection("public").document("notaPublica").get().addOnSuccessListener { document->
+                        val status=document.getString("estado")
+                        if(status!=null){
+                            statusPublicEmp[rebuildLocalDate]=status
+                            binding.calendarView.notifyDateChanged(rebuildLocalDate)
+                        }
+                    }.addOnFailureListener{e->
+                        snackBar(binding.root, "Error al cargar sugerencias del día ${rebuildLocalDate}: ${e.message}")
+                    }
                 }
 
         }
         binding.calendarView.notifyDateChanged(LocalDate.now())
     }
-
-
-
     private fun loadSpinnerEmployee(section:String){
         db=FirebaseFirestore.getInstance()
         db.collection("users").whereEqualTo("seccion",section).get().addOnSuccessListener { document->
@@ -248,11 +344,11 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             Snackbar.make(binding.root,"Error al cargar empleados",Snackbar.LENGTH_SHORT).show()
         }
     }
-
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
     when(p0?.id) {
         binding.spinnerSections.id -> {
             selectedSection = p0.getItemAtPosition(p2).toString()
+            positionSection=p2
             loadSpinnerEmployee(selectedSection)
             val sectionIcon = when (selectedSection) {
                 "Sala" -> R.drawable.salaicon
@@ -270,8 +366,6 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 binding.iconEmployeeSelected.visibility = View.GONE
             }
         }
-
-
         binding.spinnerEmployeeSelected.id -> {
             selectedEmployee = p0.getItemAtPosition(p2).toString()
             numEmple = selectedEmployee.split(":")[0].trim()
@@ -287,17 +381,85 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             }
             binding.calendarView.notifyCalendarChanged()
         }
+        binding.spinnerTurns.id->{
+                turn=p0.getItemAtPosition(p2).toString()
+            when(p2){
+                0->binding.btnSave.isEnabled=false
+                else->binding.btnSave.isEnabled=true
+            }
+        }
     }
     }
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
-    override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
 
+
+    override fun onClick(v: View?) {
+        val dateParts= pickedDate.split("-")
+        val dateForThisFunction=LocalDate.of(dateParts[2].toInt(),dateParts[1].toInt(),dateParts[0].toInt())
+
+        when(v?.id) {
+            binding.btnSave.id -> {
+                val createDoc = hashMapOf("created" to true)
+                db.collection("turnos").document(pickedDate).set(createDoc)
+                val schedule = hashMapOf("turno" to turn)
+                db.collection("turnos").document(pickedDate).collection(numEmple).document("turno")
+                    .set(schedule)
+
+                employeeTurns[dateForThisFunction] = turn
+                binding.calendarView.notifyDateChanged(dateForThisFunction)
+            }
+
+            binding.btnAccept.id -> {
+                builder.setMessage("Esta acción no será reversible a menos que el empleado borre la sugerencia.¿Deseas ACEPTAR la sugeréncia?")
+                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog, wich ->
+                        db.collection("turnos").document(pickedDate).collection(numEmple)
+                            .document("notas")
+                            .collection("public").document("notaPublica")
+                            .update("estado", "aceptado",).addOnSuccessListener {
+                                snackBar(binding.root, "Sugerencia aceptada.")
+                                statusPublicEmp[dateForThisFunction] = "aceptado"
+                                binding.calendarView.notifyDateChanged(dateForThisFunction)
+                                binding.btnAccept.visibility = View.GONE
+                                binding.btnReject.visibility = View.GONE
+                            }.addOnFailureListener { e ->
+                                snackBar(binding.root, "Error: ${e.message}")
+                            }
+
+                    }.setNegativeButton("No") { dialog, wich ->
+                        dialog.dismiss()
+                    }
+                    .show()
+
+
+            }
+            binding.btnReject.id->{
+                builder.setMessage("Esta acción no será reversible a menos que el empleado borre la sugerencia.¿Deseas RECHAZAR la sugeréncia?")
+                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog, wich ->
+                db.collection("turnos").document(pickedDate).collection(numEmple).document("notas")
+                    .collection("public").document("notaPublica").update("estado","aceptado",).addOnSuccessListener {
+                        snackBar(binding.root,"Sugerencia rechazada.")
+                        statusPublicEmp[dateForThisFunction]="rechazado"
+                        binding.calendarView.notifyDateChanged(dateForThisFunction)
+
+                    }.addOnFailureListener { e ->
+                        snackBar(binding.root, "Error: ${e.message}")
+                    }
+                    }.setNegativeButton("No") { dialog, wich ->
+                        dialog.dismiss()
+                    }
+                    .show()
+
+            }
+            }
+        }
     }
+
+
+
+private fun snackBar(view:View, message:String) {
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
 }
-
-
-
 
 //Modificar los cardView de Notas: El empleado creara una anotacion en la que automáticamente se guardará en la base de datos
 //con una señal de "pendiente" y un boolean de aprovado "true o false". En el perfil de Jefe, podrá listar las anotaciones de cada empleado
