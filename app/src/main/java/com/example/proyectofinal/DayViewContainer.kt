@@ -2,7 +2,6 @@ package com.example.proyectofinal
 
 import android.content.Context
 import android.graphics.Color
-import android.media.Image
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,28 +29,31 @@ class DayViewContainer(
 
     init {
         view.setOnClickListener {
-            val date = day.date
-            val text = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
-            selectedDateText.text = text
+            val date = day.date // Variable que recoge la fecha entera de un día (Ej:2025-04-18)
+            val text = "${date.dayOfMonth}/${date.monthValue}/${date.year}" //Construimos la fecha para mostrarla extrayendo las valores de date.
+            selectedDateText.text = text /*Variable construida a partir del elemento selectedDayText de las activitys del calendario,
+            la cual recoge el texto resultante de la fecha construida en "text". Se pone aquí y no en cada clase porque necesitamos que
+            se cliquee un dia para poder asignarle su valor en String y mostarlo.*/
 
             if (day.position == DayPosition.MonthDate) {  //Si la fecha pulsada está dentro del mes actual mostrado...
                 val currentSelectedDate = selectedDate
-
                 if (currentSelectedDate == day.date) {  //Si el usuario vuelve a pulsar la misma fecha...deselecciona
                     selectedDate = null
-                    dayNumber.setBackgroundColor(Color.TRANSPARENT)
                     calendarView.notifyDateChanged(day.date)
                 } else {                              //Si no es la misma fecha...selecciona
                     selectedDate = day.date
-                    calendarView.notifyDateChanged(day.date)
+                    functionShowElements(view.context,date)  /*Llamada a la funcion de la clase Clanedar para mostrar el dialogo o
+                                                             de la clase EmployeeCalendar para mostrar los container según que activity acceda.*/
+
                     dayNumber.setTextColor(Color.WHITE)
                     dayNumber.setBackgroundColor(Color.CYAN)
+
+                    calendarView.notifyDateChanged(day.date)
                     if (currentSelectedDate != null) {
                         calendarView.notifyDateChanged(currentSelectedDate)
                     }
 
-                    functionShowElements(view.context,date)  //Llamada a la funcion de la clase Clanedar para mostrar el dialogo o
-                                                             //de la clase EmployeeCalendar para mostrar los container según que activity acceda.
+
 
                 }
             }

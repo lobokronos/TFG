@@ -92,21 +92,20 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
             firstDayOfWeekFromLocale()                         // Obtiene el primer día de la semana segun la configuracion horaria del dispositivo (Lunes)
 
         val titlesContainer = findViewById<ViewGroup>(R.id.titlesContainer)
-        val children = titlesContainer.children.toList()
-
-        for (i in children.indices) {
-            val textView = children[i] as TextView
-            val dayOfWeek = daysOfWeek()[i]
-            val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-            textView.text = title
-            if (textView.text == "dom") {
-                textView.setTextColor(Color.WHITE)
-                textView.setBackgroundColor(Color.RED)
-            } else {
-                textView.setTextColor(Color.WHITE)
-                textView.setBackgroundColor(Color.BLUE)
+        titlesContainer.children
+            .map { it as TextView }
+            .forEachIndexed { index, textView ->
+                val dayOfWeek = daysOfWeek()[index]
+                val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                textView.text = title
+                if (textView.text == "dom") {
+                    textView.setTextColor(Color.WHITE)
+                    textView.setBackgroundColor(Color.RED)
+                } else {
+                    textView.setTextColor(Color.WHITE)
+                    textView.setBackgroundColor(Color.BLUE)
+                }
             }
-        }
 
         binding.calendarView.scrollPaged =
             true                                 // Permite hacer scroll entre los meses
