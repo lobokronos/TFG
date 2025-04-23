@@ -1,5 +1,13 @@
 package com.example.proyectofinal
 
+/**
+ * No Completada
+ *
+ * Falta ensanchar el TexView
+ * Falta dar color a las letras del textView (negro)
+ * Falta ajustar en Snackbar cuando se resetea la contraseña (algun Thread.sleep o algo)
+ */
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,14 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ResetPassActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityResetPassBinding
-    private lateinit var editOldPass: String
-    private lateinit var editNewPass: String
-    private lateinit var repeatNewPass: String
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private var recoveredData: Bundle? = null
-    private lateinit var numEmple: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,95 +29,63 @@ class ResetPassActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(binding.root)
 
         variables()
-        binding.btnResetPass.setOnClickListener(this)
-
-
+        actions()
     }
 
+    /**
+     * Función que recoge las acciones de los elementos
+     */
+    private fun actions() {
+        binding.btnResetPass.setOnClickListener(this)
+    }
+
+    /**
+     * Función que recoge las inicializaciones de las variables
+     */
     private fun variables() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        recoveredData = intent.getBundleExtra("data")
-        numEmple = recoveredData?.getString("numEmple") ?: ""
+
     }
 
+    /**
+     * On click de los botones
+     */
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.btnResetPass.id -> {
-                resetPass()
+                sendEmailPass()
             }
         }
     }
 
-    private fun resetPass() {
-        val intent = Intent(this, MainActivity::class.java)
-        editOldPass = binding.editOldPass.text.toString()
-        editNewPass = binding.editNewPass.text.toString()
-        repeatNewPass = binding.editRepeatPass.text.toString()
-        var userOldPass: String
-        if (editOldPass.isEmpty() || editNewPass.isEmpty() || repeatNewPass.isEmpty()) {
-            Snackbar.make(
-                binding.root,
-                "Todos los campos deben estar completos",
-                Snackbar.LENGTH_SHORT
-            ).show()
+    /**
+     * Función para enviar un mail de reseteo de contraseña
+     *
+     * Esta función recoge el texto del editText donde el usuario ingresa el correo y envía un mail con dicho objetivo
+     */
+    private fun sendEmailPass() {
+        val emailToSend=binding.emailToSend.text.toString()
+
+        auth.setLanguageCode("es")
+        if (emailToSend.isEmpty()) {
+            snackBar(binding.root, "Por favor, ingresa tu correo electrónico")
         } else {
-            db.collection("users").document(numEmple).get().addOnSuccessListener { document ->
-                if (document.exists()) {
-                    println(editOldPass)
-                    println(editNewPass)
-                    println(repeatNewPass)
-                    userOldPass = document.getString("password").toString()
-                    if (userOldPass == editOldPass) {
-                        if (editNewPass == repeatNewPass) {
-                            val user=auth.currentUser
-                                if(user!=null) {
-                                    user.updatePassword(repeatNewPass).addOnSuccessListener {
-                                        db.collection("users").document(numEmple)
-                                            .update("password", repeatNewPass)
-                                            .addOnSuccessListener {
-                                                db.collection("users").document(numEmple)
-                                                    .update("login", true).addOnSuccessListener {
-                                                        Snackbar.make(
-                                                            binding.root,
-                                                            "La contraseña ha sido actualizada",
-                                                            Snackbar.LENGTH_SHORT
-                                                        ).show()
-                                                        startActivity(intent)
-                                                        finish()
-                                                    }.addOnFailureListener {
-                                                        Snackbar.make(
-                                                            binding.root,
-                                                            "Error al actualizar la contraseña",
-                                                            Snackbar.LENGTH_SHORT
-                                                        ).show()
-                                                    }
-                                            }
-
-                                    }.addOnFailureListener {
-                                        Snackbar.make(
-                                            binding.root,
-                                            "Error al actualizar la contraseña en Authentication",
-                                            Snackbar.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }else{
-                                    Snackbar.make(
-                                        binding.root,
-                                        "El usuario no esta autenticado o no ha iniciado sesion",
-                                        Snackbar.LENGTH_SHORT
-                                    ).show()
-                                }
-                        }
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            "La contraseña no es correcta",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
+            auth.sendPasswordResetEmail(emailToSend).addOnCompleteListener{ task ->
+                if(task.isSuccessful){
+                    snackBar(binding.root,"Revisa la bandeja de entrada de tu correo")
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
+            }.addOnFailureListener{e->
+                snackBar(binding.root,"Error: ${e.message}")
             }
         }
     }
+}
+
+/**
+ * Función para reutilizar los Snackbar
+ */
+private fun snackBar(view:View, message:String){
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
 }

@@ -21,8 +21,8 @@ class HomeActivity : BaseActivity(){
         En cada activity, funcionará del mismo modo, cargando el contenido personalizado de cada
         página a traves del FrameLayout del BaseActivity).**/
 
-        val frameContent=findViewById<FrameLayout>(R.id.content_frame)
-        frameContent.addView(binding.root)
+        val navDrawer=findViewById<FrameLayout>(R.id.content_frame)
+        navDrawer.addView(binding.root)
 
 
 

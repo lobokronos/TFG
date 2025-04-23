@@ -86,11 +86,10 @@
     <!-- ********************************************************************************************* -->
 
     <!-- (deprecated) activity_reset_pass.xml (deprecated) -->
-    <string name="caution">¡Atención!</string>
-    <string name="changePassTitle">Va a cambiar su contraseña</string>
-    <string name="editNewPass1">Introduzca su contraseña actual</string>
-    <string name="editNewPass2">Introduzca la nueva contraseña</string>
-    <string name="editNewPass3">Repita la nueva contraseña</string>
+    <string name="caution">Restablecer contraseña</string>
+    <string name="changePassTitle">Introduzca su correo electrónico</string>
+    <string name="changePassInstruction">Se va a proceder a enviar un mail para que puedas restablecer tu contraseña. Por favor, ingresa tu correo electrónico</string>
+    <string name="resetHint">ejemplo@gmail.com</string>
     <string name="btnNewPass">Restablecer contraseña</string>
     <!-- ********************************************************************************************* -->
 

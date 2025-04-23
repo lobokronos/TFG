@@ -1,6 +1,12 @@
 package com.example.proyectofinal
 
-import android.content.Context
+/**
+ *
+ * No completada
+ *
+ * Falta el comentario
+ */
+
 import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
@@ -20,7 +26,7 @@ class DayViewContainer(
     private val selectedDateText: TextView,
     private val calendarView: CalendarView,
     private var selectedDate: LocalDate?,
-    private val functionShowElements:(Context, LocalDate) ->Unit //Este parámetro recoge la función de carga del dialog (CalendarActivity) y la de los container de notas del EmployeeCalendarActivity (Containers)
+    private val functionShowElements:(LocalDate) ->Unit //Este parámetro recoge la función de carga del dialog (CalendarActivity) y la de los container de notas del EmployeeCalendarActivity (Containers)
 ) : ViewContainer(view) {
 
     val dayNumber: TextView = view.findViewById(R.id.calendarDayText)
@@ -42,7 +48,7 @@ class DayViewContainer(
                     calendarView.notifyDateChanged(day.date)
                 } else {                              //Si no es la misma fecha...selecciona
                     selectedDate = day.date
-                    functionShowElements(view.context,date)  /*Llamada a la funcion de la clase Clanedar para mostrar el dialogo o
+                    functionShowElements(date)  /*Llamada a la funcion de la clase Clanedar para mostrar el dialogo o
                                                              de la clase EmployeeCalendar para mostrar los container según que activity acceda.*/
 
                     dayNumber.setTextColor(Color.WHITE)

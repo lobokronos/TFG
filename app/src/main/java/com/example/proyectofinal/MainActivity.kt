@@ -1,5 +1,8 @@
 package com.example.proyectofinal
 
+/**
+ *Completada
+ */
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -15,6 +18,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -22,36 +26,68 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         actions()
     }
 
+    /**
+     * Función que recoge las inicializaciones de las variables
+     */
     private fun variables() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
     }
 
+    /**
+     * Función que recoge las acciones de los elementos
+     */
     private fun actions() {
         binding.btnLogin.setOnClickListener(this)
         binding.warningPass.visibility=View.GONE
+        binding.btnForgotPassword.setOnClickListener(this)
     }
 
-
+    /**
+     * On click de los botones
+     */
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.btnLogin.id -> {
-                val email = binding.editEmployeeMail.text.toString()
-                val password = binding.editPass.text.toString()
+            /**
+             * Botón de login
+             *
+             * Este botón llama la función loginUser() siempre y cuando todos los campos estén rellenos.
+             */
+            binding.btnLogin.id -> { //Lógica del botón login.
+                val email = binding.editEmployeeMail.text.toString() //Variable que recoge el texto del email.
+                val password = binding.editPass.text.toString() //variable que recoge el texto de la contraseña.
 
-                if (email.isEmpty()) {
-                    Snackbar.make(binding.root, "Ingrese un email", Snackbar.LENGTH_SHORT).show()
+                if (email.isEmpty()) { //Si el email está vacío, muestra una advertencia.
+                    snackBar(binding.root, "Ingrese un email")
                 }
-                if (password.isEmpty())
-                    Snackbar.make(binding.root, "Ingrese la contraseña", Snackbar.LENGTH_SHORT)
-                        .show()
-                else {
+                if (password.isEmpty())  //Si la contraseña está vacía, muestra una advertencia.
+                    snackBar(binding.root, "Ingrese la contraseña")
+
+                else {  //Si todos los campos están rellenos, se procede a la llamada del método login.
                     loginUser(email, password)
                 }
+            }
+            /**
+             * Botón Olvido su Contraseña
+             *
+             * Si pulsamos sobre este botón, nos lleva directamente a la activity de restablecimiento
+             * de contraseña
+             */
+            binding.btnForgotPassword.id->{
+                startActivity(Intent(this, ResetPassActivity::class.java))
             }
         }
     }
 
+    /**
+     * Realiza el inicio de sesión del usuario
+     *
+     * Esta función realiza el Login cuando se pulsa el boton de "Iniciar sesión". Coge de la base de datos el uid del usuario
+     * que logea para acceder a su "login" y su número de empleado. Si su login es FALSE querrá decir que será la primera vez
+     * que hace login y se le enviará un email de restablecimiento de contraseña como recomendación ya que, por defecto, la contraseña
+     * que se asigna automáticamente al crear usuarios es la misma que la de su numero de empleado. Lo abra o no, podrá volver
+     * a meter sus credenciales y logearse. Si su login es TRUE, no mandará el email y entrará automáticamente
+     */
     private fun loginUser(email: String, password: String) {
         auth.setLanguageCode("es")  // Establece el idioma en español para el envío del correo de restablecimiento de contraseña
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
@@ -70,25 +106,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                     Snackbar.make(binding.root, "Email enviado, revisa tu correo.", Snackbar.LENGTH_SHORT).show()
                                 }
                             }.addOnFailureListener{e ->
-                                Snackbar.make(binding.root, "Error al enviar el mail: ${e.message}.", Snackbar.LENGTH_SHORT).show()
+                                snackBar(binding.root, "Error al enviar el mail: ${e.message}.")
                             }
                         } else {
                             binding.warningPass.visibility=View.GONE
-                            val intent = Intent(applicationContext, HomeActivity::class.java)
-                            val bundle = Bundle()
-                            bundle.putString("numEmple", numEmple)
-                            intent.putExtra("data", bundle)
-                            startActivity(intent)
+                            startActivity(Intent(applicationContext, HomeActivity::class.java))
                         }
                     } else {
-                        Snackbar.make(binding.root, "No existe ningun usuario con ese email.", Snackbar.LENGTH_SHORT).show()
+                        snackBar(binding.root, "No existe ningun usuario con ese email.")
                     }
                 }.addOnFailureListener { e ->
-                    Snackbar.make(binding.root, "${e.message}.", Snackbar.LENGTH_SHORT).show()
+                    snackBar(binding.root, "${e.message}.")
                 }
             }
         }.addOnFailureListener{e ->
-            Snackbar.make(binding.root, "El usuario o contraseña no coinciden: ${e.message}.", Snackbar.LENGTH_SHORT).show()
+            snackBar(binding.root, "El usuario o contraseña no coinciden: ${e.message}.")
         }
     }
 }
+
+private fun snackBar(view: View, message: String) {
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+}
+

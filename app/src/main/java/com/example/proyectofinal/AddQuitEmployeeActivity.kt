@@ -1,6 +1,12 @@
 package com.example.proyectofinal
 
-import android.annotation.SuppressLint
+
+/**
+ * No completada
+ *
+ * Falta introducir un alertDialog para el borrado de usuario por precaución.
+ * Falta dar estilo a los radioButton
+ */
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -30,8 +36,8 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         super.onCreate(savedInstanceState)
         binding = ActivityAddQuitEmployeeBinding.inflate(layoutInflater)
 
-        val frameContent = findViewById<FrameLayout>(R.id.content_frame)
-        frameContent.addView(binding.root)
+        val navDrawer = findViewById<FrameLayout>(R.id.content_frame)
+        navDrawer.addView(binding.root)
 
 
         auth = FirebaseAuth.getInstance()
@@ -45,16 +51,24 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
 
     }
 
-    /**Sobreescribimos el método onCheckedChange para mostrar las Cardview "addCardView" o "deleteCardView" segun la seleccion del
+    /**
+     * OnCheckedChange de los radioButtons para mostrar una vista u otra
+     *
+     * Sobreescribimos el método onCheckedChange para mostrar las Cardview "addCardView" o "deleteCardView" segun la seleccion del
      * RadioGroup mediante los métodos view.VISIBLE y view.GONE
      */
     override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
         when (checkedId) {
+            /**
+             * Si se pulsa Añadir empleado, se oculta Borrar empleado
+             */
             binding.AddEmployee.id -> {
                 binding.addCardView.visibility = View.VISIBLE
                 binding.deleteCardView.visibility = View.GONE
             }
-
+            /**
+             * Lo mismo pero al revés
+             */
             binding.deleteEmployee.id -> {
                 binding.addCardView.visibility = View.GONE
                 binding.deleteCardView.visibility = View.VISIBLE
@@ -62,78 +76,99 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         }
     }
 
-    /**En la función del botón guardamos un nuevo usuario o empleado en la BBDD mediante la función "saveData",
-     * la cual utiliza como parámetros los datos recogidos de los campos del CardView
-     * "addCardView".
+    /**
+     * Botones de AñadirEmpleado, BorrarEmpleado y Buscar
      */
     override fun onClick(v: View?) {
         val findNum = binding.includeDeleteEmployee.editNumber.text.toString()
         when (v?.id) {
+
+            /**
+             * Si pulsamos este botón, llama a la función validateData() para guardar un empleado
+             */
             binding.includeAddEmployee.btnAdd.id -> {
                 validateData()
             }
 
+            /**
+             * Si pulsamos este botón, llama a la función findUser() para buscar un empleado
+             */
             binding.includeDeleteEmployee.btnFind.id -> {
                 findUser(findNum)
             }
 
+            /**
+             * Si pulsamos este botón, llama a la función deleteUser() para borrar un empleado
+             */
             binding.includeDeleteEmployee.btnDelete.id -> {
-                deleteUser(findNum)
+                deleteUser(findNum) //Función para borrar usuario
             }
         }
     }
 
+    /**
+     * Función para añadir un empleado
+     *
+     * Esta función recoge el nombre, apellidos y email a partir de los editText, así como la sección a la que
+     * pertenece y el rol de empleado de los spinners correspondientes para pasarselos como parámetro a la función
+     * saveData(). Tambén recoge los posibles errores de dejarse los campos vacíos, o de que los spinner deben tener
+     * alguna opcion seleccionada.
+     */
     private fun validateData() {
         val name = binding.includeAddEmployee.editName.text.toString()
         val surname = binding.includeAddEmployee.editSurname.text.toString()
         val email = binding.includeAddEmployee.editEmail.text.toString()
         if (name.isEmpty()) {
-            Snackbar.make(binding.root, "Debe ingresar un nombre", Snackbar.LENGTH_SHORT).show()
+            snackBar(binding.root, "Debe ingresar un nombre")
         } else if (surname.isEmpty()) {
-            Snackbar.make(binding.root, "Debe ingresar apellidos", Snackbar.LENGTH_SHORT).show()
+            snackBar(binding.root, "Debe ingresar apellidos")
         } else if (email.isEmpty()) {
-            Snackbar.make(binding.root, "Debe ingresar un email", Snackbar.LENGTH_SHORT).show()
+            snackBar(binding.root, "Debe ingresar un email")
         } else if (positionSection == 0) {
-            Snackbar.make(binding.root, "Debe seleccionar una sección", Snackbar.LENGTH_SHORT)
-                .show()
+            snackBar(binding.root, "Debe seleccionar una sección")
         } else if (positionJob == 0) {
-            Snackbar.make(binding.root, "Debe seleccionar un puesto", Snackbar.LENGTH_SHORT).show()
+            snackBar(binding.root, "Debe seleccionar un puesto")
         } else {
             saveData(name, surname, email, section, positionSection, job)
         }
     }
 
-    /**Aquí sobreescribimos la función onItemSelected de los Spinner para recoger tanto la posición del item seleccionado de
-     * ambos, como su posición en un número.
+    /**
+     * Lógica de los Spinner de Secciones y de Rol
      */
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         when (p0?.id) {
+
+            /**
+             * Spinner de secciones
+             *
+             * Este spinner recoge la sección y su posición para tratarlas mas adelante. Si no, salta un mensaje
+             * de error.
+             */
             binding.includeAddEmployee.spinnerSections.id -> {
                 section = p0.getItemAtPosition(p2).toString()
                 positionSection = p2
                 if (positionSection == 0) {
-                    Snackbar.make(
-                        binding.root,
-                        "Debes seleccionar una sección",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    snackBar(binding.root, "Debes seleccionar una sección")
                 } else {
-                    Snackbar.make(binding.root, "$section selecccionado", Snackbar.LENGTH_SHORT)
-                        .show()
+                    snackBar(binding.root, "$section selecccionado")
+
                 }
             }
 
+            /**
+             * Spinner de Rol
+             *
+             * Hace lo mismo que el anterior pero con los roles.
+             */
             binding.includeAddEmployee.spinnerJob.id -> {
                 job = p0.getItemAtPosition(p2).toString()
                 positionJob = p2
                 if (positionJob == 0) {
-                    Snackbar.make(
-                        binding.root,
-                        "Debes seleccionar una ocupación",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    snackBar(binding.root, "Debes seleccionar una ocupación")
+
                 } else {
-                    Snackbar.make(binding.root, "$job selecccionado", Snackbar.LENGTH_SHORT).show()
+                    snackBar(binding.root, "$job selecccionado")
                 }
             }
         }
@@ -144,11 +179,14 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
 
     }
 
-    /**Esta función es la encargada de realizar la conexión a la base de datos y de guardar sus datos en las colecciones correspondientes
+    /**
+     * Función para guardar un empleado.
+     *
+     * Esta función es la encargada de realizar la conexión a la base de datos y de guardar sus datos en las colecciones correspondientes
      * o en los documentos correspondientes. Además, se genera de forma automática un número de empleado de tipo Int y una contraseña, la cual
      * será la misma que el número de empleado. Para el número de empleado, se hace una consulta a la coleccion "users" mediante un ORDER BY
      * descendente para averiguar el último numero de empleado que existe. Una vez averiguado, se crea uno nuevo sumándole +32 al último
-     * numero de empleado existente.
+     * numero de empleado existente. (Cuando el usuario creado haga su primer login, se le recomendará cambiarla).
      */
     private fun saveData(
         name: String,
@@ -172,35 +210,46 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                 auth.createUserWithEmailAndPassword(email, pass)
                     .addOnCompleteListener { task ->//Aqui metemos el user en authentication
                         if (task.isSuccessful) {
-                            val uid = auth.currentUser!!.uid
-                            val logged = false
-                            val employee = hashMapOf(
-                                "uid" to uid,
-                                "nombre" to name,
-                                "apellidos" to surname,
-                                "numEmple" to newEmpNum,  //Se utiliza un Hashmap para guardar todos los datos recogidos en una variable "employee"
-                                "email" to email,         //la cual se utilizará para meter lo datos en la coleccion "users".
-                                "rol" to job,
-                                "seccion" to section,
-                                "login" to logged
-                            )
+                            val uid = auth.currentUser!!.uid //Introducimos su uid en el documento
+                            val logged =
+                                false // False para que salte la advertencia de cambiar la contraseña en el primer login
+                            val employee =
+                                hashMapOf( //Contruimos el hashMap para guardar los datos despues
+                                    "uid" to uid,
+                                    "nombre" to name,
+                                    "apellidos" to surname,
+                                    "numEmple" to newEmpNum,
+                                    "email" to email,
+                                    "rol" to job,
+                                    "seccion" to section,
+                                    "login" to logged
+                                )
                             val employeeNumber =
                                 hashMapOf("numEmple" to newEmpNum) //Hashmap para guardar el número de empleado en el documento "empleados_sala."
                             val sectionData = hashMapOf(
                                 "numEmple" to newEmpNum,
                                 "nombre" to name,
                                 "apellidos" to surname
-                            )
-                            val state = "activo"
+                            ) //hashMap para guardar el empleado en la sección
+                            val state =
+                                "activo" //Esta variable contempla que el usuario está dado de alta o de baja en la empresa. Cuando se da de baja, desaparece de la BBDD pero se conserva su numEmple.
                             val registeredUser = hashMapOf("estado" to state)
                             //Estas variables guardan las inserciones de datos en los documentos o colecciones correspondientes utilizando los Hashmaps anteriores.
 
-                            val insertRol = db.collection("rol").document(job).set(employeeNumber)
-                            val insertUser =
-                                db.collection("users").document(newEmpNum.toString()).set(employee)
-                            val insertRegistered =
-                                db.collection("usuarios registrados").document(newEmpNum.toString())
-                                    .set(registeredUser)
+                            val insertRol = db.collection("rol").document(job)
+                                .set(employeeNumber) //Insertamos el numero de empleado en su rol
+                            val insertUser = db.collection("users").document(newEmpNum.toString())
+                                .set(employee) //Insertamos el hasMap con los dtos del usuario
+                            val insertRegistered = db.collection("usuarios registrados")
+                                .document(newEmpNum.toString()) // Insertamos el hashMap del estado
+                                .set(registeredUser)
+
+                            /**
+                             * Aquí recalco algo.
+                             *
+                             * Solo puede haber un jefe de sección por cada sección, por lo que la lógica desarrollada mas abajo
+                             * permite que solo se pueda guardar uno.
+                             */
                             val insertJob =
                                 db.collection("secciones").document(positionSection.toString())
                             if (job == "Jefe de sección") {
@@ -211,7 +260,9 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                             val insertBoss = insertJob.collection("Jefe de sección")
                                                 .document(newEmpNum.toString()).set(sectionData)
 
-                                            /**Utilizamos el método "Tasks.whenAllComplete" para indicar que cuando se terminen de realizar las tres acciones
+                                            /**
+                                             * Task.whenAllComplete
+                                             * Utilizamos el método "Tasks.whenAllComplete" para indicar que cuando se terminen de realizar las tres acciones
                                              * de inserciones en la BBDD anteriores (las pasamos mediante parametro a traves de las variables) se pasará a la
                                              * pantalla "SuccessActivity donde se mostrarán los datos nuevos del usuario creado. Si no se realizan alguna de
                                              * las tres acciones de inserciones se mostrará un error mediante el Listener addOnFailureListener
@@ -222,10 +273,11 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                                 insertBoss,
                                                 insertRegistered
                                             )
-                                                .addOnSuccessListener {
+                                                .addOnSuccessListener { //Si se completan todas las tareas pasamos a la pantalla de Verificación.
                                                     val intent =
                                                         Intent(this, SuccessActivity::class.java)
                                                     val bundle = Bundle()
+                                                    //Mirar si se puede pasar con una lista o algo mas cómodo
                                                     bundle.putString("name", name)
                                                     bundle.putString("surname", surname)
                                                     bundle.putString("numEmp", newEmpNum.toString())
@@ -233,18 +285,20 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                                     intent.putExtra("data", bundle)
                                                     startActivity(intent)
                                                 }.addOnFailureListener { e ->
-                                                    Snackbar.make(
+
+                                                    snackBar(
                                                         binding.root,
-                                                        "Error al guardar el jefe: ${e.message}",
-                                                        Snackbar.LENGTH_SHORT
-                                                    ).show()
+                                                        "Error al guardar el jefe: ${e.message}"
+                                                    )
+
                                                 }
                                         } else {
-                                            Snackbar.make(
+
+                                            snackBar(
                                                 binding.root,
-                                                "$name $surname ya es el jefe de esta sección",
-                                                Snackbar.LENGTH_SHORT
-                                            ).show()
+                                                "$name $surname ya es el jefe de esta sección"
+                                            )
+
                                         }
                                     }
                             } else {
@@ -253,7 +307,10 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                     insertJob.collection("Empleados").document(newEmpNum.toString())
                                         .set(sectionData)
 
-                                /**Mismo Tasks.whenAllComplete que antes, solo que este cambia la última variable por la de inserción de empleado, ya que en
+                                /**
+                                 * Task.whenAllComplete
+                                 *
+                                 * Mismo Tasks.whenAllComplete que antes, solo que este cambia la última variable por la de inserción de empleado, ya que en
                                  * esta casuística estamos insertando un empleado. Una vez comprobadas las tres inserciones, se procede al cambio de pantalla
                                  */
                                 Tasks.whenAllComplete(
@@ -272,11 +329,11 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                         intent.putExtra("data", bundle)
                                         startActivity(intent)
                                     }.addOnFailureListener { e ->
-                                        Snackbar.make(
+                                        snackBar(
                                             binding.root,
-                                            "Error al guardar el empleado ${e.message}",
-                                            Snackbar.LENGTH_SHORT
-                                        ).show()
+                                            "Error al guardar el empleado ${e.message}"
+                                        )
+
                                     }
                             }
                         }
@@ -284,40 +341,43 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
             }
     }
 
-
+    /**
+     * Función para buscár un empleado
+     *
+     * Esta función permite la búsqueda de un empleado en la base de datos a traves de su número de empleado.
+     */
     private fun findUser(numEmple: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document(numEmple).get().addOnSuccessListener { document ->
-            if (document.exists()) {
+            if (document.exists()) { //Si existe un documento con ese número, se cogen sus datos.
                 val name = document.getString("nombre")
                 val surname = document.getString("apellidos")
                 val rol = document.getString("rol")
                 val section = document.getString("seccion")
 
                 val resultText =
-                    "Nombre completo: ${name} ${surname}\nSección: ${rol} en ${section}."
+                    "Nombre completo: ${name} ${surname}\nSección: ${rol} en ${section}." //Y se muestra el resultado
                 binding.includeDeleteEmployee.textResult.text = resultText
             } else {
-                Snackbar.make(
-                    binding.root,
-                    "No se ha encontrado ningún empleado con ese número.",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                snackBar(binding.root, "No se ha encontrado ningún empleado con ese número.")
+
                 binding.includeDeleteEmployee.textResult.setText("Sin resultados")
             }
         }
     }
 
+    /**
+     * Función para borrar un empleado
+     *
+     * Esta función permite borrar un empleado a través de su número de empleado
+     */
     private fun deleteUser(numEmple: String) {
-
-        var sectionNumber = ""
-        var rol = ""
-
         db.collection("users").document(numEmple).get().addOnSuccessListener { document ->
             if (document.exists()) {
-                val findSection = document.getString("seccion")
-                rol = document.getString("rol").toString()
-                sectionNumber =
+                val findSection =
+                    document.getString("seccion") //Buscamos la sección a la que pertenece
+                val rol = document.getString("rol").toString() //También su rol
+                val sectionNumber =
                     when (findSection) { //Volvemos a darle valor a sectionNumber, ya que en esta cardView no hay un Spinner que proporcione el valor necesario
                         "Sala" -> "1"
                         "Charcutería" -> "2"
@@ -328,65 +388,73 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                         else -> "0"
                     }
                 //Recuperamos el uid de authenticator del usuario
-
-                val deleteUser = db.collection("users").document(numEmple).delete()
+                val deleteUser = db.collection("users").document(numEmple)
+                    .delete() //Borramos al usuario de la colección usuarios.
                 val setState = db.collection("usuarios registrados").document(numEmple)
-                    .update("estado", "inactivo")
+                    .update(
+                        "estado",
+                        "inactivo"
+                    ) //Actualizamos su estado a "inactivo" para que, cuando generemos otro nuevo empleado, el sistema no reutilice números de empleado ya dados de baja.
                 val deleteRol = db.collection("rol").document(rol).update(
                     "numEmple",
                     FieldValue.delete()
                 ) //FieldValue.delete permite eliminar un campo de un documento mediante un UPDATE
                 val locateSection = db.collection("secciones").document(sectionNumber)
                 when (rol) {
-                    "Jefe de tienda" -> {
-                        Snackbar.make(
+                    "Jefe de tienda" -> { //Si es el Jefe de la tienda NO se puede borrar.
+                        snackBar(
                             binding.root,
-                            "No puedes borrar el jefe de tienda. Para borrarlo contacta con Central.",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                            "No puedes borrar el jefe de tienda. Para borrarlo contacta con Central."
+                        )
                     }
-                    "Jefe de sección" -> {
+
+                    "Jefe de sección" -> { //Si es jefe de sección lo borramos de su colección.
                         val deleteBoss =
                             locateSection.collection("Jefe de sección").document(numEmple).delete()
 
+                        /**
+                         * task.whenAllComplete
+                         *
+                         * Cuando se completen las tareas de borrar usuario, actualizar el estado, borrar su rol y borrar el jefe
+                         * Se muestra el mensaje de exito o de error dependiendo del caso.
+                         */
                         Tasks.whenAllComplete(deleteUser, setState, deleteRol, deleteBoss)
                             .addOnSuccessListener {
-                                Snackbar.make(
+                                snackBar(
                                     binding.root,
-                                    "Se ha borrado el jefe de sección correctamente",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                    "Se ha borrado el jefe de sección correctamente"
+                                )
+
                             }.addOnFailureListener { e ->
-                                Snackbar.make(
+                                snackBar(
                                     binding.root,
-                                    "Error al borrar el jefe de sección ${e.message}",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                    "Error al borrar el jefe de sección ${e.message}"
+                                )
+
                             }
                     }
-                    else -> {
+                    /**
+                     * Si es empleado, se sigue el mismo procedimiento de antes pero sin pasar por la condicional de los jefes
+                     */
+                    else -> { //Si es empleado, se sigue el mismo procedimiento
                         val deleteEmployee =
                             locateSection.collection("Empleados").document(numEmple).delete()
                         Tasks.whenAllComplete(deleteUser, deleteRol, setState, deleteEmployee)
                             .addOnSuccessListener {
-                                Snackbar.make(
-                                    binding.root,
-                                    "Se ha borrado el empleado correctamente",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                snackBar(binding.root, "Se ha borrado el empleado correctamente")
+
                             }.addOnFailureListener { e ->
-                                Snackbar.make(
-                                    binding.root,
-                                    "Error al borrar el empleado ${e.message}",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                snackBar(binding.root, "Error al borrar el empleado ${e.message}")
                             }
                     }
                 }
             }
         }
     }
+}
 
+    private fun snackBar(view: View, message: String) {
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
 
 }
 

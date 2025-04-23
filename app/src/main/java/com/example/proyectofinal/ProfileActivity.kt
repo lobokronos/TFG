@@ -15,8 +15,8 @@ class ProfileActivity : BaseActivity() {
         enableEdgeToEdge()
         binding=ActivityProfileBinding.inflate(layoutInflater)
 
-        val frameContent=findViewById<FrameLayout>(R.id.content_frame)
-        frameContent.addView(binding.root)
+        val navDrawer=findViewById<FrameLayout>(R.id.content_frame)
+        navDrawer.addView(binding.root)
 
     }
 }

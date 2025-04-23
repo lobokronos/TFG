@@ -1,21 +1,24 @@
 package com.example.proyectofinal
 
-import android.content.Context
+/**
+ * No completada
+ *
+ * Falta el comentario
+ * Falta arreglar las vistas de los container
+ */
+
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
 import com.example.proyectofinal.databinding.ActivityEmployeeCalendarBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -49,8 +52,8 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         super.onCreate(savedInstanceState)
         binding = ActivityEmployeeCalendarBinding.inflate(layoutInflater)
 
-        val frameContent = findViewById<FrameLayout>(R.id.content_frame)
-        frameContent.addView(binding.root)
+        val navDrawer = findViewById<FrameLayout>(R.id.content_frame)
+        navDrawer.addView(binding.root)
 
         variables()
         buildCalendar()
@@ -91,18 +94,18 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         val firstDayOfWeek =
             firstDayOfWeekFromLocale()                         // Obtiene el primer día de la semana segun la configuracion horaria del dispositivo (Lunes)
 
-        val titlesContainer = findViewById<ViewGroup>(R.id.titlesContainer)
-        titlesContainer.children
-            .map { it as TextView }
-            .forEachIndexed { index, textView ->
-                val dayOfWeek = daysOfWeek()[index]
-                val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+        val titlesContainer = findViewById<ViewGroup>(R.id.titlesContainer) //Captura el contenedor titlesContainer(Titulos de los dias) en una variable
+        titlesContainer.children // recoge una secuencia de todas las vistas hijas de los titulos (son 7).
+            .map { it as TextView } //recorre la secuencia y cada elemento lo pasa a textView
+            .forEachIndexed { index, textView -> //forEachIndexed recorre la lista y nos da el TextView y el Indice de cada elemento.
+                val dayOfWeek = daysOfWeek()[index] //daysOfWeek asigna el dia correspondiente con el valor del índice.
+                val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()) // Asignamos el titulo del día a cada título.
                 textView.text = title
-                if (textView.text == "dom") {
-                    textView.setTextColor(Color.WHITE)
+                if (textView.text == "dom") { // Si el textView correspondiente en el bucle es "dom":
+                    textView.setTextColor(Color.WHITE) //Aparecerá con letras blancas y fondo rojo.
                     textView.setBackgroundColor(Color.RED)
                 } else {
-                    textView.setTextColor(Color.WHITE)
+                    textView.setTextColor(Color.WHITE) // Si no, el color de fonjdo será azúl
                     textView.setBackgroundColor(Color.BLUE)
                 }
             }
@@ -137,15 +140,8 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
             /**Esta función crea el diseño de cada día*/
-            override fun create(view: View): DayViewContainer {
-                return DayViewContainer(
-                    view, //La vista del día (Layout de un cuadrado del calendario)
-                    binding.selectedDateText, //El textView de debajo del calendario
-                    binding.calendarView, //El calendario completo
-                    selectedDate, //La fecha seleccionada
-                    ::showNotesElements //La funcion que muestra las notas
-                )                                   //Asigna la vista de día a un contenedor
-            }
+            override fun create(view: View): DayViewContainer = DayViewContainer(view, binding.selectedDateText,
+                binding.calendarView, selectedDate, ::showNotesElements) //Asigna la vista de día a un contenedor
 
 
             /**Este método decide que mostrar en cada día del calendario utilizando el contenedor del dia actual y la fecha actual*/
@@ -192,7 +188,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
     }
 
 //Context aparece en gris porque aqui no se utiliza, pero en la función del dialogo de CalendarActivity si la usamos, por lo que habra que meterla aquí igualmente para que pueda funcionar la función genérica del DayViewContainer.
-    private fun showNotesElements(context: Context, date: LocalDate) {
+    private fun showNotesElements( date: LocalDate) {
         binding.notesContainer.visibility = View.VISIBLE
         pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}"
         val dbNotes =

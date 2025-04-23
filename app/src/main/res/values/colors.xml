@@ -8,6 +8,7 @@
     <color name="colorFondo">#F9FFE5</color>
     <color name="textColor">#FF000000</color>
     <color name="toolbarColor">#FFFFFFFF</color>
+    <color name="forgotPassColor">#0050FF</color>
 
 
 </resources>
