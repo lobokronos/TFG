@@ -98,7 +98,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/calendarView"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iconEmployeeSelected">
 
             <include
                 android:id="@+id/titlesContainer"
@@ -123,6 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30sp"
             android:textSize="18sp"
+            android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarView" />
@@ -148,6 +150,8 @@
             android:id="@+id/otherScheduleTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:textStyle="bold"
             android:layout_marginTop="30sp"
             android:layout_marginLeft="30sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -157,8 +161,9 @@
             android:id="@+id/showOtherSchedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="30sp"
+            android:textColor="@color/textColor"
             android:paddingBottom="50sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/otherScheduleTitle" />
@@ -189,6 +194,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10sp"
                 android:entries="@array/Turns"
+                android:background="@drawable/spinner_background_edited"
+                android:popupBackground="@color/colorFondo"
+                android:theme="@style/spinnerTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -196,8 +204,9 @@
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40sp"
                 android:text="@string/btn_save"
+                android:backgroundTint="@color/naranjaPersonalOscuro"
                 android:layout_marginTop="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -228,6 +237,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15sp"
+                    android:textColor="@color/textColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -243,9 +253,10 @@
                 <Button
                     android:id="@+id/btnAccept"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40sp"
                     android:text="@string/btnAcceptNote"
                     android:layout_marginTop="30sp"
+                    android:backgroundTint="@color/accept"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/publicNoteText" />
@@ -253,12 +264,20 @@
                 <Button
                     android:id="@+id/btnReject"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40sp"
                     android:text="@string/btnRejectNote"
+                    android:backgroundTint="@color/deny"
                     android:layout_marginTop="30sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/publicNoteText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="30sp"
+                    app:layout_constraintTop_toBottomOf="@+id/btnAccept" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

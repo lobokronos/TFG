@@ -9,6 +9,8 @@
     <color name="textColor">#FF000000</color>
     <color name="toolbarColor">#FFFFFFFF</color>
     <color name="forgotPassColor">#0050FF</color>
+    <color name="accept">#4CAF50</color>
+    <color name="deny">#F44336</color>
 
 
 </resources>
