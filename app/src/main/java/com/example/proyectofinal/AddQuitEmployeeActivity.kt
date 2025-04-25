@@ -4,8 +4,15 @@ package com.example.proyectofinal
 /**
  * No completada
  *
+ * Se ha descubierto un fallo importante: al crear un nuevo empleado, al autenticarlo en el codigo, si nos ibamos al Perfil
+ * en vez de aparecer el perfil del Superusuario (el que debería estar) aparecía el del perfil nuevo creado y se apoderaba de la sesion
+ * de superusuario teniendo acceso a toda la app hasta que no se cerrase sesion. Se ha arreglado forzando al superusuario que
+ * ingrese su password para completar el proceso de añadir usuario y asi poder recuperar su contraseña para volverle a iniciar sesion
+ * despues de dar de alta al usuario en la base de datos. OK 3H
+ *
  * Falta introducir un alertDialog para el borrado de usuario por precaución.
  * Falta dar estilo a los radioButton
+ * Falta controlar un Snackbar por si la contraseña del superjefe se mete mal.
  */
 import android.content.Intent
 import android.os.Bundle
@@ -118,6 +125,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         val name = binding.includeAddEmployee.editName.text.toString()
         val surname = binding.includeAddEmployee.editSurname.text.toString()
         val email = binding.includeAddEmployee.editEmail.text.toString()
+        val superPassword = binding.includeAddEmployee.editSuperPass.text.toString()
         if (name.isEmpty()) {
             snackBar(binding.root, "Debe ingresar un nombre")
         } else if (surname.isEmpty()) {
@@ -128,8 +136,11 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
             snackBar(binding.root, "Debe seleccionar una sección")
         } else if (positionJob == 0) {
             snackBar(binding.root, "Debe seleccionar un puesto")
+        }else if(superPassword.isEmpty()){
+            snackBar(binding.root,"Debes introducir tu contraseña para continuar")
         } else {
-            saveData(name, surname, email, section, positionSection, job)
+            val superEmail=auth.currentUser?.email!!
+            saveData(name, surname, email, section, positionSection, job, superEmail,superPassword)
         }
     }
 
@@ -194,7 +205,9 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         email: String,
         section: String,
         positionSection: Int,
-        job: String
+        job: String,
+        superEmail:String,
+        superPassword:String
     ) {
 
         db = FirebaseFirestore.getInstance()
@@ -284,8 +297,10 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                                     bundle.putString("password", pass)
                                                     intent.putExtra("data", bundle)
                                                     startActivity(intent)
+                                                    auth.signInWithEmailAndPassword(superEmail,superPassword).addOnFailureListener{e->
+                                                        snackBar(binding.root,"Error: Error al iniciar sesión de Superjefe")
+                                                    }
                                                 }.addOnFailureListener { e ->
-
                                                     snackBar(
                                                         binding.root,
                                                         "Error al guardar el jefe: ${e.message}"
@@ -328,6 +343,9 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                         bundle.putString("password", pass)
                                         intent.putExtra("data", bundle)
                                         startActivity(intent)
+                                        auth.signInWithEmailAndPassword(superEmail,superPassword).addOnFailureListener{e->
+                                            snackBar(binding.root,"Error: Error al iniciar sesión de Superjefe")
+                                        }
                                     }.addOnFailureListener { e ->
                                         snackBar(
                                             binding.root,

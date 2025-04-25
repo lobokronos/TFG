@@ -76,6 +76,14 @@
     <string name="jobProfile">Puesto</string>
     <string name="numEmployeeProfile">Nº Empleado</string>
     <string name="emailProfile">Email</string>
+    <string name="profileCompleteName">Nombre completo</string>
+    <string name="profileBtnResetPass">Restablecer contraseña</string>
+    <string name="profileQuestionResetPass">¿Quieres cambiar tu contraseña?</string>
+    <string name="profileEditEmail">Editar</string>
+    <string name="OldEmailTitle">Introcude tu correo actual</string>
+    <string name="newEmailTitle">Introduce tu correo nuevo</string>
+    <string name="passTitle">Introduce tu contraseña</string>
+    <string name="NumTitle">Número de empleado</string>
     <!-- ********************************************************************************************* -->
 
     <!-- activity_home.xml -->

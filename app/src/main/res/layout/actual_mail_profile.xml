@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorFondo">
+
+    <TextView
+        android:id="@+id/profileEmailName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emailProfile"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="15sp"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profileRecoveredEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="30sp"
+        android:layout_marginLeft="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailName" />
+
+    <Button
+        android:id="@+id/btnEditMail"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/naranjaPersonalOscuro"
+        android:text="@string/profileEditEmail"
+        android:layout_marginLeft="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/profileRecoveredEmail"
+        app:layout_constraintStart_toEndOf="@+id/profileRecoveredEmail"
+        app:layout_constraintTop_toTopOf="@+id/profileRecoveredEmail" />
+
+    <TextView
+        android:id="@+id/resetPassTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50sp"
+        android:text="@string/profileQuestionResetPass"
+        android:textColor="@color/textColor"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileRecoveredEmail" />
+
+    <Button
+        android:id="@+id/btnResetProfilePass"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/naranjaPersonalOscuro"
+        android:layout_marginTop="20sp"
+        android:text="@string/profileBtnResetPass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resetPassTitle" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

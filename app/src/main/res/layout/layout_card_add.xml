@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="560dp"
+    android:layout_height="wrap_content"
     android:background="@color/colorFondo"
     android:paddingLeft="30sp">
 
@@ -145,14 +146,38 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/titleJob" />
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:textStyle="italic"
+        android:text="Introduce tu contraseña para terminar el proceso"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerSections" />
+
+    <EditText
+        android:id="@+id/editSuperPass"
+        android:layout_width="220dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="15sp"
+        android:background="@android:color/white"
+        android:hint="Password"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70sp"
         android:backgroundTint="@color/naranjaPersonalOscuro"
         android:text="@string/btnAdd"
+        android:layout_marginTop="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.441"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerSections" />
+        app:layout_constraintTop_toBottomOf="@+id/editSuperPass" />
 </androidx.constraintlayout.widget.ConstraintLayout>
