@@ -2,6 +2,9 @@ package com.example.proyectofinal
 
 /**
  *Completada
+ *
+ * Cambiado el redirigido de inicio de sesion al calendario directamente.
+ * Falta borrar la activity HomeActivity.kt
  */
 import android.content.Intent
 import android.os.Bundle
@@ -98,6 +101,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         val document = querySnapshot.documents[0]
                         var login=document.getBoolean("login")
                         var numEmple=document.getLong("numEmple")!!.toString()
+                        var rol=document.getString("rol")
                         if (login==false) {
                             auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
@@ -110,7 +114,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             }
                         } else {
                             binding.warningPass.visibility=View.GONE
-                            startActivity(Intent(applicationContext, HomeActivity::class.java))
+                            when (rol){ //Dependiendo del rol, el usuario será redirigido a un calendario u otro.
+                                "Jefe de tienda"->startActivity(Intent(applicationContext, CalendarActivity::class.java))
+                                "Jefe de sección" ->startActivity(Intent(applicationContext, EmployeeCalendarActivity::class.java))
+                                "Empleado" ->startActivity(Intent(applicationContext, EmployeeCalendarActivity::class.java))
+
+                            }
                         }
                     } else {
                         snackBar(binding.root, "No existe ningun usuario con ese email.")
