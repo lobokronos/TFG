@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <!--En este layout editamos las opciones que va a tener el menu desplegable del Drawer-->
     <item
-        android:id="@+id/menu_home"
-        android:title="@string/menu_home" />
-    <item
         android:id="@+id/menu_profile"
         android:title="@string/menu_profile"/>
     <item

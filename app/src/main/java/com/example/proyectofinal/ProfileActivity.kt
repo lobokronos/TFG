@@ -3,17 +3,16 @@ package com.example.proyectofinal
 /**
  * No completado
  *
- * Falta probar a verificar el usuario antes de poder cambiar el mail. Ya que si no sale un error pidiendolo (mirar el logCat)
+ * Falta editar colores correctamente
+ * Añadida verificación de usuario y lógica para cambiar el mail. Importante el metodo verifyBeforeUpdateMail() 4H OK
+ *
  */
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.proyectofinal.databinding.ActivityProfileBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.EmailAuthProvider
@@ -23,123 +22,235 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfileActivity : BaseActivity(), View.OnClickListener {
     private lateinit var binding: ActivityProfileBinding
-    private lateinit var db:FirebaseFirestore
-    private lateinit var auth:FirebaseAuth
-    private var user: FirebaseUser?=null
-    private lateinit var name:String
-    private lateinit var surname:String
-    private lateinit var section:String
-    private lateinit var email:String
-    private lateinit var numEmple:String
-    private lateinit var rol:String
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+    private var user: FirebaseUser? = null
+    private lateinit var name: String
+    private lateinit var surname: String
+    private lateinit var section: String
+    private lateinit var email: String
+    private lateinit var numEmple: String
+    private lateinit var rol: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding=ActivityProfileBinding.inflate(layoutInflater)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
 
-        val navDrawer=findViewById<FrameLayout>(R.id.content_frame)
+        val navDrawer = findViewById<FrameLayout>(R.id.content_frame)
         navDrawer.addView(binding.root)
 
-        variables()
-        actions()
-        allData()
-
-
+        variables() // Método para inicializar las variables al iniciar la pantalla
+        checkUserVerification() //Método para ocultar items según si el ususario está verificado o no
+        actions() // Método que guarda las acciones de los botones
+        allData() // Método que recoge todos los datos del usuario, y que llama al otro método showData() para mostrarlos
     }
 
+    /**
+     * Método que oculta o muestra elementos según si el usuario está verificado o no
+     *
+     * Si el usuario no está verificado, deshabilitará el botón de "editar mail" para evitar errores, ocultará
+     * el icono de verificación y mostrará un mensaje de advertencia indicando que se debe verificar el
+     * correo antes de poder actualizarlo, junto con un boton para enviar un mail de verificación. Si está
+     * verificado, mostrará el icono de verficación y el texto cambiará a "usuario verificado. Ademas
+     * habilitará el botón de editar para que, ahora si, el usuario pueda modificar su mail.
+     */
+    private fun checkUserVerification() {
+        if (user?.isEmailVerified == true) {
+            binding.includeOldEmailCardView.verifidedText.setText("Email verificado")
+            binding.includeOldEmailCardView.verifidedText.setTextColor(Color.GREEN)
+            binding.includeOldEmailCardView.btnVerify.visibility = View.GONE
+            binding.includeOldEmailCardView.btnEditMail.isEnabled = true
+        } else {
+            binding.includeOldEmailCardView.btnEditMail.isEnabled = false
+            binding.includeOldEmailCardView.btnVerify.visibility = View.VISIBLE
+            binding.includeOldEmailCardView.verifiedIMG.visibility = View.GONE
+        }
+    }
+
+    /**
+     * Método que contiene las acciones de los botones
+     */
     private fun actions() {
         binding.includeOldEmailCardView.btnResetProfilePass.setOnClickListener(this)
         binding.includeOldEmailCardView.btnEditMail.setOnClickListener(this)
         binding.includerResetEmailCardView.btnResetAccept.setOnClickListener(this)
         binding.includerResetEmailCardView.btnCanelReset.setOnClickListener(this)
+        binding.includeOldEmailCardView.btnVerify.setOnClickListener(this)
     }
 
-    private fun variables(){
-        db=FirebaseFirestore.getInstance()
-        auth= FirebaseAuth.getInstance()
-        user=auth.currentUser
+    /**
+     * Método para inicializar variables
+     */
+    private fun variables() {
+        db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+        user = auth.currentUser
 
     }
 
+    /**
+     * Método para mostrar los datos recogidos de la base de datos en el perfil del usuario
+     */
     private fun showData() {
-        binding.profileRecoveredName.text="${name} ${surname}"
-        binding.profileNumText.text=numEmple
-        binding.profileRecoveredSection.text=section
-        binding.profileRecoveredJob.text=rol
-        binding.includeOldEmailCardView.profileRecoveredEmail.text=email
+        binding.profileRecoveredName.text = "${name} ${surname}"
+        binding.profileNumText.text = numEmple
+        binding.profileRecoveredSection.text = section
+        binding.profileRecoveredJob.text = rol
+        binding.includeOldEmailCardView.profileRecoveredEmail.text = email
     }
 
-    private fun allData(){
-        val uid=user?.uid
-        db.collection("users").whereEqualTo("uid",uid).get().addOnSuccessListener { result->
-            if(!result.isEmpty){
-                val resDoc=result.documents[0]
-                name=resDoc.getString("nombre").toString()
-                surname=resDoc.getString("apellidos").toString()
-                email=resDoc.getString("email").toString()
-                rol=resDoc.getString("nombre").toString()
-                val docNum=resDoc.getLong("numEmple")
-                numEmple=docNum.toString()
-                section=resDoc.getString("seccion").toString()
-                showData()
+    /**
+     * Método que hace una llamada a la colección del usuario en la base de datos para recoger sus datos
+     */
+    private fun allData() {
+        val uid = user?.uid
+        db.collection("users").whereEqualTo("uid", uid).get().addOnSuccessListener { result ->
+            if (!result.isEmpty) {
+                val resDoc = result.documents[0]
+                name = resDoc.getString("nombre").toString()
+                surname = resDoc.getString("apellidos").toString()
+                email = resDoc.getString("email").toString()
+                rol = resDoc.getString("nombre").toString()
+                val docNum = resDoc.getLong("numEmple")
+                numEmple = docNum.toString()
+                section = resDoc.getString("seccion").toString()
+                showData() // Llamada al método que mostrará los datos en las lineas correspondientes del perfil
 
             }
         }
     }
 
+    /**
+     * Método que reoge las funciones de los botones
+     */
     override fun onClick(v: View?) {
         when (v?.id) {
+            /**
+             * Botón para editar el mail
+             */
             binding.includeOldEmailCardView.btnEditMail.id -> {
+                // Cuando es pulsado, oculta la cardview actual y muestra la de restablecimiento de correo
                 binding.cardOldMail.visibility = View.GONE
                 binding.cardNewMail.visibility = View.VISIBLE
             }
-
+            /**
+             * Botón de "cancelar editado
+             */
             binding.includerResetEmailCardView.btnCanelReset.id -> {
+                // cuando es pulsado, oculta la cardview actual y vuelve a mostrar la de verificación
                 binding.cardOldMail.visibility = View.VISIBLE
                 binding.cardNewMail.visibility = View.GONE
             }
-
-            binding.includeOldEmailCardView.btnResetProfilePass.id->{
-                startActivity(Intent(applicationContext,ResetPassActivity::class.java))
+            /**
+             * Botón para restablecer la contraseña
+             */
+            binding.includeOldEmailCardView.btnResetProfilePass.id -> {
+                //Cuando se pulsa, el usuario es redirigido a la pantalla de restablecimiento de contraseña
+                startActivity(Intent(applicationContext, ResetPassActivity::class.java))
             }
-
+            /**
+             * Botón de restablecimiento de Email
+             */
             binding.includerResetEmailCardView.btnResetAccept.id -> {
-                val oldMail = binding.includerResetEmailCardView.cardEditOldEmail.text.toString()
+                //Primero recogemos los Strings de los editText (correo actual, contraseña y el nuevo)
+                val oldMail = binding.includerResetEmailCardView.cardEditOldEmail.toString()
                 val pass = binding.includerResetEmailCardView.cardEditPass.text.toString()
                 val newMail = binding.includerResetEmailCardView.cardEditNewMail.text.toString()
 
-                val token = EmailAuthProvider.getCredential(oldMail, pass)
-                val currentUser = user
-                currentUser?.reauthenticate(token)?.addOnCompleteListener { reAuth ->
-                    if (reAuth.isSuccessful) {
-                        currentUser.updateEmail(newMail).addOnCompleteListener { update ->
-                            if (update.isSuccessful) {
-                                val insertMail= hashMapOf("mail" to newMail)
-                                db.collection("users").document(numEmple).set(insertMail).addOnCompleteListener { set ->
-                                    if(set.isSuccessful){
-                                        snackBar(binding.root, "Email actualizado correctamente")
-                                    }else{
-                                        snackBar(binding.root,"no se ha podido ingresar el nuevo mail en la base de datos")
-                                    }
-                                }.addOnFailureListener{e->
-                                    snackBar(binding.root,"${e.message}")
+                if (oldMail.isEmpty()) { //Si no se ha introducido el correo viejo salta un error
+                    snackBar(binding.root, "Por seguridad debes introducir tu correo actual")
+                } else if (oldMail != user?.email) { //Si el correo viejo no coincide con el del usuario, salta un error
+                    snackBar(
+                        binding.root,
+                        "El correo actual no coincide con el de la sesión iniciada"
+                    )
+                } else if (pass.isEmpty()) { // Si la contraseña no ha sido introducida, salta un error
+                    snackBar(binding.root, "Por seguridad debes introducir tu contraseña")
+                } else if (newMail.isEmpty()) { // Si el nuevo correo no ha sido introducido salta un error
+                    snackBar(binding.root, "Introduce tu nuevo correo por favor")
+                } else { // Si todos los campos estan correctos...
+
+                    val token = EmailAuthProvider.getCredential(
+                        oldMail,
+                        pass
+                    ) //Recogemos el correo y la contraseña del usuario y la guardamos en una variable a modo de token o "llave"
+                    val currentUser = user
+                    Log.d("CorreoEnSesion", user?.email.toString())
+                    currentUser?.reauthenticate(token)
+                        ?.addOnCompleteListener { reAuth -> // Aqui utilizamos la "llave" para comprobar si el usuario y contraseña introducidos coinciden con el usuario actual. Si coinciden...
+                            if (reAuth.isSuccessful) {//si coinciden...
+                                if (currentUser.isEmailVerified) {//Y si el usuario ya está verificado...
+                                    /*Se ha sustituido el método "updateEmail(String)" por verifyBeforeUpdateEmail ya que el otro estaba deprecado.
+                                    El antiguo método daba error ya que el funcionamiento de Authentication ha cambiado. Ahora se necesita verificar el
+                                    email antes de ser modificado. Ahora se puede actualizar el mail, pero hasta que el usuario no verifique su cuenta
+                                    a traves del mail de verificación, no podra hacer login.
+                                     */
+                                    currentUser.verifyBeforeUpdateEmail(newMail)
+                                        .addOnCompleteListener { verify -> //Actualizamos el email con el newMail
+                                            if (verify.isSuccessful) {//Si la actualización es correcta...
+                                                val insertMail =
+                                                    hashMapOf("mail" to newMail) //creamos un hashmap para introducir los datos en Firebase
+                                                db.collection("users").document(numEmple)
+                                                    .set(insertMail)
+                                                    .addOnCompleteListener { set -> //Hacemos el set para cambiar los datos en la BBDD
+                                                        if (set.isSuccessful) { // Avisamos de que ha salido bien
+                                                            snackBar(
+                                                                binding.root,
+                                                                "Email actualizado correctamente"
+                                                            )
+                                                        } else { //Si no, avisamos del error
+                                                            snackBar(
+                                                                binding.root,
+                                                                "no se ha podido ingresar el nuevo mail en la base de datos"
+                                                            )
+                                                        }
+                                                    }
+                                                    .addOnFailureListener { e -> //Si da fallo al guardar los datos, avisamos
+                                                        snackBar(
+                                                            binding.root,
+                                                            "Error al guardar en la base de datos: ${e.message}"
+                                                        )
+                                                    }
+                                            } else {
+                                                snackBar(binding.root, "Error al actualizar el mail")
+                                            }
+                                            }.addOnFailureListener{ e->// Se ha dejado este Log para ver el fallo que daba al intentar actualizar el nuevo mail
+                                                snackBar(binding.root,"Fallo real: ${e.message}")
+                                            Log.e("FIREBASE_ERROR", "updateEmail failed", e)
+                                        }
+                                } else {
+                                    snackBar(binding.root, "Debes verificar el correo")
                                 }
                             } else {
-                                snackBar(binding.root, "Error al actualizar el mail")
+                                snackBar(binding.root, "Contraseña incorrecta o main incorrecto")
                             }
-                        }.addOnFailureListener { e ->
-                            snackBar(binding.root, "Error de reautenticación: ${e.message}")
-                            Log.e("FirebaseError", "Error de reautenticación", e)
                         }
+                }
+            }
+
+
+            /**
+             * Botón para mandar el email de verificación
+             */
+            binding.includeOldEmailCardView.btnVerify.id->{
+                //Al pulsarlo se envía un email de verificación para que el usuario verifique su cuenta.
+                user?.sendEmailVerification()?.addOnCompleteListener{verify->
+                    if(verify.isSuccessful){ // Si sale bien...
+                        snackBar(binding.root,"Correo de verificación enviado. Revisa tu bandeja de entrada")
+                    }else{ // Si no sale bien...
+                        snackBar(binding.root,"Error al enviar el correo de verificación")
                     }
                 }
             }
         }
     }
-    }
+}
 
+/**
+ * Método para mostrar Snackbars
+ */
 private fun snackBar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
 }

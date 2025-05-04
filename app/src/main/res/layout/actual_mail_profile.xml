@@ -41,27 +41,59 @@
         app:layout_constraintTop_toTopOf="@+id/profileRecoveredEmail" />
 
     <TextView
+        android:id="@+id/verifidedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:textColor="@color/black"
+        android:text="Debes verificar tu correo antes de poder cambiarlo."
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEditMail" />
+
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verificar cuenta"
+        android:textColor="@color/forgotPassColor"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/verifidedText" />
+
+    <TextView
         android:id="@+id/resetPassTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="30sp"
         android:text="@string/profileQuestionResetPass"
         android:textColor="@color/textColor"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileRecoveredEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/btnVerify" />
 
     <Button
         android:id="@+id/btnResetProfilePass"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginTop="15sp"
         android:backgroundTint="@color/naranjaPersonalOscuro"
-        android:layout_marginTop="20sp"
         android:text="@string/profileBtnResetPass"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resetPassTitle" />
+
+    <ImageView
+        android:id="@+id/verifiedIMG"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:src="@drawable/tick"
+        app:layout_constraintBottom_toTopOf="@+id/btnVerify"
+        app:layout_constraintStart_toEndOf="@+id/verifidedText"
+        app:layout_constraintTop_toTopOf="@+id/verifidedText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

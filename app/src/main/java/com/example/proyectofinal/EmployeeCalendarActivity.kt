@@ -1,10 +1,10 @@
 package com.example.proyectofinal
 
 /**
- * No completada
+ * Completada
  *
- * Falta el comentario
- * Falta arreglar las vistas de los container
+ * Falta el comentario OK
+ * Falta arreglar las vistas de los container OK
  */
 
 import android.graphics.Color
@@ -39,7 +39,6 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var uid: String
-    private lateinit var employeeName: String
     private lateinit var numEmple: String
     private var selectedPosition: Int = 0
     private lateinit var builder: AlertDialog.Builder
@@ -64,6 +63,9 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
 
     }
 
+    /**
+     * Acciones de los botones y Spinners
+     */
     private fun actions() {
         binding.btnSave.setOnClickListener(this)
         binding.spinnerNoteType.onItemSelectedListener = this
@@ -72,8 +74,13 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
 
     }
 
+    /**
+     * Variables iniciadas nada mas arrancar la pantalla
+     */
     private fun variables() {
-        binding.notesContainer.visibility = View.INVISIBLE
+        binding.notesContainer.visibility = View.INVISIBLE // Mostramos el contenedor de notas invisible nada mas iniciar la pantalla
+        binding.containerShowExistPrivateNotes.visibility=View.GONE // Mostramos el visor de notas y sugerencias invisible hasta que no se pulse un día
+        binding.containerShowExistPublicNotes.visibility=View.GONE
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser?.uid ?: ""
@@ -172,12 +179,13 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                     }
                 }
 
+                // Iremos pintando los números de los días dependiendo del estado de la sugerencia que contenga
                 when(showPublicDate){
                     "pendiente"->{ container.dayNumber.setTextColor(Color.MAGENTA) }
                     "aceptado" -> { container.dayNumber.setTextColor(Color.GREEN) }
                     "rechazado" ->{ container.dayNumber.setTextColor(Color.RED) }
                 }
-
+                // Si existe un día con una nota en la variable showPrivateIcons, vuelve visible el icono.
                 if (showPrivateIcons==true){
                     icon.visibility=View.VISIBLE
                 }else{
@@ -187,22 +195,29 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         }
     }
 
-//Context aparece en gris porque aqui no se utiliza, pero en la función del dialogo de CalendarActivity si la usamos, por lo que habra que meterla aquí igualmente para que pueda funcionar la función genérica del DayViewContainer.
+    /**
+     * Función que muestra las notas y sugerencias que contienen los días al ser pulsados en el calendario.
+     *
+     * Esta función comprueba en la base de datos si existen notas en un día pulsado. Si existen, las muestra en
+     * el editText TextShowPrivate o TextShowPublic haciendo aparecer sus correspondientes contenedores. Si no
+     * hay notas o sugerencias, directamente oculta estos contenedores para evitar futuros errores.
+     */
     private fun showNotesElements( date: LocalDate) {
-        binding.notesContainer.visibility = View.VISIBLE
-        pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}"
-        val dbNotes =
+        binding.notesContainer.visibility = View.VISIBLE //Cuando se pulsa un día, automáticamente se vuelve visible el selector de notas o sugerencias
+        pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}" //construimos un LocalDate para utilizarlo en este método.
+        val dbNotes = //Consulta a la base de datos para las notas privadas
             db.collection("turnos").document(pickedDate).collection(numEmple).document("notas")
         dbNotes.collection("private").document("notaPrivada").get()
             .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val privateText = document.getString("nota")
-                    binding.containerShowExistPrivateNotes.visibility = View.VISIBLE
-                    binding.textShowPrivate.text = privateText
+                if (document.exists()) { // Si hay notas privadas...
+                    val privateText = document.getString("nota") //Cogemos la nota
+                    binding.containerShowExistPrivateNotes.visibility = View.VISIBLE //Hacemos visible su contenedor para mostrarla
+                    binding.textShowPrivate.text = privateText // Le pasamos el texto de la nota al EditText para que sea legible
                 } else {
-                    binding.containerShowExistPrivateNotes.visibility = View.GONE
+                    binding.containerShowExistPrivateNotes.visibility = View.GONE //Si no, directamente no mostramos dicho contenedor
                 }
             }
+        //Hacemos exáctamente lo mismo con las notas públicas
         dbNotes.collection("public").document("notaPublica").get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -289,7 +304,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
      * se construye a partir del día cogido del PickedDate, separandolo en trozos  guardando cada parte (día, mes y año) dentro de el.
      */
     override fun onClick(v: View?) {
-        val dateParts= pickedDate.split("-")
+        val dateParts= pickedDate.split("-") //Deconstruimos el pickedDate para reconstruir la fecha en la siguiente variable con el orden de los elementos ordenado correctamente
         val dateForThisFunction=LocalDate.of(dateParts[2].toInt(),dateParts[1].toInt(),dateParts[0].toInt())
         when (v?.id) {
             binding.btnSave.id -> {
@@ -377,24 +392,25 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                 //Primero generamos un dialogo al pulsar el boton como medida de seguridad, para evitar que el usuario borre
                 //por error una nota. Si en el dialogo se pulsa si, se borra, si no se cierra y no pasa nada.
                 builder.setMessage("¿Estas seguro de querer borrar esta nota?")
-                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog,wich ->
+                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog,wich -> //Generamos la lógica que actuará cuando se pulse el SI
                         db.collection("turnos").document(pickedDate).collection(numEmple)
                             .document("notas")
                             .collection("private").document("notaPrivada").delete()
-                            .addOnSuccessListener {
-                                snackBar(binding.root,"Anotación borrada con éxito")
-                                privateNoteList.remove(dateForThisFunction)
-                                binding.calendarView.notifyDateChanged(dateForThisFunction)
+                            .addOnSuccessListener { //Si está correcto
+                                snackBar(binding.root,"Anotación borrada con éxito") //Informamos
+                                privateNoteList.remove(dateForThisFunction) //Borramos del array de notas privadas la que contenga dicha fecha
+                                binding.calendarView.notifyDateChanged(dateForThisFunction) //Refrescamos el día con la fecha seleccionada.
                             }.addOnFailureListener { e ->
                                 snackBar(binding.root,"Error: ${e.message}")
                             }
+                        //Y despues de borrarla ocultamos el contenedor de las notas privadas ya que ahora no existe ninguna nota
                         binding.containerShowExistPrivateNotes.visibility = View.GONE
-                    }.setNegativeButton("No") { dialog, wich ->
+                    }.setNegativeButton("No") { dialog, wich -> //Si pulsamos no, directamente cerramos el dialogo.
                         dialog.dismiss()
                     }
                     .show()
             }
-
+// Aquí hacemos exáctamente lo mismo que en el botón anterior, solo que con las notas públicas.
             binding.deletePublic.id -> {
                 builder.setMessage("¿Estas seguro de querer borrar esta nota?")
                     .setTitle("¡Atención!").setPositiveButton("Si") { dialog, wich ->
@@ -417,19 +433,24 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         }
     }
 
+    /**
+     * En este onItemSelected se juega con el spinner de selección de notas o sugerencias para mostrar unos elementos
+     * u otros dependiendo del item seleccionado
+     */
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         selectedPosition = p2
+        //Dependiendo de la posición del Spinner...
         when (selectedPosition) {
-            0 -> {
+            0 -> { // Si es 0 dirrectamente no mostramos el contenedor entero
                 binding.noteContainerSelected.visibility = View.INVISIBLE
             }
-
+            // Si se selecciona la privada, se muestra el contenedor y se personalizan sus elementos para que muestren advertencias y mensajes referentes a las notas privadas
             1 -> {
                 binding.noteContainerSelected.visibility = View.VISIBLE
                 binding.typeTitleText.text = getString(R.string.privateNote)
                 binding.noteInstructionsText.text = getString(R.string.instructionsPrivate)
             }
-
+            // Si se selecciona la sugerencia, se muestra el contenedor y se personalizan sus elementos para que muestren advertencias y mensajes referentes a las sugerencias
             2 -> {
                 binding.noteContainerSelected.visibility = View.VISIBLE
                 binding.typeTitleText.text = getString(R.string.publicNote)
@@ -442,6 +463,9 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 }
 
+/**
+ * Método para los Snackbar
+ */
 private fun snackBar(view:View, message:String){
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
 }

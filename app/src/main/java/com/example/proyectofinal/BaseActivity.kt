@@ -2,6 +2,8 @@ package com.example.proyectofinal
 
 /**
  * Completada
+ *
+ * Quitado el item de HomeActivity ya que no se iba a utilizar
  */
 
 import android.content.Intent
@@ -75,10 +77,6 @@ open class BaseActivity : AppCompatActivity() {
          */
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-
-                R.id.menu_home ->
-                    startActivity(Intent(this, HomeActivity::class.java)) //Lleva hacia Home
-
 
                 R.id.menu_profile ->
                     startActivity(Intent(this, ProfileActivity::class.java))//Lleva hacia Mi Perfil
@@ -183,6 +181,7 @@ open class BaseActivity : AppCompatActivity() {
             return when (title) { // dependiendo del nombre que de, extraemos y colocamos el String correspondiente.
                 "com.example.proyectofinal.HomeActivity" -> getString(R.string.menu_home)
                 "com.example.proyectofinal.CalendarActivity" -> getString(R.string.menu_calendar)
+                "com.example.proyectofinal.EmployeeCalendarActivity" ->getString(R.string.menu_calendar)
                 "com.example.proyectofinal.AddQuitEmployeeActivity" -> getString(R.string.menu_addQuit)
                 "com.example.proyectofinal.ProfileActivity" -> getString(R.string.menu_profile)
                 else -> "No Title"
