@@ -539,7 +539,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
              */
             binding.btnReject.id -> {
                 builder.setMessage("Esta acción no será reversible a menos que el empleado borre la sugerencia.¿Deseas RECHAZAR la sugeréncia?")
-                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog, wich ->
+                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog, _ ->
                         db.collection("turnos").document(pickedDate).collection(numEmple)
                             .document("notas")
                             .collection("public").document("notaPublica")

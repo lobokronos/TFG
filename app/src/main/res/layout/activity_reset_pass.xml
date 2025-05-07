@@ -22,7 +22,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100sp"
@@ -43,10 +43,10 @@
         android:layout_marginTop="40sp"
         app:layout_constraintEnd_toEndOf="@+id/viewContainer"
         app:layout_constraintStart_toStartOf="@+id/viewContainer"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/descriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50sp"
@@ -68,7 +68,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/viewContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"/>
+        app:layout_constraintTop_toBottomOf="@+id/descriptionText"/>
 
 
 

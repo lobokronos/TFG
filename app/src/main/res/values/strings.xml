@@ -17,7 +17,7 @@
 
     <!--Aactivity_add_quit_employee.xml -->
     <string name="rBtnAdd">Añadir empleado</string>
-    <string name="rBtnDelete">Buscar/Eliminar empleado</string>
+    <string name="rBtnDelete">Borrar empleado</string>
     <!-- ********************************************************************************************* -->
 
     <!-- layout_card_add.xml -->

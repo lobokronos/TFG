@@ -62,6 +62,7 @@ open class BaseActivity : AppCompatActivity() {
 
         //Agregamos la acción de escucha para el botón del menú
         binding.drawerLayout.addDrawerListener(toggle)
+
         toggle.syncState() //syncStatesincroniza el icono del menu cuando se abre o se cierra, cambiandolo segun su estado.
 
         //Aquí le damos título personalizado en el toolbar dependiendo de la activity en la que nos encontremos a traves de la

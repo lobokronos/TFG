@@ -32,12 +32,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="20sp"
+            android:background="@drawable/radiobutton_style"
             android:text="@string/rBtnAdd"
             android:textColor="@color/textColor"/>
 
         <RadioButton
             android:id="@+id/deleteEmployee"
             android:layout_width="wrap_content"
+            android:background="@drawable/radiobutton_style"
             android:layout_height="wrap_content"
             android:text="@string/rBtnDelete"
             android:textColor="@color/textColor"/>

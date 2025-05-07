@@ -3,6 +3,8 @@ package com.example.proyectofinal
 /**
  * No Completada
  *
+ * Detectado un error: Se podía introducir cualquier correo exisitiera ono. Solucionado haciendo una
+ * llamada a la base de datos para consultar si exisste el correo. OK
  * Falta ensanchar el TexView
  * Falta dar color a las letras del textView (negro)
  * Falta ajustar en Snackbar cuando se resetea la contraseña (algun Thread.sleep o algo)
@@ -65,20 +67,35 @@ class ResetPassActivity : AppCompatActivity(), View.OnClickListener {
      * Esta función recoge el texto del editText donde el usuario ingresa el correo y envía un mail con dicho objetivo
      */
     private fun sendEmailPass() {
-        val emailToSend=binding.emailToSend.text.toString()
+        val emailToSend = binding.emailToSend.text.toString()
 
         auth.setLanguageCode("es")
         if (emailToSend.isEmpty()) {
             snackBar(binding.root, "Por favor, ingresa tu correo electrónico")
         } else {
-            auth.sendPasswordResetEmail(emailToSend).addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    snackBar(binding.root,"Revisa la bandeja de entrada de tu correo")
-                    startActivity(Intent(this, MainActivity::class.java))
+            db.collection("users").whereEqualTo("email", emailToSend).get()
+                .addOnSuccessListener { query ->
+                    if (!query.isEmpty) {
+
+
+                        auth.sendPasswordResetEmail(emailToSend).addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                snackBar(binding.root, "Revisa la bandeja de entrada de tu correo")
+                                startActivity(Intent(this, MainActivity::class.java))
+                            }
+                        }.addOnFailureListener { e ->
+                            snackBar(binding.root, "Error: ${e.message}")
+                        }
+                    } else {
+                        snackBar(
+                            binding.root,
+                            "Este correo no existe en nuestro sistema o está mal escrito"
+                        )
+                    }
                 }
-            }.addOnFailureListener{e->
-                snackBar(binding.root,"Error: ${e.message}")
-            }
+                .addOnFailureListener { e ->
+                    snackBar(binding.root, "Error al verificar el correo ${e.message}")
+                }
         }
     }
 }
@@ -86,6 +103,6 @@ class ResetPassActivity : AppCompatActivity(), View.OnClickListener {
 /**
  * Función para reutilizar los Snackbar
  */
-private fun snackBar(view:View, message:String){
+private fun snackBar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
 }
