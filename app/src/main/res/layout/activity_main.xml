@@ -12,7 +12,7 @@
         android:id="@+id/orangeContainer"
         android:layout_width="280dp"
         android:layout_height="180dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/frame_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,7 @@
         android:layout_width="350dp"
         android:layout_height="200dp"
         android:src="@drawable/logo_titulo"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/email"
+        android:textColor="@color/textColor"
         android:textSize="18sp"
         android:layout_marginLeft="35dp"
         app:layout_constraintBottom_toTopOf="@+id/editEmployeeMail"
@@ -47,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/password"
+        android:textColor="@color/textColor"
         android:textSize="18sp"
         android:layout_marginTop="10sp"
         android:layout_marginLeft="35dp"
@@ -62,6 +64,8 @@
         android:hint="@string/hintEmail"
         android:textColor="@color/textColor"
         android:padding="8dp"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:layout_marginTop="35dp"
         app:layout_constraintEnd_toEndOf="@+id/orangeContainer"
         app:layout_constraintStart_toStartOf="@+id/orangeContainer"
@@ -74,6 +78,8 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:hint="@string/hintPass"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:inputType="textPassword"
         android:layout_marginTop="5sp"
         android:padding="8dp"
@@ -86,14 +92,24 @@
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="130dp"
+        android:layout_marginBottom="180dp"
         android:backgroundTint="@color/naranjaPersonalOscuro"
         android:text="@string/btnLogin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orangeContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/btnForgotPassword" />
+
+    <ImageView
+        android:id="@+id/btnGoogle"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />"
+
 
     <TextView
         android:id="@+id/warningPass"
@@ -104,8 +120,10 @@
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />"
 
     <Button
         android:id="@+id/btnForgotPassword"
@@ -114,7 +132,6 @@
         android:text="¡Olvidaste tu contraseña?"
         android:textColor="@color/forgotPassColor"
         android:backgroundTint="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orangeContainer" />

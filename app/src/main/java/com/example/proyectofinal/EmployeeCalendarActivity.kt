@@ -171,10 +171,14 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                 val showPrivateIcons=privateNoteList[data.date]
                 val icon=container.icon
                 when (recoveredTurn) {
-                    "Mañana" -> { container.dayNumber.setBackgroundColor(Color.YELLOW) }
-                    "Tarde" -> { container.dayNumber.setBackgroundColor(Color.BLUE) }
-                    "Fiesta" -> { container.dayNumber.setBackgroundColor(Color.RED) }
-                    "Libre" -> { container.dayNumber.setBackgroundColor(Color.GREEN) }
+                    "Mañana" -> { container.dayNumber.setBackgroundResource(R.drawable.turnomanana)
+                    container.dayNumber.background.alpha=100}
+                    "Tarde" -> { container.dayNumber.setBackgroundResource(R.drawable.tarde)
+                        container.dayNumber.background.alpha=100}
+                    "Fiesta" -> { container.dayNumber.setBackgroundResource(R.drawable.turnovacaciones)
+                        container.dayNumber.background.alpha=100}
+                    "Libre" -> { container.dayNumber.setBackgroundResource(R.drawable.turnolibre)
+                        container.dayNumber.background.alpha=100}
                     else -> {
                         container.dayNumber.setBackgroundColor(Color.TRANSPARENT)
                     }
@@ -225,9 +229,31 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                     val publicText = document.getString("nota")
                     status = document.getString("estado").toString()
                     binding.containerShowExistPublicNotes.visibility = View.VISIBLE
-                    val finalPublicText = "${publicText} (${status})"
+                    val finalPublicText = "${publicText}"
                     binding.textShowPublic.text = finalPublicText
 
+                    when(status){
+                        "pendiente"->{
+                            binding.imageResult.setImageResource(R.drawable.questionpublic)
+                            binding.textPublicResult.setTextColor(Color.MAGENTA)
+                            binding.deletePublic.isEnabled=true
+                            binding.textPublicResult.text="Pendiente"
+
+                        }
+                        "aceptado" -> {
+                            binding.imageResult.setImageResource(R.drawable.likepublic)
+                            binding.textPublicResult.setTextColor(Color.GREEN)
+                            binding.deletePublic.isEnabled=false
+                            binding.textPublicResult.text="Aceptado"
+                        }
+                        "rechazado" ->{
+                            binding.imageResult.setImageResource(R.drawable.dislikepublic)
+                            binding.textPublicResult.setTextColor(Color.RED)
+                            binding.deletePublic.isEnabled=false
+                            binding.textPublicResult.text="Rechazado"
+
+                        }
+                    }
                 } else {
                     binding.containerShowExistPublicNotes.visibility = View.GONE
 
@@ -372,12 +398,13 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                                                     .document("notaPublica")
                                                     .set(insertPublic).addOnSuccessListener {
                                                         binding.containerShowExistPublicNotes.visibility = View.VISIBLE //Hacemos visible el contenedor para mostrar las notas
-                                                        val newPublicText = "${text} (${noteStatus})" //Juntamos la nota y su estado en una variable
+                                                        val newPublicText = "${text}" //Juntamos la nota en una variable
                                                         binding.textShowPublic.text = newPublicText  //Asignamos la variable anterior al textView para que se vea la nota
                                                         binding.editNotes.text.clear()  //Borramos el editText de caracteres
                                                         snackBar(binding.root,"Nota guardada")
                                                         statusPublicEmp[dateForThisFunction]="pendiente" //Con esto guardamos el valor pendiente en la fecha del hashmap
                                                         binding.calendarView.notifyDateChanged(dateForThisFunction) //actualizamos el calendario con la fecha que hemos seleccionado para que muestre el color
+
                                                     }.addOnFailureListener { e ->
                                                         snackBar(binding.root,"Error al guardar la nota: ${e.message}")
                                                     }

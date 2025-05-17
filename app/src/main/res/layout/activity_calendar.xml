@@ -216,9 +216,10 @@
                 android:id="@+id/publicNotesContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
+                android:layout_marginTop="32dp"
                 android:background="@color/colorFondo"
-                app:layout_constraintTop_toBottomOf="@+id/btnSave">
+                app:layout_constraintTop_toBottomOf="@+id/btnSave"
+                tools:layout_editor_absoluteX="16dp">
 
                 <TextView
                     android:id="@+id/textView13"
@@ -226,7 +227,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/notesTitle"
                     android:textColor="@color/textColor"
-                    android:textSize="15sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -242,6 +243,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
+                <ImageView
+                    android:id="@+id/imageResult"
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_marginTop="60sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+                <TextView
+                    android:id="@+id/textResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10sp"
+                    app:layout_constraintEnd_toEndOf="@+id/imageResult"
+                    app:layout_constraintStart_toStartOf="@+id/imageResult"
+                    app:layout_constraintTop_toBottomOf="@+id/imageResult" />
+
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline"
                     android:layout_width="wrap_content"
@@ -254,9 +273,9 @@
                     android:id="@+id/btnAccept"
                     android:layout_width="wrap_content"
                     android:layout_height="40sp"
-                    android:text="@string/btnAcceptNote"
-                    android:layout_marginTop="30sp"
                     android:backgroundTint="@color/accept"
+                    android:layout_marginTop="120sp"
+                    android:text="@string/btnAcceptNote"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/publicNoteText" />
@@ -265,9 +284,9 @@
                     android:id="@+id/btnReject"
                     android:layout_width="wrap_content"
                     android:layout_height="40sp"
-                    android:text="@string/btnRejectNote"
                     android:backgroundTint="@color/deny"
-                    android:layout_marginTop="30sp"
+                    android:text="@string/btnRejectNote"
+                    android:layout_marginTop="120sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/publicNoteText" />
@@ -275,8 +294,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="30sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnAccept" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

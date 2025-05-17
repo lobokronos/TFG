@@ -178,10 +178,14 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                  * dependiendo de lso turnos recogidos en la lista recoveredTurn se pintaran unos u otros colores
                  */
                 when (recoveredTurn) {
-                    "Mañana" -> { container.dayNumber.setBackgroundColor(Color.YELLOW) }
-                    "Tarde" -> { container.dayNumber.setBackgroundColor(Color.BLUE) }
-                    "Festivo" -> { container.dayNumber.setBackgroundColor(Color.RED) }
-                    "Libre" -> { container.dayNumber.setBackgroundColor(Color.GREEN) }
+                    "Mañana" -> { container.dayNumber.setBackgroundResource(R.drawable.turnomanana)
+                        container.dayNumber.background.alpha=100}
+                    "Tarde" -> { container.dayNumber.setBackgroundResource(R.drawable.tarde)
+                        container.dayNumber.background.alpha=100}
+                    "Festivo" -> { container.dayNumber.setBackgroundResource(R.drawable.turnovacaciones)
+                        container.dayNumber.background.alpha=100}
+                    "Libre" -> { container.dayNumber.setBackgroundResource(R.drawable.turnolibre)
+                        container.dayNumber.background.alpha=100}
                     "Borrar turno" -> {
                         db.collection("turnos").document(pickedDate).collection(numEmple)
                             .document("turno").delete()
@@ -234,15 +238,26 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     val publicText = document.getString("nota")
                     status = document.getString("estado").toString()
                     binding.publicNotesContainer.visibility = View.VISIBLE
-                    if(status=="pendiente") {
-                        val finalPublicText = "${publicText} \n\n(SIN REVISAR)"
-                        binding.publicNoteText.text = finalPublicText
-                    }else if(status=="aceptado"){
-                        val finalPublicText = "${publicText} \n\n(ACEPTADA)"
-                        binding.publicNoteText.text = finalPublicText
-                    }else if (status=="rechazado"){
-                        val finalPublicText = "${publicText} \n\n(RECHAZADA)"
-                        binding.publicNoteText.text = finalPublicText
+                    when (status) {
+                        "pendiente" -> {
+                            val finalPublicText = "${publicText} "
+                            binding.publicNoteText.text = finalPublicText
+                            binding.imageResult.setImageResource(R.drawable.questionpublic)
+                            binding.textResult.text=status
+                        }
+                        "aceptado" -> {
+                            val finalPublicText = "${publicText}"
+                            binding.publicNoteText.text = finalPublicText
+                            binding.imageResult.setImageResource(R.drawable.likepublic)
+                            binding.textResult.text=status
+
+                        }
+                        "rechazado" -> {
+                            val finalPublicText = "${publicText}"
+                            binding.publicNoteText.text = finalPublicText
+                            binding.imageResult.setImageResource(R.drawable.dislikepublic)
+                            binding.textResult.text=status
+                        }
                     }
 
                 } else {
@@ -522,6 +537,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                                 binding.calendarView.notifyDateChanged(dateForThisFunction) //refrescamos el día del calendario utilizando la fecha construida a partir del string.
                                 binding.btnAccept.visibility = View.GONE //Ocultamos los botones.
                                 binding.btnReject.visibility = View.GONE
+                                binding.imageResult.setImageResource(R.drawable.likepublic)
                             }.addOnFailureListener { e ->
                                 snackBar(binding.root, "Error: ${e.message}")
                             }
@@ -543,10 +559,11 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                         db.collection("turnos").document(pickedDate).collection(numEmple)
                             .document("notas")
                             .collection("public").document("notaPublica")
-                            .update("estado", "aceptado").addOnSuccessListener {
+                            .update("estado", "rechazado").addOnSuccessListener {
                                 snackBar(binding.root, "Sugerencia rechazada.")
                                 statusPublicEmp[dateForThisFunction] = "rechazado"
                                 binding.calendarView.notifyDateChanged(dateForThisFunction)
+                                binding.imageResult.setImageResource(R.drawable.dislikepublic)
 
                             }.addOnFailureListener { e ->
                                 snackBar(binding.root, "Error: ${e.message}")

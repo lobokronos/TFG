@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- En este layout definimos el contenido de cada día o celda del calendario -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
     <ImageView
         android:id="@+id/infoIcon"
         android:visibility="gone"
@@ -21,9 +21,9 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textStyle="bold"
-        android:textSize="18dp"
+        android:textSize="20dp"
         tools:text="22"/>
 
 
 
-</LinearLayout>
+</FrameLayout>

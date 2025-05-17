@@ -11,6 +11,7 @@
     <string name="warningLogin">!Atención¡ Te recomendamos que restablezcas tu contraseña. Te hemos enviado un mail para que puedas hacerlo ahora si quieres,
         si no, vuelve a hacer login y cambiala más tarde desde tu perfil</string>
     <string name="btnLoginGoogle">Ingresar con Google</string>
+
     <!-- ********************************************************************************************* -->
 
     <!-- activity_home.xml -->

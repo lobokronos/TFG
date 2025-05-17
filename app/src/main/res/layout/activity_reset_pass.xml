@@ -10,8 +10,8 @@
 
     <FrameLayout
         android:id="@+id/viewContainer"
-        android:layout_width="360sp"
-        android:layout_height="530sp"
+        android:layout_width="330sp"
+        android:layout_height="500sp"
         android:layout_marginBottom="30sp"
         android:background="@drawable/frame_background"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,10 +23,10 @@
 
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="100sp"
-        android:layout_marginLeft="200sp"
+        android:textAlignment="center"
         android:text="@string/caution"
         android:textColor="@color/textColor"
         android:textSize="40sp"
@@ -62,9 +62,13 @@
     <EditText
         android:id="@+id/emailToSend"
         android:layout_width="220dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
         android:background="@android:color/white"
         android:hint="@string/resetHint"
+        android:textColor="@color/textColor"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/viewContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
