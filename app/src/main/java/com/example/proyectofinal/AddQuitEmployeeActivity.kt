@@ -10,12 +10,18 @@ package com.example.proyectofinal
  * ingrese su password para completar el proceso de añadir usuario y asi poder recuperar su contraseña para volverle a iniciar sesion
  * despues de dar de alta al usuario en la base de datos. OK 3H
  *
- * Falta introducir un alertDialog para el borrado de usuario por precaución.
- * Falta dar estilo a los radioButton
+ * Se ha descubierto un fallo importante: cuando se creaba un usuario nuevo, se comprobaba el último Nº de empleado en la coleccion users.
+ * Esto ocasionaba que si se borraban usuarios, se volverían a reutilizar Nº de empleados de usuarios ya inexistentes. Se ha solucionado
+ * haciendo dicha consulta a la colección "usuarios registrados" cuya finalidad es mantener el registro de todos los numeros de empleado
+ * sigan existiendo o no. 2H
+ *
+ * Falta introducir un alertDialog para el borrado de usuario por precaución. OK
+ * Falta dar estilo a los radioButton OK
  * Falta controlar un Snackbar por si la contraseña del superjefe se mete mal.
  */
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.FrameLayout
@@ -26,6 +32,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -107,6 +114,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
              * Si pulsamos este botón, llama a la función validateData() para guardar un empleado
              */
             binding.includeAddEmployee.btnAdd.id -> {
+                Log.d("DEBUG", "Botón Añadir pulsado")
                 validateData()
             }
 
@@ -153,7 +161,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
             snackBar(binding.root, "Debes introducir tu contraseña para continuar")
         } else {
             val superEmail = auth.currentUser?.email!! // Recogemos la contraseña actual de authenticator del usuario Jefe
-            saveData(name, surname, email, section, positionSection, job, superEmail, superPassword) //Llamamos al método para guardar los datos en la base de datos
+            saveData(name, surname, email, section, job, superEmail, superPassword) //Llamamos al método para guardar los datos en la base de datos
         }
     }
 
@@ -217,14 +225,13 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         surname: String,
         email: String,
         section: String,
-        positionSection: Int,
         job: String,
         superEmail: String,
         superPassword: String
     ) {
-        db.collection("users").orderBy("numEmple", Query.Direction.DESCENDING).get()
-            .addOnSuccessListener { documents ->
-                var newEmpNum = 1
+        db.collection("usuarios registrados").orderBy("numEmple", Query.Direction.DESCENDING).get()
+            .addOnSuccessListener { documents ->// Se hace una consulta a la coleeción usuarios registrados para averiguar cual es el ultimo Nº de empleado asignado.
+                var newEmpNum = 1  //Inicializamos la variable
                 if (!documents.isEmpty) { // Se genera el numero de empleado y se guarda en una variable.
                     val lastEmpNum = documents.documents[0].getLong("numEmple") ?: 0
                     newEmpNum = (lastEmpNum + 32).toInt()
@@ -232,7 +239,6 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                 val pass =
                     newEmpNum.toString() //Se genera la password igualandola al numero de empleado y se castea a String.
 
-                val insertJob = db.collection("secciones").document(positionSection.toString())
                 /**
                  * Aquí recalco algo.
                  *
@@ -281,7 +287,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                 ) //hashMap para guardar el empleado en la sección
 
                                 val state = "activo" //Esta variable contempla que el usuario está dado de alta o de baja en la empresa. Cuando se da de baja, desaparece de la BBDD pero se conserva su numEmple.
-                                val registeredUser = hashMapOf("estado" to state)
+                                val registeredUser = hashMapOf("estado" to state, "numEmple" to newEmpNum)
                                 //Estas variables guardan las inserciones de datos en los documentos o colecciones correspondientes utilizando los Hashmaps anteriores.
                                 val insertRol = db.collection("rol").document(job)
                                     .set(employeeNumber) //Insertamos el numero de empleado en su rol
@@ -386,7 +392,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                         "apellidos" to surname
                     ) //hashMap para guardar el empleado en la sección
                     val state = "activo" //Esta variable contempla que el usuario está dado de alta o de baja en la empresa. Cuando se da de baja, desaparece de la BBDD pero se conserva su numEmple.
-                    val registeredUser = hashMapOf("estado" to state)
+                    val registeredUser = hashMapOf("estado" to state,"numEmple" to newEmpNum)
                     //Estas variables guardan las inserciones de datos en los documentos o colecciones correspondientes utilizando los Hashmaps anteriores.
 
                     val insertRol = db.collection("rol").document(job).set(employeeNumber) //Insertamos el numero de empleado en su rol

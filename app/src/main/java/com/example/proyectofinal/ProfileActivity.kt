@@ -5,7 +5,8 @@ package com.example.proyectofinal
  *
  * Falta editar colores correctamente
  * Añadida verificación de usuario y lógica para cambiar el mail. Importante el metodo verifyBeforeUpdateMail() 4H OK
- *
+ * Añadida una excepción para que, en caso de que de fallo la conexión a Firestore para recopilar los datos del
+ *  usuario, aparezca un mensaje de error tanto en los campos de texto como en el SnackBar OK
  */
 import android.content.Intent
 import android.graphics.Color
@@ -118,9 +119,20 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 section = resDoc.getString("seccion").toString()
                 showData() // Llamada al método que mostrará los datos en las lineas correspondientes del perfil
 
+            } else { // Si no se encuentra el documento...
+                name = "No hay nombre para mostrar"
+                surname = "No hay apellidos para mostrar"
+                email = "No hay email para mostrar"  // Mostramos el mensaje de error en todos los campos
+                rol = "No hay puesto para mostrar"
+                numEmple = "No hay número de empleado para mostrar"
+                section = "No hay sección para mostrar"
+                showData() //Llamamos al metodo que muestra los datos para mostrar el error en cada campo
             }
+        }.addOnFailureListener { e ->
+            snackBar(binding.root, "Error al acceder a la base de datos: ${e.message}")
         }
     }
+
 
     /**
      * Método que reoge las funciones de los botones

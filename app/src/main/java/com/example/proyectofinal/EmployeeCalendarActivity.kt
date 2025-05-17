@@ -5,6 +5,7 @@ package com.example.proyectofinal
  *
  * Falta el comentario OK
  * Falta arreglar las vistas de los container OK
+ * Falta que seaparezca el texto (sin revisar) de la sugerencia cuando se acepta o rechaza (FALTA)
  */
 
 import android.graphics.Color
