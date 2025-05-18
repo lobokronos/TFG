@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10sp"
         android:text="@string/add_employee"
-        android:textSize="25sp"
-        android:textColor="@color/textColor"
+        style="@style/titleTextStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50sp"
         android:text="@string/name"
-        android:textColor="@color/textColor"
-        android:textSize="15sp"
+        style="@style/subtitleTextStyle"
+        android:textSize="17dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -38,8 +37,7 @@
         android:layout_marginTop="5sp"
         android:background="@drawable/edittext_style"
         android:padding="12dp"
-        android:textColor="@color/textColor"
-        android:textSize="13sp"
+        style="@style/currentText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleName" />
 
@@ -49,8 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15sp"
         android:text="@string/surname"
-        android:textColor="@color/textColor"
-        android:textSize="15sp"
+        style="@style/subtitleTextStyle"
+        android:textSize="17dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editName" />
 
@@ -62,8 +60,7 @@
         android:layout_marginTop="5sp"
         android:background="@drawable/edittext_style"
         android:padding="12dp"
-        android:textColor="@color/textColor"
-        android:textSize="13sp"
+        style="@style/currentText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleSurname" />
 
@@ -74,8 +71,8 @@
         android:layout_marginStart="7dp"
         android:layout_marginTop="15sp"
         android:text="@string/addEmail"
-        android:textColor="@color/textColor"
-        android:textSize="15sp"
+        style="@style/subtitleTextStyle"
+        android:textSize="17dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSurname" />
 
@@ -87,8 +84,7 @@
         android:layout_marginTop="5sp"
         android:background="@drawable/edittext_style"
         android:padding="12dp"
-        android:textColor="@color/textColor"
-        android:textSize="13sp"
+        style="@style/currentText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleEmail" />
 
@@ -106,8 +102,7 @@
         android:layout_marginRight="45sp"
         android:layout_marginTop="70sp"
         android:text="@string/titleSectionAdd"
-        android:textColor="@color/textColor"
-        android:textSize="15sp"
+        style="@style/spinnerHeaderText"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
@@ -120,8 +115,7 @@
         android:layout_marginRight="45sp"
         android:layout_marginTop="70sp"
         android:text="@string/titlePositionAdd"
-        android:textColor="@color/textColor"
-        android:textSize="15sp"
+        style="@style/spinnerHeaderText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.391"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -160,7 +154,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30sp"
-        android:textStyle="italic"
+        android:fontFamily="@font/new_era_casual_italic"
+        android:textColor="@color/black"
+        android:textSize="15dp"
         android:text="Introduce tu contraseña para terminar el proceso"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -175,6 +171,7 @@
         android:hint="Password"
         android:background="@drawable/edittext_style"
         android:padding="8dp"
+        style="@style/currentText"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -183,8 +180,14 @@
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="37sp"
+        app:strokeColor="@color/naranjaPersonalOscuro"
         android:backgroundTint="@color/naranjaPersonalOscuro"
+        app:cornerRadius="0dp"
+        android:elevation="8dp"
+        android:translationZ="8dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/new_era_casual_bold"
         android:text="@string/btnAdd"
         android:layout_marginTop="30sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -133,7 +133,7 @@
    <string name="remember">Recuerda que tus anotaciones podrán ser vistas por el jefe de tienda. No escribas nada de caracter personal</string>
     <!-- ********************************************************************************************* -->
 
-    <!-- dialog_notes_employee.xml -->
+    <!-- notes_employee.layout -->
     <string name="cardviewTitle">Anotaciones/Propuestas</string>
     <string name="profileNotes">Mis anotaciones</string>
     <string name="titleSpinner">¿Que tipo de anotación vas a escribir?</string>
@@ -151,4 +151,23 @@
     <string name="btnSaveNote">Guardar</string>
 
     <!-- ********************************************************************************************* -->
+
+    <!-- legend.xml -->
+    <string name="legendTitle">Leyenda</string>
+    <string name="morningText">Turno mañana</string>
+    <string name="afternoonText">Turno tarde</string>
+    <string name="holidayText">Festivo</string>
+    <string name="freeText">Libranza</string>
+    <string name="btnExit">Cerrar leyenda</string>
+    <string name="scheduleTitle">Turnos</string>
+    <string name="notesTitleLegend">Anotaciones y sugerencias</string>
+    <string name="publicNoteAcceptText">Sugerencia aceptada</string>
+    <string name="publicNoteRejectText">Sugerencia rechazada</string>
+    <string name="publicNoteStillText">Sugerencia pendiente de revisión</string>
+    <string name="dayAccepted">Día con sugerencia aceptada</string>
+    <string name="dayRejected">Día con sugerencia rechazada</string>
+    <string name="dayStillWaiting">Día con sugerencia a la espera</string>
+    <string name="privateNoteLegend">Anotación</string>
+    <!-- ********************************************************************************************* -->
+
 </resources>

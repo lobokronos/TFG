@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:padding="10dp"
     android:textColor="@color/textColor"
+    android:fontFamily="@font/new_era_casual_regular"
     android:background="@android:color/transparent"/>

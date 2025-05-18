@@ -19,9 +19,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.core.view.children
 import com.example.proyectofinal.databinding.ActivityCalendarBinding
 import com.google.android.material.snackbar.Snackbar
@@ -68,10 +70,13 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
         binding.calendarView.visibility=View.GONE
 
+
         variables()
         actions()
         buildCalendar()
         binding.allContainer.visibility=View.GONE
+        binding.legendLayout.visibility=View.GONE
+        binding.btnLegend.visibility=View.GONE
     }
     /**
      * Función que recoge las acciones de los elementos
@@ -83,6 +88,9 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         binding.btnAccept.setOnClickListener(this)
         binding.btnReject.setOnClickListener(this)
         binding.spinnerTurns.onItemSelectedListener = this
+        binding.btnLegend.setOnClickListener(this)
+        binding.btnExitLegend.setOnClickListener(this)
+
     }
 
     /**
@@ -92,6 +100,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         builder = AlertDialog.Builder(this)
+
     }
 
     /**
@@ -229,6 +238,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
      * loadPickedSectionEmployees() para mostrar la lista turnos de los empleados de la sección.
      */
     private fun showScheduleNotesItems( date: LocalDate) {
+        binding.btnLegend.visibility=View.VISIBLE
         binding.allContainer.visibility = View.VISIBLE //
         pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}" //String para mostrar en TextViews la fecha (día, mes, año)
         val dbNotes = db.collection("turnos").document(pickedDate).collection(numEmple).document("notas")
@@ -364,7 +374,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 if(document.isEmpty) { //Si el documento está vacío.
                     if (section == "-----") { // Y si seccion es la primera posición (-----)...
                         binding.employeeSelectedText.text = "" //Ponemos el titulo del texto vacío para que al iniciar la activity no muestre nada
-                        binding.crownImage.visibility = View.GONE //Escondemos la corona
+
                     } else {
                         binding.employeeSelectedText.text = "${selectedSection} (vacío)" /*Si el documento está vacío ( la sección) pero se ha seleccionado una sección
                         mostrará el nombre de la sección y vacío.*/
@@ -383,9 +393,9 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 }
 
             // Ahora damos forma al spinner con un elemento editado, ya que, al ser "dinamico" no dejaba editarlo normal desde el layout.
-                val adapter = ArrayAdapter(this, R.layout.spinner_edited_item, employees)
-                adapter.setDropDownViewResource(R.layout.spinner_edited_item)
-                binding.spinnerEmployeeSelected.adapter = adapter
+                val employeeAdapter = ArrayAdapter(this, R.layout.spinner_edited_item, employees)
+                employeeAdapter.setDropDownViewResource(R.layout.spinner_edited_item)
+                binding.spinnerEmployeeSelected.adapter = employeeAdapter
             }.addOnFailureListener {
                 Snackbar.make(binding.root, "Error al cargar empleados", Snackbar.LENGTH_SHORT)
                     .show()
@@ -455,15 +465,9 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     binding.employeeSelectedText.text =
                         employeeName //Se muestra en el textView el nombre del empleado.
                     //falta revisar.
-                    if (isBoss) { //Si es jefe se muestra la corona, si no no
-                        binding.crownImage.visibility = View.VISIBLE
-                    } else {
-                        binding.crownImage.visibility = View.GONE
-                    }
+
                     binding.calendarView.notifyCalendarChanged() //Refrescamos el calendario
                 }
-
-
 
             /**
              * Spinner de los turnos
@@ -574,6 +578,14 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     .show()
 
             }
+
+            binding.btnLegend.id-> {
+                binding.legendLayout.visibility=View.VISIBLE
+            }
+            binding.btnExitLegend.id->{
+                binding.legendLayout.visibility=View.GONE
+            }
+
         }
     }
 }

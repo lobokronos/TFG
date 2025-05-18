@@ -6,6 +6,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillViewport="true"
     android:background="@color/colorFondo">
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -34,7 +35,7 @@
             android:paddingEnd="20sp"
             android:background="@drawable/radiobutton_style"
             android:text="@string/rBtnAdd"
-            android:textColor="@color/textColor"/>
+            style="@style/currentText"/>
 
         <RadioButton
             android:id="@+id/deleteEmployee"
@@ -42,7 +43,7 @@
             android:background="@drawable/radiobutton_style"
             android:layout_height="wrap_content"
             android:text="@string/rBtnDelete"
-            android:textColor="@color/textColor"/>
+            style="@style/currentText"/>
 
     </RadioGroup>
 

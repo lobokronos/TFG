@@ -603,10 +603,9 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
         binding.includeAddEmployee.editSurname.text.clear()
         binding.includeAddEmployee.editEmail.text.clear()
         binding.includeAddEmployee.editSuperPass.text.clear()
-
-
-
     }
+
+
 }
 
 private fun snackBar(view: View, message: String) {

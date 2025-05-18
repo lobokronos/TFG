@@ -7,17 +7,113 @@
         <item name="android:textColor">#FFFFFFFF</item>
     </style>
 
-    <style name="toolbarMenuColor" parent="Widget.AppCompat.Toolbar">
+    <style name="toolbarMenuColor" >
         <item name="android:tint">#FFFFFFFF</item>
     </style>
 
-    <style name="titleTextStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">25sp</item>
-    </style>
-<!-- Estilo para definir el desplegable de los items (color de cada elemento desplegado-->
+    <!-- Estilo para definir el desplegable de los items (color de cada elemento desplegado)-->
     <style name="spinnerTextColor">
         <item name="android:textColor">#000000</item>
         <item name="android:dropDownSelector">#000000</item>
+    </style>
+
+    <style name="titleTextStyle" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+        <item name="fontFamily">@font/new_era_casual_bold</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="subtitleTextStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">23sp</item>
+        <item name="fontFamily">@font/new_era_casual_bold</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="editTextHeaderText">
+        <item name="android:textStyle"></item>
+        <item name="android:textSize">18dp</item>
+        <item name="fontFamily">@font/new_era_casual_bold</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="editTextInnerText">
+        <item name="android:textStyle"></item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="currentText">
+    <item name="android:textStyle"></item>
+    <item name="android:textSize">15dp</item>
+        <item name="fontFamily">@font/new_era_casual_regular</item>
+    <item name="android:textColor">@color/textColor</item>
+</style>
+
+    <style name="spinnerHeaderText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16dp</item>
+        <item name="fontFamily">@font/new_era_casual_bold</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="dateTextStyle">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="employeeSelectedTextStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/headstrong</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="monthTitleText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="instructionsText">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="fontFamily">@font/new_era_casual_regular</item>
+    </style>
+
+    <style name="profileSubtitleTextStyle">
+        <item name="fontFamily">@font/new_era_casual_bold</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="profileCurrentTextStyle">
+        <item name="fontFamily">@font/new_era_casual_regular</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="monthTitleTextStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/new_era_casual_bold</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="calendarDayTitleTextStyle">
+        <item name="android:textStyle"></item>
+        <item name="fontFamily">@font/new_era_casual_regular</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="calendarDayNumbersTextStyle">
+        <item name="fontFamily">@font/new_era_casual_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="succesResultTextStyle">
+        <item name="fontFamily">@font/new_era_casual_italic</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

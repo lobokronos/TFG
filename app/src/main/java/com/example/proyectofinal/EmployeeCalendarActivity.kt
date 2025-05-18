@@ -61,6 +61,9 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         loadUserData()
         loadEmployeeTurns()
 
+        binding.legendLayout.visibility=View.GONE
+        binding.btnLegend.visibility=View.GONE
+
 
     }
 
@@ -72,6 +75,8 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         binding.spinnerNoteType.onItemSelectedListener = this
         binding.deletePrivate.setOnClickListener(this)
         binding.deletePublic.setOnClickListener(this)
+        binding.btnLegend.setOnClickListener(this)
+        binding.btnExitLegend.setOnClickListener(this)
 
     }
 
@@ -208,6 +213,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
      * hay notas o sugerencias, directamente oculta estos contenedores para evitar futuros errores.
      */
     private fun showNotesElements( date: LocalDate) {
+        binding.btnLegend.visibility=View.VISIBLE
         binding.notesContainer.visibility = View.VISIBLE //Cuando se pulsa un día, automáticamente se vuelve visible el selector de notas o sugerencias
         pickedDate = "${date.dayOfMonth}-${date.monthValue}-${date.year}" //construimos un LocalDate para utilizarlo en este método.
         val dbNotes = //Consulta a la base de datos para las notas privadas
@@ -365,19 +371,33 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                                     existNote.collection("private").document("notaPrivada").get()
                                         .addOnSuccessListener { privateNote ->
                                             if (privateNote.exists()) { //Si la nota ya existe no deja guardar otra
-                                                snackBar(binding.root, "Ya tienes una anotación guardada en este día")
+                                                snackBar(
+                                                    binding.root,
+                                                    "Ya tienes una anotación guardada en este día"
+                                                )
 
                                             } else { //Si no, la crea
-                                                existNote.collection("private").document("notaPrivada").set(insertPrivate)
+                                                existNote.collection("private")
+                                                    .document("notaPrivada").set(insertPrivate)
                                                     .addOnSuccessListener {
-                                                        binding.containerShowExistPrivateNotes.visibility = View.VISIBLE //Hacemos visible el container donde mostrará la nota
-                                                        binding.textShowPrivate.text = text //Ponemos el texto de la nota en el textView del Container
+                                                        binding.containerShowExistPrivateNotes.visibility =
+                                                            View.VISIBLE //Hacemos visible el container donde mostrará la nota
+                                                        binding.textShowPrivate.text =
+                                                            text //Ponemos el texto de la nota en el textView del Container
                                                         binding.editNotes.text.clear()  //Limpiamos el editText de caracteres
-                                                        snackBar(binding.root,"Nota privada guardada")
-                                                        privateNoteList[dateForThisFunction]=true
-                                                        binding.calendarView.notifyDateChanged(dateForThisFunction)
+                                                        snackBar(
+                                                            binding.root,
+                                                            "Nota privada guardada"
+                                                        )
+                                                        privateNoteList[dateForThisFunction] = true
+                                                        binding.calendarView.notifyDateChanged(
+                                                            dateForThisFunction
+                                                        )
                                                     }.addOnFailureListener { e ->
-                                                        snackBar(binding.root,"Error al guardar la nota: ${e.message}")
+                                                        snackBar(
+                                                            binding.root,
+                                                            "Error al guardar la nota: ${e.message}"
+                                                        )
 
                                                     }
                                             }
@@ -392,21 +412,33 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                                     existNote.collection("public").document("notaPublica").get()
                                         .addOnSuccessListener { privateNote ->
                                             if (privateNote.exists()) { //Si la nota ya existe no deja guardar otra
-                                                snackBar(binding.root,"Ya tienes una nota guardada en este día")
-                                             } else {
+                                                snackBar(
+                                                    binding.root,
+                                                    "Ya tienes una nota guardada en este día"
+                                                )
+                                            } else {
                                                 existNote.collection("public")
                                                     .document("notaPublica")
                                                     .set(insertPublic).addOnSuccessListener {
-                                                        binding.containerShowExistPublicNotes.visibility = View.VISIBLE //Hacemos visible el contenedor para mostrar las notas
-                                                        val newPublicText = "${text}" //Juntamos la nota en una variable
-                                                        binding.textShowPublic.text = newPublicText  //Asignamos la variable anterior al textView para que se vea la nota
+                                                        binding.containerShowExistPublicNotes.visibility =
+                                                            View.VISIBLE //Hacemos visible el contenedor para mostrar las notas
+                                                        val newPublicText =
+                                                            "${text}" //Juntamos la nota en una variable
+                                                        binding.textShowPublic.text =
+                                                            newPublicText  //Asignamos la variable anterior al textView para que se vea la nota
                                                         binding.editNotes.text.clear()  //Borramos el editText de caracteres
-                                                        snackBar(binding.root,"Nota guardada")
-                                                        statusPublicEmp[dateForThisFunction]="pendiente" //Con esto guardamos el valor pendiente en la fecha del hashmap
-                                                        binding.calendarView.notifyDateChanged(dateForThisFunction) //actualizamos el calendario con la fecha que hemos seleccionado para que muestre el color
+                                                        snackBar(binding.root, "Nota guardada")
+                                                        statusPublicEmp[dateForThisFunction] =
+                                                            "pendiente" //Con esto guardamos el valor pendiente en la fecha del hashmap
+                                                        binding.calendarView.notifyDateChanged(
+                                                            dateForThisFunction
+                                                        ) //actualizamos el calendario con la fecha que hemos seleccionado para que muestre el color
 
                                                     }.addOnFailureListener { e ->
-                                                        snackBar(binding.root,"Error al guardar la nota: ${e.message}")
+                                                        snackBar(
+                                                            binding.root,
+                                                            "Error al guardar la nota: ${e.message}"
+                                                        )
                                                     }
                                             }
                                         }
@@ -416,24 +448,27 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                     }
                 }
             }
+
             binding.deletePrivate.id -> {
                 //Primero generamos un dialogo al pulsar el boton como medida de seguridad, para evitar que el usuario borre
                 //por error una nota. Si en el dialogo se pulsa si, se borra, si no se cierra y no pasa nada.
                 builder.setMessage("¿Estas seguro de querer borrar esta nota?")
-                    .setTitle("¡Atención!").setPositiveButton("Si") { dialog,wich -> //Generamos la lógica que actuará cuando se pulse el SI
+                    .setTitle("¡Atención!")
+                    .setPositiveButton("Si") { dialog, wich -> //Generamos la lógica que actuará cuando se pulse el SI
                         db.collection("turnos").document(pickedDate).collection(numEmple)
                             .document("notas")
                             .collection("private").document("notaPrivada").delete()
                             .addOnSuccessListener { //Si está correcto
-                                snackBar(binding.root,"Anotación borrada con éxito") //Informamos
+                                snackBar(binding.root, "Anotación borrada con éxito") //Informamos
                                 privateNoteList.remove(dateForThisFunction) //Borramos del array de notas privadas la que contenga dicha fecha
                                 binding.calendarView.notifyDateChanged(dateForThisFunction) //Refrescamos el día con la fecha seleccionada.
                             }.addOnFailureListener { e ->
-                                snackBar(binding.root,"Error: ${e.message}")
+                                snackBar(binding.root, "Error: ${e.message}")
                             }
                         //Y despues de borrarla ocultamos el contenedor de las notas privadas ya que ahora no existe ninguna nota
                         binding.containerShowExistPrivateNotes.visibility = View.GONE
-                    }.setNegativeButton("No") { dialog, wich -> //Si pulsamos no, directamente cerramos el dialogo.
+                    }
+                    .setNegativeButton("No") { dialog, wich -> //Si pulsamos no, directamente cerramos el dialogo.
                         dialog.dismiss()
                     }
                     .show()
@@ -446,11 +481,11 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                             .document("notas")
                             .collection("public").document("notaPublica").delete()
                             .addOnSuccessListener {
-                                snackBar(binding.root,"Anotación borrada con éxito")
+                                snackBar(binding.root, "Anotación borrada con éxito")
                                 statusPublicEmp.remove(dateForThisFunction)
                                 binding.calendarView.notifyDateChanged(dateForThisFunction)
                             }.addOnFailureListener { e ->
-                                snackBar(binding.root,"Error: ${e.message}")
+                                snackBar(binding.root, "Error: ${e.message}")
                             }
                         binding.containerShowExistPublicNotes.visibility = View.GONE
                     }.setNegativeButton("No") { dialog, wich ->
@@ -458,6 +493,14 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                     }
                     .show()
             }
+
+            binding.btnLegend.id-> {
+                binding.legendLayout.visibility=View.VISIBLE
+            }
+            binding.btnExitLegend.id->{
+                binding.legendLayout.visibility=View.GONE
+            }
+
         }
     }
 
