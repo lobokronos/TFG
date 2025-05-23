@@ -15,6 +15,7 @@ import com.example.proyectofinal.databinding.ActivitySuccessBinding
  */
 
 class SuccessActivity : BaseActivity() {
+    private var recoveredData: Bundle? = null
     private lateinit var binding: ActivitySuccessBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,7 @@ class SuccessActivity : BaseActivity() {
         val frameContent = findViewById<FrameLayout>(R.id.content_frame)
         frameContent.addView(binding.root)
 
-        val recoveredData = intent.getBundleExtra("data")
+        recoveredData = intent.getBundleExtra("data")
 
         val textName = recoveredData?.getString("name")
         val textSurname = recoveredData?.getString("surname")

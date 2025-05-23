@@ -161,8 +161,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             /**
              * Función create
              * Esta función crea el diseño de cada día*/
-            override fun create(view: View): DayViewContainer = DayViewContainer(view, binding.selectedDateText,
-                binding.calendarView, selectedDate, ::showScheduleNotesItems) //Asigna la vista de día a un contenedor
+            override fun create(view: View): DayViewContainer = DayViewContainer(view) //Asigna la vista de día a un contenedor
 
             /**
              * Función bind
@@ -178,6 +177,14 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     container.dayNumber.setTextColor(Color.BLACK)
                 } else {
                     container.dayNumber.setTextColor(Color.GRAY)
+                }
+
+                container.dayNumber.setOnClickListener {
+                    val text ="${data.date.dayOfMonth}/${data.date.monthValue}/${data.date.year}"
+                    binding.selectedDateText.text = text
+                    selectedDate=data.date
+                    pickedDate = "${data.date.dayOfMonth}-${data.date.monthValue}-${data.date.year}" //String para mostrar en TextViews la fecha (día, mes, año)
+                    showScheduleNotesItems(data.date)
                 }
                 //Utilizamos la lista calve-valor que contiene la fecha/turno para ir pintando cada dia de un color cuando el método bind los construya
                 val recoveredTurn = employeeTurns[data.date]
@@ -251,12 +258,16 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     when (status) {
                         "pendiente" -> {
                             val finalPublicText = "${publicText} "
+                            binding.btnAccept.visibility=View.VISIBLE
+                            binding.btnReject.visibility=View.VISIBLE
                             binding.publicNoteText.text = finalPublicText
                             binding.imageResult.setImageResource(R.drawable.questionpublic)
                             binding.textResult.text=status
                         }
                         "aceptado" -> {
                             val finalPublicText = "${publicText}"
+                            binding.btnAccept.visibility=View.GONE
+                            binding.btnReject.visibility=View.GONE
                             binding.publicNoteText.text = finalPublicText
                             binding.imageResult.setImageResource(R.drawable.likepublic)
                             binding.textResult.text=status
@@ -267,6 +278,8 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                             binding.publicNoteText.text = finalPublicText
                             binding.imageResult.setImageResource(R.drawable.dislikepublic)
                             binding.textResult.text=status
+                            binding.btnAccept.visibility=View.GONE
+                            binding.btnReject.visibility=View.GONE
                         }
                     }
 

@@ -70,6 +70,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         binding.includeDeleteEmployee.btnDelete.setOnClickListener(this)
         binding.includeAddEmployee.spinnerSections.onItemSelectedListener = this
         binding.includeAddEmployee.spinnerJob.onItemSelectedListener = this
+        binding.includeDeleteEmployee.btnDelete.visibility=View.GONE
     }
 
     private fun variables() {
@@ -297,8 +298,6 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                     val registeredUser =
                                         hashMapOf("estado" to state, "numEmple" to newEmpNum)
                                     //Estas variables guardan las inserciones de datos en los documentos o colecciones correspondientes utilizando los Hashmaps anteriores.
-                                    val insertRol = db.collection("rol").document(job)
-                                        .set(employeeNumber) //Insertamos el numero de empleado en su rol
                                     val insertUser =
                                         db.collection("users").document(newEmpNum.toString())
                                             .set(employee) //Insertamos el hasMap con los datos del usuario
@@ -323,7 +322,6 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
 
                                     Tasks.whenAllComplete(
                                         insertUser,
-                                        insertRol,
                                         insertBoss,
                                         insertRegistered
                                     )
@@ -413,8 +411,6 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
                 val registeredUser = hashMapOf("estado" to state, "numEmple" to newEmpNum)
                 //Estas variables guardan las inserciones de datos en los documentos o colecciones correspondientes utilizando los Hashmaps anteriores.
 
-                val insertRol = db.collection("rol").document(job)
-                    .set(employeeNumber) //Insertamos el numero de empleado en su rol
                 val insertUser =
                     db.collection("users").document(newEmpNum.toString())
                         .set(employee) //Insertamos el hasMap con los dtos del usuario
@@ -435,7 +431,6 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
                  */
                 Tasks.whenAllComplete(
                     insertUser,
-                    insertRol,
                     insertEmployee,
                     insertRegistered
                 )
@@ -492,10 +487,12 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
                 val resultText =
                     "Nombre completo: ${name} ${surname}\nSección: ${rol} en ${section}." //Y se muestra el resultado
                 binding.includeDeleteEmployee.textResult.text = resultText
+                binding.includeDeleteEmployee.btnDelete.visibility=View.VISIBLE
             } else {
                 snackBar(binding.root, "No se ha encontrado ningún empleado con ese número.")
 
                 binding.includeDeleteEmployee.textResult.setText("Sin resultados")
+                binding.includeDeleteEmployee.btnDelete.visibility=View.GONE
             }
         }
     }
@@ -523,8 +520,6 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
                     }
                 builder.setTitle("!Atención¡").setMessage("Estás seguro de querer dar de baja al empleado?").setPositiveButton("SI"){dialog,_ ->
 
-
-                //Recuperamos el uid de authenticator del usuario
                 val deleteUser = db.collection("users").document(numEmple)
                     .delete() //Borramos al usuario de la colección usuarios.
                 val setState = db.collection("usuarios registrados").document(numEmple)
@@ -532,10 +527,7 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
                         "estado",
                         "inactivo"
                     ) //Actualizamos su estado a "inactivo" para que, cuando generemos otro nuevo empleado, el sistema no reutilice números de empleado ya dados de baja.
-                val deleteRol = db.collection("rol").document(rol).update(
-                    "numEmple",
-                    FieldValue.delete()
-                ) //FieldValue.delete permite eliminar un campo de un documento mediante un UPDATE
+
                 val locateSection = db.collection("secciones").document(sectionNumber)
                 when (rol) {
                     "Jefe de tienda" -> { //Si es el Jefe de la tienda NO se puede borrar.
@@ -555,13 +547,14 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
                          * Cuando se completen las tareas de borrar usuario, actualizar el estado, borrar su rol y borrar el jefe
                          * Se muestra el mensaje de exito o de error dependiendo del caso.
                          */
-                        Tasks.whenAllComplete(deleteUser, setState, deleteRol, deleteBoss)
+                        Tasks.whenAllComplete(deleteUser, setState, deleteBoss)
                             .addOnSuccessListener {
                                 snackBar(
                                     binding.root,
                                     "Se ha borrado el jefe de sección correctamente"
                                 )
                             clearData() // Función pàra borrar los datos en los campso de escritura
+                                binding.includeDeleteEmployee.btnDelete.visibility=View.GONE
                             }.addOnFailureListener { e ->
                                 snackBar(
                                     binding.root,
@@ -576,10 +569,11 @@ auth.signInWithEmailAndPassword(superEmail,superPassword).addOnSuccessListener {
                     else -> { //Si es empleado, se sigue el mismo procedimiento
                         val deleteEmployee =
                             locateSection.collection("Empleados").document(numEmple).delete()
-                        Tasks.whenAllComplete(deleteUser, deleteRol, setState, deleteEmployee)
+                        Tasks.whenAllComplete(deleteUser, setState, deleteEmployee)
                             .addOnSuccessListener {
                                 snackBar(binding.root, "Se ha borrado el empleado correctamente")
                                 clearData()
+                                binding.includeDeleteEmployee.btnDelete.visibility=View.GONE
                             }.addOnFailureListener { e ->
                                 snackBar(binding.root, "Error al borrar el empleado ${e.message}")
                             }

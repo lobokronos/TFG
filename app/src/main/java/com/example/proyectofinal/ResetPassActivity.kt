@@ -68,7 +68,6 @@ class ResetPassActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun sendEmailPass() {
         val emailToSend = binding.emailToSend.text.toString()
-
         auth.setLanguageCode("es")
         if (emailToSend.isEmpty()) {
             snackBar(binding.root, "Por favor, ingresa tu correo electrónico")

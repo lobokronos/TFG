@@ -153,8 +153,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
             /**Esta función crea el diseño de cada día*/
-            override fun create(view: View): DayViewContainer = DayViewContainer(view, binding.selectedDateText,
-                binding.calendarView, selectedDate, ::showNotesElements) //Asigna la vista de día a un contenedor
+            override fun create(view: View): DayViewContainer = DayViewContainer(view) //Asigna la vista de día a un contenedor
 
 
             /**Este método decide que mostrar en cada día del calendario utilizando el contenedor del dia actual y la fecha actual*/
@@ -167,6 +166,14 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
 
                 } else {
                     container.dayNumber.setTextColor(Color.GRAY)
+                }
+ // Se ha situado un escuchador en la celda de los dias para recoger su pulsación
+                container.dayNumber.setOnClickListener {
+                    val text ="${data.date.dayOfMonth}/${data.date.monthValue}/${data.date.year}" //Se guarda la fecha en formato texto
+                    binding.selectedDateText.text = text // Se muestrea la fecha en el textView
+                    selectedDate=data.date //Se guarda la fecha en la variable local
+                    pickedDate = "${data.date.dayOfMonth}-${data.date.monthValue}-${data.date.year}" //String para mostrar en TextViews la fecha (día, mes, año)
+                    showNotesElements(data.date) // Se activa la funcion que muestra elementos con la fecha seleccionada
                 }
 
                 //binding.notesContainer.visibility=View.INVISIBLE
@@ -319,7 +326,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
     }
 
     /**
-     * Esta función carga los datos del usuario, los cuales son necesarios para mostrar su calendario personalizado.
+     * Esta función carga el número de empleado del usuario, el ccual es necesario para mostrar su calendario personalizado.
      */
     private fun loadUserData() {
         db.collection("users").whereEqualTo("uid", uid).get().addOnSuccessListener { result ->
@@ -362,7 +369,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                         }
                         existNote.get().addOnSuccessListener { note ->
                             if (!note.exists()) {
-                                existNote.set(createDoc) //Si la colección notas no existe la creamos con un campo (la fecha de creacion)
+                                existNote.set(createDoc) //Si la colección notas no existe la creamos con un campo (true)
                             }
                             when (selectedPosition) { // Dependiendo de la posición del spinner, el boton de guardar hara una cosa u otra
                                 1 -> { //Guardará una nota privada

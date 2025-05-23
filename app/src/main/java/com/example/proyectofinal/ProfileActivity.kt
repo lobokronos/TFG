@@ -170,7 +170,6 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 val oldMail = binding.includerResetEmailCardView.cardEditOldEmail.toString()
                 val pass = binding.includerResetEmailCardView.cardEditPass.text.toString()
                 val newMail = binding.includerResetEmailCardView.cardEditNewMail.text.toString()
-
                 if (oldMail.isEmpty()) { //Si no se ha introducido el correo viejo salta un error
                     snackBar(binding.root, "Por seguridad debes introducir tu correo actual")
                 } else if (oldMail != user?.email) { //Si el correo viejo no coincide con el del usuario, salta un error

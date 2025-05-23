@@ -180,7 +180,6 @@ open class BaseActivity : AppCompatActivity() {
         private fun activityTitle(): String {
             val title = this::class.java.name // Cogemos el nombre de la activity en la que nos vayamos a encontrar.
             return when (title) { // dependiendo del nombre que de, extraemos y colocamos el String correspondiente.
-                "com.example.proyectofinal.HomeActivity" -> getString(R.string.menu_home)
                 "com.example.proyectofinal.CalendarActivity" -> getString(R.string.menu_calendar)
                 "com.example.proyectofinal.EmployeeCalendarActivity" ->getString(R.string.menu_calendar)
                 "com.example.proyectofinal.AddQuitEmployeeActivity" -> getString(R.string.menu_addQuit)

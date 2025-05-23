@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var progressDialog: ProgressDialog
+    private var firebaseUser: FirebaseUser? = null
+    private var userRol: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -150,12 +153,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                 CalendarActivity::class.java
                             )
                         )
+
                         "Jefe de sección" -> startActivity(
                             Intent(
                                 applicationContext,
                                 EmployeeCalendarActivity::class.java
                             )
                         )
+
                         "Empleado" -> startActivity(
                             Intent(
                                 applicationContext,
@@ -191,12 +196,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             if (task.isSuccessful) {
                 val uid = auth.currentUser?.uid.toString()
                 db.collection("users").whereEqualTo("uid", uid).get()
-                    .addOnSuccessListener { querySnapshot ->
-                        if (!querySnapshot.isEmpty) {
-                            val document = querySnapshot.documents[0]
+                    .addOnSuccessListener { query ->
+                        if (!query.isEmpty) {
+                            val document = query.documents[0]
                             var login = document.getBoolean("login")
                             var numEmple = document.getLong("numEmple")!!.toString()
                             var rol = document.getString("rol")
+                            userRol=rol
                             if (login == false) {
                                 auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
@@ -221,37 +227,57 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                             CalendarActivity::class.java
                                         )
                                     )
-
-                                    "Jefe de sección" -> startActivity(
+                                    "Jefe de sección", "Empleado" -> startActivity(
                                         Intent(
                                             applicationContext,
                                             EmployeeCalendarActivity::class.java
                                         )
                                     )
-
-                                    "Empleado" -> startActivity(
-                                        Intent(
-                                            applicationContext,
-                                            EmployeeCalendarActivity::class.java
-                                        )
-                                    )
-
                                 }
                             }
                         } else {
                             snackBar(binding.root, "No existe ningun usuario con ese email.")
                         }
                     }.addOnFailureListener { e ->
-                    snackBar(binding.root, "${e.message}.")
-                }
+                        snackBar(binding.root, "${e.message}.")
+                    }
             }
         }.addOnFailureListener { e ->
             snackBar(binding.root, "El usuario o contraseña no coinciden: ${e.message}.")
         }
     }
-}
 
-private fun snackBar(view: View, message: String) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+    private fun checkSession() { // Funcion para comprobar si la sesion esta activa, la cual si es que si, vuelve a redirigir al usuario a su pantalla
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        if (firebaseUser != null && userRol !=null) {
+            when (userRol) { //Dependiendo del rol, el usuario será redirigido a un calendario u otro.
+                "Jefe de tienda" -> startActivity(
+                    Intent(
+                        applicationContext,
+                        CalendarActivity::class.java
+                    )
+                )
+
+                "Jefe de sección", "Empleado" -> startActivity(
+                    Intent(
+                        applicationContext,
+                        EmployeeCalendarActivity::class.java
+                    )
+                )
+            }
+            finish()
+        }
+
+    }
+
+
+    private fun snackBar(view: View, message: String) {
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onStart() { //Sobreescribimos el método onStart paraque cuando se cargue de nuevo esta activity llame al metodo para comprobar sesion activa.
+        checkSession()
+        super.onStart()
+    }
 }
 
