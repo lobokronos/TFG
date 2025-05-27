@@ -5,9 +5,11 @@ package com.example.proyectofinal
  */
 
 import android.os.Bundle
+import android.view.animation.Animation
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import com.example.proyectofinal.databinding.ActivitySuccessBinding
+import android.view.animation.AnimationUtils
 
 /**
  * Esta actividad se muestra cuando el dado de alta de un usuario ha sido satisfactorio. Muestra los datos introducidos y
@@ -21,9 +23,11 @@ class SuccessActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivitySuccessBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val frameContent = findViewById<FrameLayout>(R.id.content_frame)
-        frameContent.addView(binding.root)
+        val animation : Animation = AnimationUtils.loadAnimation(this,R.anim.anim_appear)
+        binding.imageView.startAnimation(animation)
+
 
         recoveredData = intent.getBundleExtra("data")
 

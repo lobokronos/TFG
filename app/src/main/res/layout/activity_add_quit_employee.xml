@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillViewport="true"
-    android:background="@color/colorFondo">
+    android:background="@drawable/gradient_calendar">
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,7 +13,7 @@
     android:id="@+id/addEmployee"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorFondo">
+    android:background="@drawable/gradient_calendar">
 
 
     <RadioGroup
@@ -30,18 +30,23 @@
 
         <RadioButton
             android:id="@+id/AddEmployee"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:paddingEnd="20sp"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:button="@null"
             android:background="@drawable/radiobutton_style"
             android:text="@string/rBtnAdd"
             style="@style/currentText"/>
 
         <RadioButton
             android:id="@+id/deleteEmployee"
-            android:layout_width="wrap_content"
-            android:background="@drawable/radiobutton_style"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:button="@null"
+            android:background="@drawable/radiobutton_style"
             android:text="@string/rBtnDelete"
             style="@style/currentText"/>
 
@@ -53,6 +58,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:visibility="visible"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -68,6 +76,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="0dp"
+        app:cardUseCompatPadding="false"
         android:layout_marginTop="90dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -16,6 +16,12 @@
     <color name="green">#FF00FF00</color>
     <color name="red">#FFFF0000</color>
     <color name="magenta">#FFFF00FF</color>
+    <color name="degradadoUno">#FFFF00FF</color>
+    <color name="degradadoDos">#FFFF00FF</color>
+    <color name="degradadoTres">#FFFF00FF</color>
+    <color name="naranjaGradiente">#FFD67A</color>
+    <color name="grayPerfil">#393939</color>
+
 
 
 </resources>

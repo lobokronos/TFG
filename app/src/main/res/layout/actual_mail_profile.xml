@@ -21,23 +21,17 @@
         android:id="@+id/profileRecoveredEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/currentText"
+        style="@style/profileCurrentTextStyle"
         android:layout_marginTop="30sp"
         android:layout_marginLeft="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileEmailName" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnEditMail"
         android:layout_width="wrap_content"
         android:layout_height="37sp"
-        app:strokeColor="@color/naranjaPersonalOscuro"
-        android:backgroundTint="@color/naranjaPersonalOscuro"
-        app:cornerRadius="0dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/new_era_casual_bold"
+        style="@style/RectangularMaterialButton"
         android:text="@string/profileEditEmail"
         android:layout_marginLeft="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/profileRecoveredEmail"
@@ -61,7 +55,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pulsa aquí para verificar la cuenta"
-        style="@style/currentText"
         android:textColor="@color/forgotPassColor"
         android:backgroundTint="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,17 +72,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnVerify" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnResetProfilePass"
         android:layout_width="wrap_content"
         android:layout_height="37sp"
-        app:strokeColor="@color/naranjaPersonalOscuro"
-        android:backgroundTint="@color/naranjaPersonalOscuro"
-        app:cornerRadius="0dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/new_era_casual_bold"
+        style="@style/RectangularMaterialButton"
         android:layout_marginTop="15sp"
         android:text="@string/profileBtnResetPass"
         app:layout_constraintEnd_toEndOf="parent"

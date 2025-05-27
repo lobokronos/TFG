@@ -101,6 +101,7 @@ open class BaseActivity : AppCompatActivity() {
                 R.id.menu_closeSession -> {
                     auth.signOut()
                     startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 }
             }
 
@@ -184,6 +185,8 @@ open class BaseActivity : AppCompatActivity() {
                 "com.example.proyectofinal.EmployeeCalendarActivity" ->getString(R.string.menu_calendar)
                 "com.example.proyectofinal.AddQuitEmployeeActivity" -> getString(R.string.menu_addQuit)
                 "com.example.proyectofinal.ProfileActivity" -> getString(R.string.menu_profile)
+                "com.example.proyectofinal.ProfileActivity" -> "Usuario creado"
+
                 else -> "No Title"
             }
 

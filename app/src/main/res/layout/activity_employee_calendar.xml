@@ -10,7 +10,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorFondo">
+    android:background="@drawable/gradient_calendar">
 
     <!--Este TextView mete los encabezados de los meses -->
     <TextView
@@ -47,10 +47,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLegend"
         android:layout_width="wrap_content"
         android:layout_height="40sp"
+        style="@style/RectangularMaterialButton"
         android:text="@string/legendTitle"
         android:layout_marginRight="15sp"
         android:layout_marginTop="15sp"
@@ -222,7 +224,8 @@
 
         <TextView
             android:id="@+id/dayAccepted"
-            style="@style/currentText"
+            style="@style/profileSubtitleTextStyle"
+            android:textSize="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -246,7 +249,8 @@
 
         <TextView
             android:id="@+id/dayRejected"
-            style="@style/currentText"
+            style="@style/profileSubtitleTextStyle"
+            android:textSize="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -270,7 +274,8 @@
 
         <TextView
             android:id="@+id/dayWaiting"
-            style="@style/currentText"
+            style="@style/profileSubtitleTextStyle"
+            android:textSize="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -285,13 +290,14 @@
             android:layout_height="45sp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/privateicon"
+            android:src="@drawable/privatenoteicon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/waiting" />
 
         <TextView
             android:id="@+id/privateText"
-            style="@style/currentText"
+            style="@style/profileSubtitleTextStyle"
+            android:textSize="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/privateNoteLegend"
@@ -299,12 +305,12 @@
             app:layout_constraintStart_toStartOf="@+id/dayWaiting"
             app:layout_constraintTop_toTopOf="@+id/privateImage" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnExitLegend"
             android:layout_width="wrap_content"
             android:layout_height="40sp"
             android:layout_marginTop="15dp"
-            android:backgroundTint="@color/naranjaPersonalOscuro"
+            style="@style/RectangularMaterialButton"
             android:text="@string/btnExit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -356,12 +362,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/deletePublic"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="40sp"
             android:text="@string/btnDeleteNote"
-            android:backgroundTint="@color/naranjaPersonalOscuro"
+            style="@style/RejectRectangularButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -406,12 +412,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/deletePrivate"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="40sp"
             android:text="@string/btnDeleteNote"
-            android:backgroundTint="@color/naranjaPersonalOscuro"
+            style="@style/RejectRectangularButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -486,14 +492,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editNotes" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30sp"
                 android:layout_marginBottom="68dp"
                 android:text="@string/btn_save"
-                android:backgroundTint="@color/naranjaPersonalOscuro"
+                style="@style/RectangularMaterialButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

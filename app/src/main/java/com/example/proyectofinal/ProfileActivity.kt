@@ -88,6 +88,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser
+        Log.d("CorreoSesionIniciada", "Email actual: ${user?.email}")
 
     }
 
@@ -122,7 +123,8 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
             } else { // Si no se encuentra el documento...
                 name = "No hay nombre para mostrar"
                 surname = "No hay apellidos para mostrar"
-                email = "No hay email para mostrar"  // Mostramos el mensaje de error en todos los campos
+                email =
+                    "No hay email para mostrar"  // Mostramos el mensaje de error en todos los campos
                 rol = "No hay puesto para mostrar"
                 numEmple = "No hay número de empleado para mostrar"
                 section = "No hay sección para mostrar"
@@ -167,7 +169,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
              */
             binding.includerResetEmailCardView.btnResetAccept.id -> {
                 //Primero recogemos los Strings de los editText (correo actual, contraseña y el nuevo)
-                val oldMail = binding.includerResetEmailCardView.cardEditOldEmail.toString()
+                val oldMail = binding.includerResetEmailCardView.cardEditOldEmail.text.toString()
                 val pass = binding.includerResetEmailCardView.cardEditPass.text.toString()
                 val newMail = binding.includerResetEmailCardView.cardEditNewMail.text.toString()
                 if (oldMail.isEmpty()) { //Si no se ha introducido el correo viejo salta un error
@@ -182,86 +184,115 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 } else if (newMail.isEmpty()) { // Si el nuevo correo no ha sido introducido salta un error
                     snackBar(binding.root, "Introduce tu nuevo correo por favor")
                 } else { // Si todos los campos estan correctos...
-
-                    val token = EmailAuthProvider.getCredential(
-                        oldMail,
-                        pass
-                    ) //Recogemos el correo y la contraseña del usuario y la guardamos en una variable a modo de token o "llave"
-                    val currentUser = user
-                    Log.d("CorreoEnSesion", user?.email.toString())
-                    currentUser?.reauthenticate(token)
-                        ?.addOnCompleteListener { reAuth -> // Aqui utilizamos la "llave" para comprobar si el usuario y contraseña introducidos coinciden con el usuario actual. Si coinciden...
-                            if (reAuth.isSuccessful) {//si coinciden...
-                                if (currentUser.isEmailVerified) {//Y si el usuario ya está verificado...
-                                    /*Se ha sustituido el método "updateEmail(String)" por verifyBeforeUpdateEmail ya que el otro estaba deprecado.
-                                    El antiguo método daba error ya que el funcionamiento de Authentication ha cambiado. Ahora se necesita verificar el
-                                    email antes de ser modificado. Ahora se puede actualizar el mail, pero hasta que el usuario no verifique su cuenta
-                                    a traves del mail de verificación, no podra hacer login.
-                                     */
-                                    currentUser.verifyBeforeUpdateEmail(newMail)
-                                        .addOnCompleteListener { verify -> //Actualizamos el email con el newMail
-                                            if (verify.isSuccessful) {//Si la actualización es correcta...
-                                                val insertMail =
-                                                    hashMapOf("mail" to newMail) //creamos un hashmap para introducir los datos en Firebase
-                                                db.collection("users").document(numEmple)
-                                                    .set(insertMail)
-                                                    .addOnCompleteListener { set -> //Hacemos el set para cambiar los datos en la BBDD
-                                                        if (set.isSuccessful) { // Avisamos de que ha salido bien
+                    db.collection("users").whereEqualTo("email", email).get()
+                        .addOnSuccessListener { query ->
+                            if (!query.isEmpty) {
+                                snackBar(
+                                    binding.root,
+                                    "Este correo ya existe, por favor introduce otro"
+                                )
+                            } else {
+                                val token = EmailAuthProvider.getCredential(
+                                    oldMail,
+                                    pass
+                                ) //Recogemos el correo y la contraseña del usuario y la guardamos en una variable a modo de token o "llave"
+                                val currentUser = user
+                                Log.d("CorreoEnSesion", user?.email.toString())
+                                currentUser?.reauthenticate(token)
+                                    ?.addOnCompleteListener { reAuth -> // Aqui utilizamos la "llave" para comprobar si el usuario y contraseña introducidos coinciden con el usuario actual. Si coinciden...
+                                        if (reAuth.isSuccessful) {//si coinciden...
+                                            if (currentUser.isEmailVerified) {//Y si el usuario ya está verificado...
+                                                /*Se ha sustituido el método "updateEmail(String)" por verifyBeforeUpdateEmail ya que el otro estaba deprecado.
+                                                El antiguo método daba error ya que el funcionamiento de Authentication ha cambiado. Ahora se necesita verificar el
+                                                email antes de ser modificado. Ahora se puede actualizar el mail, pero hasta que el usuario no verifique su cuenta
+                                                a traves del mail de verificación, no podra hacer login.
+                                                 */
+                                                currentUser.verifyBeforeUpdateEmail(newMail)
+                                                    .addOnCompleteListener { verify -> //Actualizamos el email con el newMail
+                                                        if (verify.isSuccessful) {//Si la actualización es correcta...
+                                                            val insertMail =
+                                                                hashMapOf("mail" to newMail) //creamos un hashmap para introducir los datos en Firebase
+                                                            db.collection("users")
+                                                                .document(numEmple)
+                                                                .set(insertMail)
+                                                                .addOnCompleteListener { set -> //Hacemos el set para cambiar los datos en la BBDD
+                                                                    if (set.isSuccessful) { // Avisamos de que ha salido bien
+                                                                        snackBar(
+                                                                            binding.root,
+                                                                            "Email actualizado correctamente"
+                                                                        )
+                                                                    } else { //Si no, avisamos del error
+                                                                        snackBar(
+                                                                            binding.root,
+                                                                            "no se ha podido ingresar el nuevo mail en la base de datos"
+                                                                        )
+                                                                    }
+                                                                }
+                                                                .addOnFailureListener { e -> //Si da fallo al guardar los datos, avisamos
+                                                                    snackBar(
+                                                                        binding.root,
+                                                                        "Error al guardar en la base de datos: ${e.message}"
+                                                                    )
+                                                                }
+                                                        } else {
                                                             snackBar(
                                                                 binding.root,
-                                                                "Email actualizado correctamente"
-                                                            )
-                                                        } else { //Si no, avisamos del error
-                                                            snackBar(
-                                                                binding.root,
-                                                                "no se ha podido ingresar el nuevo mail en la base de datos"
+                                                                "Error al actualizar el mail"
                                                             )
                                                         }
                                                     }
-                                                    .addOnFailureListener { e -> //Si da fallo al guardar los datos, avisamos
+                                                    .addOnFailureListener { e ->// Se ha dejado este Log para ver el fallo que daba al intentar actualizar el nuevo mail
                                                         snackBar(
                                                             binding.root,
-                                                            "Error al guardar en la base de datos: ${e.message}"
+                                                            "Fallo real: ${e.message}"
+                                                        )
+                                                        Log.e(
+                                                            "FIREBASE_ERROR",
+                                                            "updateEmail failed",
+                                                            e
                                                         )
                                                     }
                                             } else {
-                                                snackBar(binding.root, "Error al actualizar el mail")
+                                                snackBar(binding.root, "Debes verificar el correo")
                                             }
-                                            }.addOnFailureListener{ e->// Se ha dejado este Log para ver el fallo que daba al intentar actualizar el nuevo mail
-                                                snackBar(binding.root,"Fallo real: ${e.message}")
-                                            Log.e("FIREBASE_ERROR", "updateEmail failed", e)
+                                        } else {
+                                            snackBar(
+                                                binding.root,
+                                                "Contraseña incorrecta o main incorrecto"
+                                            )
                                         }
-                                } else {
-                                    snackBar(binding.root, "Debes verificar el correo")
-                                }
-                            } else {
-                                snackBar(binding.root, "Contraseña incorrecta o main incorrecto")
+                                    }
                             }
+                        }.addOnFailureListener {
+                            snackBar(binding.root, "Error al comprobar si el correo existe")
                         }
                 }
             }
 
 
-            /**
-             * Botón para mandar el email de verificación
-             */
-            binding.includeOldEmailCardView.btnVerify.id->{
-                //Al pulsarlo se envía un email de verificación para que el usuario verifique su cuenta.
-                user?.sendEmailVerification()?.addOnCompleteListener{verify->
-                    if(verify.isSuccessful){ // Si sale bien...
-                        snackBar(binding.root,"Correo de verificación enviado. Revisa tu bandeja de entrada")
-                    }else{ // Si no sale bien...
-                        snackBar(binding.root,"Error al enviar el correo de verificación")
+                    /**
+                     * Botón para mandar el email de verificación
+                     */
+                    binding.includeOldEmailCardView.btnVerify.id->{
+                        //Al pulsarlo se envía un email de verificación para que el usuario verifique su cuenta.
+                        user?.sendEmailVerification()?.addOnCompleteListener { verify ->
+                            if (verify.isSuccessful) { // Si sale bien...
+                                snackBar(
+                                    binding.root,
+                                    "Correo de verificación enviado. Revisa tu bandeja de entrada"
+                                )
+                            } else { // Si no sale bien...
+                                snackBar(binding.root, "Error al enviar el correo de verificación")
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
 
-/**
- * Método para mostrar Snackbars
- */
-private fun snackBar(view: View, message: String) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
-}
+        /**
+         * Método para mostrar Snackbars
+         */
+        private fun snackBar(view: View, message: String) {
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+        }

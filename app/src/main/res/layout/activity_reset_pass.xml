@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/naranjaPersonalizado"
+    android:background="@drawable/gradient_reset_background"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -88,19 +88,12 @@
 
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnResetPass"
         android:layout_width="wrap_content"
-        android:layout_height="37sp"
-        app:strokeColor="@color/naranjaPersonalOscuro"
-        android:backgroundTint="@color/naranjaPersonalOscuro"
-        app:cornerRadius="0dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/new_era_casual_bold"
+        android:layout_height="40sp"
+        style="@style/RectangularMaterialButton"
         android:text="@string/btnNewPass"
-        android:textSize="15sp"
         android:layout_marginTop="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

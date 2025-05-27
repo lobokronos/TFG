@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/naranjaPersonalizado"
+    android:background="@drawable/gradient_main_background"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -87,32 +87,13 @@
         android:layout_width="350dp"
         android:layout_height="200dp"
         android:src="@drawable/logo_titulo"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="37sp"
-        app:strokeColor="@color/naranjaPersonalOscuro"
-        android:backgroundTint="@color/naranjaPersonalOscuro"
-        app:cornerRadius="0dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/new_era_casual_bold"
-        android:layout_marginBottom="180dp"
-        android:text="@string/btnLogin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnForgotPassword" />
-
-    <ImageView
+    <!--<ImageView
         android:id="@+id/btnGoogle"
         android:layout_width="180dp"
         android:layout_height="40dp"
@@ -123,7 +104,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />"
+-->
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        style="@style/RectangularMaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="45sp"
+        android:layout_marginBottom="150dp"
+        android:text="@string/btnLogin"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnForgotPassword"
+        app:layout_constraintVertical_bias="0.595" />
 
     <TextView
         android:id="@+id/warningPass"

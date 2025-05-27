@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="560dp"
-    android:background="@color/colorFondo"
+    android:background="@android:color/transparent"
     android:paddingLeft="30sp">
 
     <TextView
@@ -41,17 +41,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleName" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnFind"
         android:layout_width="wrap_content"
         android:layout_height="37sp"
-        app:strokeColor="@color/naranjaPersonalOscuro"
-        android:backgroundTint="@color/naranjaPersonalOscuro"
-        app:cornerRadius="0dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/new_era_casual_bold"
+       style="@style/RectangularMaterialButton"
         android:layout_marginLeft="20sp"
         android:text="@string/find"
         app:layout_constraintStart_toEndOf="@+id/editNumber"
@@ -67,17 +61,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editNumber" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="37sp"
-        app:strokeColor="@color/naranjaPersonalOscuro"
-        android:backgroundTint="@color/naranjaPersonalOscuro"
-        app:cornerRadius="0dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/new_era_casual_bold"
+        style="@style/RectangularMaterialButton"
         android:text="@string/btnDelete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -11,7 +11,7 @@
         android:visibility="gone"
         android:layout_width="12dp"
         android:layout_height="12sp"
-        android:src="@drawable/privateicon"
+        android:src="@drawable/privatenoteicon"
         android:layout_gravity="end|top"
         android:layout_marginEnd="4dp"
         android:layout_marginTop="4dp"/>

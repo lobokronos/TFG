@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillViewport="true"
-    android:background="@color/colorFondo">
+    android:background="@drawable/gradient_calendar">
 
     <!--Utilizamos un Constraint para ordenar los elementos-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorFondo">
+        android:background="@drawable/gradient_calendar">
 
         <!--Titulo del encabezado del Spinner de Secciones-->
         <TextView
@@ -116,18 +116,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/employeeSelectedText" />
-        <Button
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLegend"
             android:layout_width="wrap_content"
             android:layout_height="37sp"
-            app:strokeColor="@color/naranjaPersonalOscuro"
-            android:backgroundTint="@color/naranjaPersonalizado"
-            app:cornerRadius="0dp"
-            android:elevation="8dp"
-            android:translationZ="8dp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/new_era_casual_bold"
             android:text="@string/legendTitle"
+            style="@style/RectangularMaterialButton"
             android:layout_marginRight="15sp"
             android:layout_marginTop="15sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -185,9 +180,9 @@
 
             <FrameLayout
                 android:id="@+id/frameLayout"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="53dp"
-                android:background="@color/naranjaPersonalizado"
+                android:background="@drawable/legend_radius"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -385,42 +380,18 @@
                 app:layout_constraintStart_toEndOf="@+id/waiting"
                 app:layout_constraintTop_toTopOf="@+id/waiting" />
 
-            <ImageView
-                android:id="@+id/privateImage"
-                android:layout_width="25sp"
-                android:layout_height="45sp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/privateicon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/waiting" />
 
-            <TextView
-                android:id="@+id/privateText"
-                style="@style/currentText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/privateNoteLegend"
-                app:layout_constraintBottom_toBottomOf="@+id/privateImage"
-                app:layout_constraintStart_toStartOf="@+id/dayWaiting"
-                app:layout_constraintTop_toTopOf="@+id/privateImage" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnExitLegend"
                 android:layout_width="wrap_content"
                 android:layout_height="37sp"
-                app:strokeColor="@color/naranjaPersonalOscuro"
-                android:backgroundTint="@color/naranjaPersonalizado"
-                app:cornerRadius="0dp"
-                android:elevation="8dp"
-                android:translationZ="8dp"
-                android:textColor="@color/white"
+                style="@style/RectangularMaterialButton"
                 android:layout_marginTop="15dp"
                 android:text="@string/btnExit"
-                android:fontFamily="@font/new_era_casual_bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/privateText" />
+                app:layout_constraintTop_toBottomOf="@+id/waiting" />
 
 
             <View
@@ -470,7 +441,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="37sp"
@@ -544,22 +515,26 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.5" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAccept"
                     android:layout_width="wrap_content"
                     android:layout_height="40sp"
                     android:backgroundTint="@color/accept"
                     android:layout_marginTop="120sp"
+                    android:elevation="8dp"
+                    android:translationZ="8dp"
                     android:text="@string/btnAcceptNote"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/publicNoteText" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnReject"
                     android:layout_width="wrap_content"
                     android:layout_height="40sp"
                     android:backgroundTint="@color/deny"
+                    android:elevation="8dp"
+                    android:translationZ="8dp"
                     android:text="@string/btnRejectNote"
                     android:layout_marginTop="120sp"
                     app:layout_constraintEnd_toEndOf="parent"

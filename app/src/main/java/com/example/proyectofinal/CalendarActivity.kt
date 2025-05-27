@@ -194,14 +194,10 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                  * dependiendo de lso turnos recogidos en la lista recoveredTurn se pintaran unos u otros colores
                  */
                 when (recoveredTurn) {
-                    "Mañana" -> { container.dayNumber.setBackgroundResource(R.drawable.turnomanana)
-                        container.dayNumber.background.alpha=100}
-                    "Tarde" -> { container.dayNumber.setBackgroundResource(R.drawable.tarde)
-                        container.dayNumber.background.alpha=100}
-                    "Festivo" -> { container.dayNumber.setBackgroundResource(R.drawable.turnovacaciones)
-                        container.dayNumber.background.alpha=100}
-                    "Libre" -> { container.dayNumber.setBackgroundResource(R.drawable.turnolibre)
-                        container.dayNumber.background.alpha=100}
+                    "Mañana" -> { container.dayNumber.setBackgroundResource(R.drawable.turnomananaopacity) }
+                    "Tarde" -> { container.dayNumber.setBackgroundResource(R.drawable.afternoonopacity) }
+                    "Vacaciones" -> { container.dayNumber.setBackgroundResource(R.drawable.turnovacacionesopacity) }
+                    "Libre" -> { container.dayNumber.setBackgroundResource(R.drawable.turnolibreopacity) }
                     "Borrar turno" -> {
                         db.collection("turnos").document(pickedDate).collection(numEmple)
                             .document("turno").delete()
@@ -309,19 +305,20 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     for (doc in userQuery) { //Bucle para actuar sobre cada uno de los resultados de la consulta.
                         val nameList = doc.getString("nombre")
                         val surnameList = doc.getString("apellidos")
+                        val rolList = doc.getString("rol")
                         val empNumLong = doc.getLong("numEmple")
                         val empNumList = empNumLong.toString()
-                        Log.d("loadPickedSectionEmployees", "Consultando turno para empleado: $empNumList en la fecha $pickedDate") //Logcat para comprobar los datos extraidos.
                         db.collection("turnos").document(pickedDate)
                             .collection(empNumList)
                             .document("turno").get()
                             .addOnSuccessListener { documentSchedule -> //Ahora, por cada resultado, extraemos su turno usando su numero de empleado.
                                 val scheduleDoc = documentSchedule.getString("turno") ?: "Sin turno"
-                                Log.d("loadPickedSectionEmployees", "Turno encontrado: $scheduleDoc para el empleado $empNumList")  //Logcat para comprobar que el turno se ha encontrado.
-                                finalSheduleList += "\n ${empNumList} - ${nameList} ${surnameList} : ${scheduleDoc}" //Metemos los datos del usuario y turno al String.
+                                val sectionBossText= if (rolList=="Jefe de sección") "(Jefe)" else ""
+
+                                finalSheduleList += "\n ${empNumList} - ${nameList} ${surnameList} ${sectionBossText} : ${scheduleDoc}" //Metemos los datos del usuario y turno al String.
                                 counter++ //Sumamos +1 al contador para que vaya controlando los usuarios de la consulta que ya se han terminado de tratar.
                                 if (counter == userQuery.size()) { //Cuando el contador iguale al tamaño de la consulta, mostramos la lista ya completa.
-                                    binding.otherScheduleTitle.text = "Resto de turnos de ${selectedSection}"
+                                    binding.otherScheduleTitle.text = "Turnos de ${selectedSection}"
                                     binding.showOtherSchedule.text = finalSheduleList
                                 }
 
@@ -472,8 +469,6 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     loadEmployeeTurns(numEmple) //Cargamos los turnos del empleado seleccionado a traves de esta función.
                     val employeeName =
                         selectedEmployee.split(":")[1].trim() //Se separa el empleado de toda la cadena.
-                    val isBoss = selectedEmployee.trim()
-                        .endsWith("(Jefe)") //Se recoge la palabra jefe de la cadena.
                     firstEmployee = true
                     binding.employeeSelectedText.text =
                         employeeName //Se muestra en el textView el nombre del empleado.

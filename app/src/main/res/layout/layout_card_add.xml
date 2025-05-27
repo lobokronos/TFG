@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorFondo"
+    android:background="@android:color/transparent"
     android:paddingLeft="30sp">
 
     <TextView
@@ -177,21 +177,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAdd"
+        style="@style/RectangularMaterialButton"
         android:layout_width="wrap_content"
         android:layout_height="37sp"
-        app:strokeColor="@color/naranjaPersonalOscuro"
-        android:backgroundTint="@color/naranjaPersonalOscuro"
-        app:cornerRadius="0dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/new_era_casual_bold"
+        android:layout_marginTop="28dp"
         android:text="@string/btnAdd"
-        android:layout_marginTop="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.441"
+        app:layout_constraintHorizontal_bias="0.439"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSuperPass" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnLogin.setOnClickListener(this)
         binding.warningPass.visibility = View.GONE
         binding.btnForgotPassword.setOnClickListener(this)
-        binding.btnGoogle.setOnClickListener(this)
+        //binding.btnGoogle.setOnClickListener(this)
     }
 
     /**
@@ -108,13 +108,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, ResetPassActivity::class.java))
             }
 
-            binding.btnGoogle.id -> {
+            /*binding.btnGoogle.id -> {
                 startGoogleSignIn()
-            }
+            }*/
         }
     }
 
-    private fun startGoogleSignIn() {
+    /*private fun startGoogleSignIn() {
         val googleSignIntent = googleSignInClient.signInIntent
         googleSignInARL.launch(googleSignIntent)
     }
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             snackBar(binding.root, "${e.message}")
 
         }
-    }
+    }*/
 
     /**
      * Realiza el inicio de sesión del usuario

@@ -26,7 +26,7 @@
 
     <style name="subtitleTextStyle">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">27sp</item>
         <item name="fontFamily">@font/new_era_casual_bold</item>
         <item name="android:textColor">@color/textColor</item>
     </style>
@@ -86,13 +86,13 @@
     <style name="profileSubtitleTextStyle">
         <item name="fontFamily">@font/new_era_casual_bold</item>
         <item name="android:textSize">17dp</item>
-        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColor">@color/grayPerfil</item>
     </style>
 
     <style name="profileCurrentTextStyle">
         <item name="fontFamily">@font/new_era_casual_regular</item>
         <item name="android:textSize">17dp</item>
-        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColor">@color/naranjaGradiente</item>
     </style>
 
     <style name="monthTitleTextStyle">
@@ -116,4 +116,33 @@
         <item name="fontFamily">@font/new_era_casual_italic</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <!-- Estilos para botones -->
+    <style name="RectangularMaterialButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/naranjaPersonalOscuro</item>
+        <item name="strokeColor">@color/naranjaPersonalOscuro</item>
+        <item name="elevation">8dp</item>
+        <item name="android:translationZ">8dp</item>
+        <item name="cornerRadius">0dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/new_era_casual_bold</item>
+    </style>
+
+    <!-- Estilos para botones de borrar -->
+    <style name="RejectRectangularButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/deny</item>
+        <item name="strokeColor">@color/deny</item>
+        <item name="elevation">8dp</item>
+        <item name="android:translationZ">8dp</item>
+        <item name="cornerRadius">0dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/new_era_casual_bold</item>
+    </style>
+
+
 </resources>
