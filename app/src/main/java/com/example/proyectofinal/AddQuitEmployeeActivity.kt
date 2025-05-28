@@ -264,39 +264,43 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                 /**
                  * Esta consulta comprueba que el correo que se esta introduciendo no exista ya, si existe, dará error y cortará la creación
                  */
-                db.collection("users").whereEqualTo("email",email).get().addOnSuccessListener { query ->
-                    if(!query.isEmpty){
-                        snackBar(binding.root,"Este correo ya existe, por favor introduce otro")
+                db.collection("users").whereEqualTo("email", email).get()
+                    .addOnSuccessListener { query ->
+                        if (!query.isEmpty) {
+                            snackBar(
+                                binding.root,
+                                "Este correo ya existe, por favor introduce otro"
+                            )
 // Si el correo no existe, dará comienzo la inserción del usuario dependiendo de su rol
-                    } else {
-                        if (job == "Jefe de sección") { // Si es Jefe de seccion llamamos al método correspondiente para guardarlo
-                            insertSectionBoss(
-                                email,
-                                pass,
-                                name,
-                                surname,
-                                newEmpNum,
-                                job,
-                                section,
-                                superEmail,
-                                superPassword
-                            )
-                        } else { // Si no, lo guardamos como empleado con su función correspondiente
-                            insertEmployee(
-                                email,
-                                pass,
-                                name,
-                                surname,
-                                newEmpNum,
-                                job,
-                                section,
-                                superEmail,
-                                superPassword
-                            )
-                        }
+                        } else {
+                            if (job == "Jefe de sección") { // Si es Jefe de seccion llamamos al método correspondiente para guardarlo
+                                insertSectionBoss(
+                                    email,
+                                    pass,
+                                    name,
+                                    surname,
+                                    newEmpNum,
+                                    job,
+                                    section,
+                                    superEmail,
+                                    superPassword
+                                )
+                            } else { // Si no, lo guardamos como empleado con su función correspondiente
+                                insertEmployee(
+                                    email,
+                                    pass,
+                                    name,
+                                    surname,
+                                    newEmpNum,
+                                    job,
+                                    section,
+                                    superEmail,
+                                    superPassword
+                                )
+                            }
 
-                    }
-                }.addOnFailureListener {
+                        }
+                    }.addOnFailureListener {
                     snackBar(binding.root, "error al verificar el correo")
                 }
             }
@@ -637,95 +641,95 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                             "Panadería" -> "6"
                             else -> "0"
                         }
-                    builder.setTitle("!Atención¡")
-                        .setMessage("Estás seguro de querer dar de baja al empleado?")
-                        .setPositiveButton("SI") { dialog, _ ->
+                    if (rol == "Jefe de tienda") {
+                        snackBar(
+                            binding.root,
+                            "No puedes borrar el jefe de tienda. Para borrarlo contacta con Central."
+                        )
+                    }else{
+                        builder.setTitle("!Atención¡")
+                            .setMessage("Estás seguro de querer dar de baja al empleado?")
+                            .setPositiveButton("SI") { dialog, _ ->
 
-                            val deleteUser = db.collection("users").document(numEmple)
-                                .delete() //Borramos al usuario de la colección usuarios.
-                            val setState =
-                                db.collection("usuarios registrados").document(numEmple)
-                                    .update(
-                                        "estado",
-                                        "inactivo"
-                                    ) //Actualizamos su estado a "inactivo" para que, cuando generemos otro nuevo empleado, el sistema no reutilice números de empleado ya dados de baja.
+                                val deleteUser = db.collection("users").document(numEmple)
+                                    .delete() //Borramos al usuario de la colección usuarios.
+                                val setState =
+                                    db.collection("usuarios registrados").document(numEmple)
+                                        .update(
+                                            "estado",
+                                            "inactivo"
+                                        ) //Actualizamos su estado a "inactivo" para que, cuando generemos otro nuevo empleado, el sistema no reutilice números de empleado ya dados de baja.
 
-                            val locateSection =
-                                db.collection("secciones").document(sectionNumber)
-                            when (rol) {
-                                "Jefe de tienda" -> { //Si es el Jefe de la tienda NO se puede borrar.
-                                    snackBar(
-                                        binding.root,
-                                        "No puedes borrar el jefe de tienda. Para borrarlo contacta con Central."
-                                    )
-                                }
+                                val locateSection =
+                                    db.collection("secciones").document(sectionNumber)
+                                when (rol) {
+                                    "Jefe de sección" -> { //Si es jefe de sección lo borramos de su colección.
+                                        val deleteBoss =
+                                            locateSection.collection("Jefe de sección")
+                                                .document(numEmple)
+                                                .delete()
 
-                                "Jefe de sección" -> { //Si es jefe de sección lo borramos de su colección.
-                                    val deleteBoss =
-                                        locateSection.collection("Jefe de sección")
-                                            .document(numEmple)
-                                            .delete()
+                                        /**
+                                         * task.whenAllComplete
+                                         *
+                                         * Cuando se completen las tareas de borrar usuario, actualizar el estado, borrar su rol y borrar el jefe
+                                         * Se muestra el mensaje de exito o de error dependiendo del caso.
+                                         */
+                                        Tasks.whenAllComplete(
+                                            deleteUser,
+                                            setState,
+                                            deleteBoss
+                                        )
+                                            .addOnSuccessListener {
+                                                snackBar(
+                                                    binding.root,
+                                                    "Se ha borrado el jefe de sección correctamente"
+                                                )
+                                                clearData() // Función pàra borrar los datos en los campso de escritura
+                                                binding.includeDeleteEmployee.btnDelete.visibility =
+                                                    View.GONE
+                                            }.addOnFailureListener { e ->
+                                                snackBar(
+                                                    binding.root,
+                                                    "Error al borrar el jefe de sección ${e.message}"
+                                                )
 
+                                            }
+                                    }
                                     /**
-                                     * task.whenAllComplete
-                                     *
-                                     * Cuando se completen las tareas de borrar usuario, actualizar el estado, borrar su rol y borrar el jefe
-                                     * Se muestra el mensaje de exito o de error dependiendo del caso.
+                                     * Si es empleado, se sigue el mismo procedimiento de antes pero sin pasar por la condicional de los jefes
                                      */
-                                    Tasks.whenAllComplete(
-                                        deleteUser,
-                                        setState,
-                                        deleteBoss
-                                    )
-                                        .addOnSuccessListener {
-                                            snackBar(
-                                                binding.root,
-                                                "Se ha borrado el jefe de sección correctamente"
-                                            )
-                                            clearData() // Función pàra borrar los datos en los campso de escritura
-                                            binding.includeDeleteEmployee.btnDelete.visibility =
-                                                View.GONE
-                                        }.addOnFailureListener { e ->
-                                            snackBar(
-                                                binding.root,
-                                                "Error al borrar el jefe de sección ${e.message}"
-                                            )
-
-                                        }
+                                    else -> { //Si es empleado, se sigue el mismo procedimiento
+                                        val deleteEmployee =
+                                            locateSection.collection("Empleados")
+                                                .document(numEmple)
+                                                .delete()
+                                        Tasks.whenAllComplete(
+                                            deleteUser,
+                                            setState,
+                                            deleteEmployee
+                                        )
+                                            .addOnSuccessListener {
+                                                snackBar(
+                                                    binding.root,
+                                                    "Se ha borrado el empleado correctamente"
+                                                )
+                                                clearData()
+                                                binding.includeDeleteEmployee.btnDelete.visibility =
+                                                    View.GONE
+                                            }.addOnFailureListener { e ->
+                                                snackBar(
+                                                    binding.root,
+                                                    "Error al borrar el empleado ${e.message}"
+                                                )
+                                            }
+                                    }
                                 }
-                                /**
-                                 * Si es empleado, se sigue el mismo procedimiento de antes pero sin pasar por la condicional de los jefes
-                                 */
-                                else -> { //Si es empleado, se sigue el mismo procedimiento
-                                    val deleteEmployee =
-                                        locateSection.collection("Empleados")
-                                            .document(numEmple)
-                                            .delete()
-                                    Tasks.whenAllComplete(
-                                        deleteUser,
-                                        setState,
-                                        deleteEmployee
-                                    )
-                                        .addOnSuccessListener {
-                                            snackBar(
-                                                binding.root,
-                                                "Se ha borrado el empleado correctamente"
-                                            )
-                                            clearData()
-                                            binding.includeDeleteEmployee.btnDelete.visibility =
-                                                View.GONE
-                                        }.addOnFailureListener { e ->
-                                            snackBar(
-                                                binding.root,
-                                                "Error al borrar el empleado ${e.message}"
-                                            )
-                                        }
-                                }
+                            }.setNegativeButton("NO") { dialog, _ ->
+                                dialog.dismiss()
                             }
-                        }.setNegativeButton("NO") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                    builder.show()
+                        builder.show()
+                    }
                 }
             }
     }

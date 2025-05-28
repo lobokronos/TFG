@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:background="@color/naranjaPersonalizado"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleLegend"
+        style="@style/titleTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:text="@string/legendTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/morningImage"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_marginTop="70dp"
+        android:src="@drawable/turnomanana"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleLegend" />
+
+    <TextView
+        android:id="@+id/morningText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:text="@string/morningText"
+        style="@style/currentText"
+        app:layout_constraintBottom_toBottomOf="@+id/morningImage"
+        app:layout_constraintStart_toEndOf="@+id/morningImage"
+        app:layout_constraintTop_toTopOf="@+id/morningImage" />
+
+    <ImageView
+        android:id="@+id/afternoonImage"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:src="@drawable/tarde"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/morningImage" />
+
+    <TextView
+        android:id="@+id/afternoonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        style="@style/currentText"
+        android:text="@string/afternoonText"
+        app:layout_constraintBottom_toBottomOf="@+id/afternoonImage"
+        app:layout_constraintStart_toEndOf="@+id/afternoonImage"
+        app:layout_constraintTop_toTopOf="@+id/afternoonImage" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/holidayImage"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_marginTop="70sp"
+        android:src="@drawable/turnovacaciones"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/titleLegend" />
+
+    <TextView
+        android:id="@+id/holidayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:text="@string/holidayText"
+        style="@style/currentText"
+        app:layout_constraintBottom_toBottomOf="@+id/holidayImage"
+        app:layout_constraintStart_toEndOf="@+id/holidayImage"
+        app:layout_constraintTop_toTopOf="@+id/holidayImage" />
+
+    <ImageView
+        android:id="@+id/freeImage"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/turnolibre"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/holidayImage" />
+
+    <TextView
+        android:id="@+id/freeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:text="@string/freeText"
+        style="@style/currentText"
+        app:layout_constraintBottom_toBottomOf="@+id/freeImage"
+        app:layout_constraintStart_toEndOf="@+id/freeImage"
+        app:layout_constraintTop_toTopOf="@+id/freeImage" />
+
+    <TextView
+        android:id="@+id/titleTurns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        style="@style/subtitleTextStyle"
+        android:text="@string/scheduleTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleLegend" />
+
+    <TextView
+        android:id="@+id/notesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        style="@style/subtitleTextStyle"
+        android:text="@string/notesTitleLegend"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/afternoonImage" />
+
+    <TextView
+        android:id="@+id/accepted"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:text="00"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/green"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notesTitle" />
+
+    <TextView
+        android:id="@+id/dayAccepted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/currentText"
+        android:layout_marginLeft="20dp"
+        android:text="@string/publicNoteAcceptText"
+        app:layout_constraintBottom_toBottomOf="@+id/accepted"
+        app:layout_constraintStart_toEndOf="@+id/accepted"
+        app:layout_constraintTop_toTopOf="@+id/accepted" />
+
+    <TextView
+        android:id="@+id/rejected"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="00"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accepted" />
+
+    <TextView
+        android:id="@+id/dayRejected"
+        style="@style/currentText"
+        android:text="@string/publicNoteRejectText"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/rejected"
+        app:layout_constraintStart_toEndOf="@+id/rejected"
+        app:layout_constraintTop_toTopOf="@+id/rejected" />
+
+    <TextView
+        android:id="@+id/waiting"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:gravity="center"
+        android:text="00"
+        android:textColor="@color/magenta"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rejected" />
+
+    <TextView
+        android:id="@+id/dayWaiting"
+        style="@style/currentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/publicNoteStillText"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/waiting"
+        app:layout_constraintStart_toEndOf="@+id/waiting"
+        app:layout_constraintTop_toTopOf="@+id/waiting" />
+
+    <ImageView
+        android:id="@+id/privateImage"
+        android:layout_width="25sp"
+        android:layout_height="45sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/privatenoteicon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waiting" />
+
+    <TextView
+        android:id="@+id/privateText"
+        style="@style/currentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/privateNoteLegend"
+        app:layout_constraintBottom_toBottomOf="@+id/privateImage"
+        app:layout_constraintStart_toStartOf="@+id/dayWaiting"
+        app:layout_constraintTop_toTopOf="@+id/privateImage" />
+
+    <Button
+        android:id="@+id/btnExitLegend"
+        android:layout_width="wrap_content"
+        android:layout_height="37sp"
+        app:strokeColor="@color/naranjaPersonalOscuro"
+        android:backgroundTint="@color/naranjaPersonalOscuro"
+        app:cornerRadius="0dp"
+        android:elevation="8dp"
+        android:translationZ="8dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/new_era_casual_bold"
+        android:layout_marginTop="30dp"
+        android:text="@string/btnExit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privateText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnExitLegend" />
+
+    <View
+        android:layout_width="300dp"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTurns" />
+
+    <View
+        android:layout_width="300dp"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notesTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
