@@ -121,7 +121,7 @@
     <!-- AllCaps indica si todas las letras deben mostrarse en mayusculas. Por defecto, MaterialButton las muestra en mayusculas -->
 
     <style name="RectangularMaterialButton" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/naranjaPersonalOscuro</item>
+        <item name="backgroundTint">@color/disabled_color</item>
         <item name="strokeColor">@color/naranjaPersonalOscuro</item>
         <item name="elevation">8dp</item>
         <item name="android:translationZ">8dp</item>

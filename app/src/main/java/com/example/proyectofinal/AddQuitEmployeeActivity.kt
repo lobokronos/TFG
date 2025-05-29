@@ -2,7 +2,7 @@ package com.example.proyectofinal
 
 
 /**
-*Completada
+ *Completada
  */
 import android.content.Intent
 import android.os.Bundle
@@ -60,8 +60,10 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
 
     private fun variables() {
         builder = AlertDialog.Builder(this) // Variable para inicializar el AlertDialog
-        auth = FirebaseAuth.getInstance() // Variable para inicializar la instancia de Authentication
-        db = FirebaseFirestore.getInstance() // Variable inicializar la instancia de  Firestore y simplificar las futuras consultas a este
+        auth =
+            FirebaseAuth.getInstance() // Variable para inicializar la instancia de Authentication
+        db =
+            FirebaseFirestore.getInstance() // Variable inicializar la instancia de  Firestore y simplificar las futuras consultas a este
     }
 
     /**
@@ -181,10 +183,14 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                     if (positionSection == 0) { // Si ya ha cargado antes, es decir, si el usuario ha interactuado con el antes, mostrará el mensaje
                         snackBar(binding.root, "Debes seleccionar una sección")
                     } else {
-                        snackBar(binding.root, "$section selecccionado") // Si ha elegido otra sección, mostrará el mensaje
+                        snackBar(
+                            binding.root,
+                            "$section selecccionado"
+                        ) // Si ha elegido otra sección, mostrará el mensaje
                     }
                 } else {
-                    firstLoadSpinnerSections = true // Si el usuario interactua con el spinner, cambia el valor a true para indicar que ya se puede mostrar el snackbar en caso de que no se elija una sección a drede
+                    firstLoadSpinnerSections =
+                        true // Si el usuario interactua con el spinner, cambia el valor a true para indicar que ya se puede mostrar el snackbar en caso de que no se elija una sección a drede
                 }
             }
 
@@ -256,17 +262,34 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
 // Si el correo no existe, dará comienzo la inserción del usuario dependiendo de su rol
                         } else {
                             if (job == "Jefe de sección") { // Si es Jefe de seccion llamamos al método correspondiente para guardarlo
-                                insertSectionBoss(
-                                    email,
-                                    pass,
-                                    name,
-                                    surname,
-                                    newEmpNum,
-                                    job,
-                                    section,
-                                    superEmail,
-                                    superPassword
-                                )
+                                db.collection("secciones").document(positionSection.toString())
+                                    .collection("Jefe de sección").get()
+                                    .addOnSuccessListener { bossQuery ->
+                                        if (!bossQuery.isEmpty) {
+                                            snackBar(
+                                                binding.root,
+                                                "Ya existe un jefe de sección en esta sección"
+                                            )
+                                        } else {
+                                            insertSectionBoss(
+                                                email,
+                                                pass,
+                                                name,
+                                                surname,
+                                                newEmpNum,
+                                                job,
+                                                section,
+                                                superEmail,
+                                                superPassword
+                                            )
+                                        }
+                                    }.addOnFailureListener {
+                                        snackBar(
+                                            binding.root,
+                                            "Error al comprobar si hay jefe de sección"
+                                        )
+                                    }
+
                             } else { // Si no, lo guardamos como empleado con su función correspondiente
                                 insertEmployee(
                                     email,
@@ -283,13 +306,13 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
 
                         }
                     }.addOnFailureListener {
-                    snackBar(binding.root, "error al verificar el correo")
-                }
+                        snackBar(binding.root, "Error al verificar el correo")
+                    }
             }
     }
 
     /**
-     * Función nidada para crear un jefe de sección en caso de que el usuario a crear tenga ese rol
+     * Función anidada para crear un jefe de sección en caso de que el usuario a crear tenga ese rol
      */
     private fun insertSectionBoss(
         email: String,
@@ -302,19 +325,19 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         superEmail: String,
         superPassword: String
     ) {
-        val user = auth.currentUser //Aquí recogemos el usuario autenticado actualmente (El jefe de tienda)
-        val token = EmailAuthProvider.getCredential(superEmail, superPassword) //Construye las credenciales de este usuario para verificar su identidad
+        val user =
+            auth.currentUser //Aquí recogemos el usuario autenticado actualmente (El jefe de tienda)
+        val token = EmailAuthProvider.getCredential(
+            superEmail,
+            superPassword
+        ) //Construye las credenciales de este usuario para verificar su identidad
         if (user != null) { //Si el usuario no es nulo (existe o se encuentra)
-            user.reauthenticate(token).addOnSuccessListener { // Lo reautenticamos para verificar su identidad antes de la creación
-                db.collection("secciones").document(positionSection.toString())
-                    .collection("Jefe de sección").get()
-                    .addOnSuccessListener { bossQuery -> //Consultamos en la colección secciones si ya existe un jefe de sección para la sección seleccionada
-                        if (!bossQuery.isEmpty) { //Si existe...mostramos mensaje informativo
-                            snackBar(
-                                binding.root,
-                                "Ya existe un jefe de sección en esta sección"
-                            )
-                        } else { // Si no lo creamos
+            user.reauthenticate(token)
+                .addOnSuccessListener { // Lo reautenticamos para verificar su identidad antes de la creación
+                    // Si no lo creamos
+                    builder.setMessage("Se va a crear el usuario $name $surname . ¿Quieres continuar?")
+                        .setTitle("¿Quieres continuar?")
+                        .setPositiveButton("Si") { dialog, wich -> //Se genera un diálogo de advertencia
                             auth.createUserWithEmailAndPassword(email, pass)
                                 .addOnCompleteListener { task ->//Aqui metemos el user en authentication
                                     if (task.isSuccessful) { // Y lo creamos con sus campos correspondientes en las colecciones pertinentes
@@ -365,7 +388,6 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                             .collection("Jefe de sección")
                                             .document(newEmpNum.toString())
                                             .set(sectionData)
-
                                         /**
                                          * Task.whenAllComplete
                                          * Utilizamos el método "Tasks.whenAllComplete" para indicar que cuando se terminen de realizar las tres acciones
@@ -373,76 +395,70 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                          * pantalla "SuccessActivity donde se mostrarán los datos nuevos del usuario creado. Si no se realizan alguna de
                                          * las tres acciones de inserciones se mostrará un error mediante el Listener addOnFailureListener
                                          */
-
                                         Tasks.whenAllComplete(
                                             insertUser,
                                             insertBoss,
                                             insertRegistered
                                         )
                                             .addOnSuccessListener { //Si se completan todas las tareas pasamos a la pantalla de Verificación.
-
-                                                builder.setMessage("Se va a crear el usuario $name $surname . ¿Quieres continuar?")
-                                                    .setTitle("¿Quieres continuar?")
-                                                    .setPositiveButton("Si") { dialog, wich -> //Se genera un diálogo de advertencia
-                                                        auth.signInWithEmailAndPassword(
-                                                            superEmail,
-                                                            superPassword
+                                                auth.signInWithEmailAndPassword(
+                                                    superEmail,
+                                                    superPassword
+                                                )
+                                                    .addOnFailureListener { e -> //Si la operación falla, mostramos error
+                                                        snackBar(
+                                                            binding.root,
+                                                            "Error: ${e.message}"
                                                         )
-                                                            .addOnFailureListener { e -> //Si la operación falla, mostramos error
-                                                                snackBar(
-                                                                    binding.root,
-                                                                    "Error: ${e.message}"
-                                                                )
-                                                            }
-                                                        val intent =
-                                                            Intent(
-                                                                this,
-                                                                SuccessActivity::class.java
-                                                            )
-                                                        val bundle = Bundle() //Creamos un bundle para pasar los datos del usuario creado a la pantalla SuccessActivity.kt
-                                                        bundle.putString("name", name)
-                                                        bundle.putString("surname", surname)
-                                                        bundle.putString(
-                                                            "numEmp",
-                                                            newEmpNum.toString()
-                                                        )
-                                                        bundle.putString("password", pass)
-                                                        intent.putExtra("data", bundle)
-                                                        startActivity(intent) //Activamos el cambio de pantalla
-                                                        /**
-                                                         * Aquí es necesario volver a iniciarle sesión al ususario actual ya que, de no hacerlo, la sesión pasaría a ser
-                                                         * del usuario creado recientemente. Descubierto a traves de fallos y pruebas. Si creabas un nuevo empleado e
-                                                         * ibas a la pagina de mi perfil, aparecían los datos del usuario creado, no del Jefe...
-                                                         */
-
                                                     }
-                                                    .setNegativeButton("No") { dialog, _ -> // Si pulsamos No en el diálogo, la operación se abortará
-                                                        dialog.dismiss()
-                                                    }.show()
+                                                val intent =
+                                                    Intent(
+                                                        this,
+                                                        SuccessActivity::class.java
+                                                    )
+                                                val bundle =
+                                                    Bundle() //Creamos un bundle para pasar los datos del usuario creado a la pantalla SuccessActivity.kt
+                                                bundle.putString("name", name)
+                                                bundle.putString("surname", surname)
+                                                bundle.putString(
+                                                    "numEmp",
+                                                    newEmpNum.toString()
+                                                )
+                                                bundle.putString("password", pass)
+                                                intent.putExtra("data", bundle)
+                                                startActivity(intent) //Activamos el cambio de pantalla
+                                                /**
+                                                 * Aquí es necesario volver a iniciarle sesión al ususario actual ya que, de no hacerlo, la sesión pasaría a ser
+                                                 * del usuario creado recientemente. Descubierto a traves de fallos y pruebas. Si creabas un nuevo empleado e
+                                                 * ibas a la pagina de mi perfil, aparecían los datos del usuario creado, no del Jefe...
+                                                 */
+
 
                                             }.addOnFailureListener { e ->
                                                 snackBar(
                                                     binding.root,
                                                     "Error al guardar el jefe: ${e.message}"
                                                 )
-
                                             }
                                     } else { // Si existe el documento en la base de datos de JEfe de Seccion...saltara un mensaje informativo y no dejará crear otro.
                                         snackBar(
                                             binding.root,
-                                            "Ya existe un jefe de sección para esta sección"
+                                            "Error al crear el usuario"
                                         )
                                     }
 
                                 }
                         }
-                    }.addOnFailureListener {
-                        snackBar(
-                            binding.root,
-                            "Contraseña incorrecta. No se ha creado ningún usuario"
-                        )
-                    }
-            }
+                        .setNegativeButton("No") { dialog, _ -> // Si pulsamos No en el diálogo, la operación se abortará
+                            dialog.dismiss()
+                        }.show()
+
+                }.addOnFailureListener {
+                    snackBar(
+                        binding.root,
+                        "Contraseña incorrecta. No se ha creado ningún usuario"
+                    )
+                }
         } else {
             snackBar(
                 binding.root,
@@ -464,108 +480,124 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
         superPassword: String
     ) {
         val user = auth.currentUser // Recogemos el usuario de la sesión actual (jefe de tienda)
-        val token = EmailAuthProvider.getCredential(superEmail, superPassword) // Preparamos sus credenciales para posteriormente reautenticarlo
+        val token = EmailAuthProvider.getCredential(
+            superEmail,
+            superPassword
+        ) // Preparamos sus credenciales para posteriormente reautenticarlo
         if (user != null) { // Si se encuentra el usuario
             user?.reauthenticate(token) // Lo revalidamos para poder continuar con la operación y asi reforzar la seguridad de estos procesos
-                ?.addOnCompleteListener { task ->//Aqui metemos el nuevo user en authentication
+                ?.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val uid =
-                            auth.currentUser!!.uid //Introducimos su uid en el documento
-                        val logged =
-                            false // False para que salte la advertencia de cambiar la contraseña en el primer login
-                        val employee =
-                            hashMapOf( //Contruimos el hashMap para guardar los datos despues
-                                "uid" to uid,
-                                "nombre" to name,
-                                "apellidos" to surname,
-                                "numEmple" to newEmpNum,
-                                "email" to email,
-                                "rol" to job,
-                                "seccion" to section,
-                                "login" to logged
-                            )
-                        val employeeNumber =
-                            hashMapOf("numEmple" to newEmpNum) //Hashmap para guardar el número de empleado en el documento "empleados_sala."
-                        val sectionData = hashMapOf(
-                            "numEmple" to newEmpNum,
-                            "nombre" to name,
-                            "apellidos" to surname
-                        ) //hashMap para guardar el empleado en la sección
-                        val state =
-                            "activo" //Esta variable contempla que el usuario está dado de alta o de baja en la empresa. Cuando se da de baja, desaparece de la BBDD pero se conserva su numEmple.
-                        val registeredUser =
-                            hashMapOf("estado" to state, "numEmple" to newEmpNum, "email" to email)
-                        //Estas variables guardan las inserciones de datos en los documentos o colecciones correspondientes utilizando los Hashmaps anteriores.
+                        builder.setMessage("Se va a crear el usuario $name $surname . ¿Quieres continuar?")
+                            .setTitle("¿Quieres continuar?")
+                            .setPositiveButton("Si") { dialog, wich ->// Mismo dialogo para frenar al usuario antes de insertar
+                                auth.createUserWithEmailAndPassword(email, pass)
+                                    .addOnSuccessListener {
+                                        val uid =
+                                            auth.currentUser!!.uid //Introducimos su uid en el documento
+                                        val logged =
+                                            false // False para que salte la advertencia de cambiar la contraseña en el primer login
+                                        val employee =
+                                            hashMapOf( //Contruimos el hashMap para guardar los datos despues
+                                                "uid" to uid,
+                                                "nombre" to name,
+                                                "apellidos" to surname,
+                                                "numEmple" to newEmpNum,
+                                                "email" to email,
+                                                "rol" to job,
+                                                "seccion" to section,
+                                                "login" to logged
+                                            )
+                                        val employeeNumber =
+                                            hashMapOf("numEmple" to newEmpNum) //Hashmap para guardar el número de empleado en el documento "empleados_sala."
+                                        val sectionData = hashMapOf(
+                                            "numEmple" to newEmpNum,
+                                            "nombre" to name,
+                                            "apellidos" to surname
+                                        ) //hashMap para guardar el empleado en la sección
+                                        val state =
+                                            "activo" //Esta variable contempla que el usuario está dado de alta o de baja en la empresa. Cuando se da de baja, desaparece de la BBDD pero se conserva su numEmple.
+                                        val registeredUser =
+                                            hashMapOf(
+                                                "estado" to state,
+                                                "numEmple" to newEmpNum,
+                                                "email" to email
+                                            )
+                                        //Estas variables guardan las inserciones de datos en los documentos o colecciones correspondientes utilizando los Hashmaps anteriores.
 
-                        val insertUser =
-                            db.collection("users").document(newEmpNum.toString())
-                                .set(employee) //Insertamos el hasMap con los dtos del usuario
-                        val insertRegistered = db.collection("usuarios registrados")
-                            .document(newEmpNum.toString()) // Insertamos el hashMap del estado
-                            .set(registeredUser)
+                                        val insertUser =
+                                            db.collection("users").document(newEmpNum.toString())
+                                                .set(employee) //Insertamos el hasMap con los dtos del usuario
+                                        val insertRegistered = db.collection("usuarios registrados")
+                                            .document(newEmpNum.toString()) // Insertamos el hashMap del estado
+                                            .set(registeredUser)
 
-                        //si no hay jefe de sección lo inserta
-                        val insertEmployee =
-                            db.collection("secciones")
-                                .document(positionSection.toString())
-                                .collection("Empleados").document(newEmpNum.toString())
-                                .set(sectionData)
+                                        //si no hay jefe de sección lo inserta
+                                        val insertEmployee =
+                                            db.collection("secciones")
+                                                .document(positionSection.toString())
+                                                .collection("Empleados")
+                                                .document(newEmpNum.toString())
+                                                .set(sectionData)
 
-                        /**
-                         * Task.whenAllComplete
-                         * Utilizamos el método "Tasks.whenAllComplete" para indicar que cuando se terminen de realizar las tres acciones
-                         * de inserciones en la BBDD anteriores (las pasamos mediante parametro a traves de las variables) se pasará a la
-                         * pantalla "SuccessActivity donde se mostrarán los datos nuevos del usuario creado. Si no se realizan alguna de
-                         * las tres acciones de inserciones se mostrará un error mediante el Listener addOnFailureListener
-                         */
-                        Tasks.whenAllComplete(
-                            insertUser,
-                            insertEmployee,
-                            insertRegistered
-                        )
-                            .addOnSuccessListener { //Si se completan todas las tareas pasamos a la pantalla de Verificación.
-
-                                builder.setMessage("Se va a crear el usuario $name $surname . ¿Quieres continuar?")
-                                    .setTitle("¿Quieres continuar?")
-                                    .setPositiveButton("Si") { dialog, wich ->// Mismo dialogo para frenar al usuario antes de insertar
-                                        val intent = Intent(this, SuccessActivity::class.java)
-                                        val bundle = Bundle() // guardamos en un bundle los datos del nuevo usuario para pasarlos a SuccesActivity.kt
-                                        bundle.putString("name", name)
-                                        bundle.putString("surname", surname)
-                                        bundle.putString("numEmp", newEmpNum.toString())
-                                        bundle.putString("password", pass)
-                                        intent.putExtra("data", bundle)
-                                        startActivity(intent)
-                                        clearData() // función para limpiar los campos de escritura
-                                        //Volvemos a iniciar sesión al jefe de tienda para que el nuevo usuario autenticado no nos robe la sesión
-                                        auth.signInWithEmailAndPassword(
-                                            superEmail,
-                                            superPassword
+                                        /**
+                                         * Task.whenAllComplete
+                                         * Utilizamos el método "Tasks.whenAllComplete" para indicar que cuando se terminen de realizar las tres acciones
+                                         * de inserciones en la BBDD anteriores (las pasamos mediante parametro a traves de las variables) se pasará a la
+                                         * pantalla "SuccessActivity donde se mostrarán los datos nuevos del usuario creado. Si no se realizan alguna de
+                                         * las tres acciones de inserciones se mostrará un error mediante el Listener addOnFailureListener
+                                         */
+                                        Tasks.whenAllComplete(
+                                            insertUser,
+                                            insertEmployee,
+                                            insertRegistered
                                         )
-                                            .addOnFailureListener { e ->
+                                            .addOnSuccessListener { //Si se completan todas las tareas pasamos a la pantalla de Verificación.
+                                                val intent =
+                                                    Intent(this, SuccessActivity::class.java)
+                                                val bundle =
+                                                    Bundle() // guardamos en un bundle los datos del nuevo usuario para pasarlos a SuccesActivity.kt
+                                                bundle.putString("name", name)
+                                                bundle.putString("surname", surname)
+                                                bundle.putString("numEmp", newEmpNum.toString())
+                                                bundle.putString("password", pass)
+                                                intent.putExtra("data", bundle)
+                                                startActivity(intent)
+                                                clearData() // función para limpiar los campos de escritura
+                                                //Volvemos a iniciar sesión al jefe de tienda para que el nuevo usuario autenticado no nos robe la sesión
+                                                auth.signInWithEmailAndPassword(
+                                                    superEmail,
+                                                    superPassword
+                                                )
+                                                    .addOnFailureListener {
+                                                        snackBar(
+                                                            binding.root,
+                                                            "Error: Error al iniciar sesión de Superjefe"
+                                                        )
+                                                    }
+
+                                            }.addOnFailureListener { e ->
                                                 snackBar(
                                                     binding.root,
-                                                    "Error: Error al iniciar sesión de Superjefe"
+                                                    "Error al guardar el empleado"
                                                 )
+
+                                            }.addOnFailureListener {
+                                                snackBar(binding.root, "Error al crear el usuario")
                                             }
-                                    }.setNegativeButton("No") { dialog, _ -> // Si se pulsa "NO", se cierra el diálogo sin completar la operación
-                                        dialog.dismiss()
-                                    }.show()
-
-                            }.addOnFailureListener { e ->
-                                snackBar(
-                                    binding.root,
-                                    "Error al guardar el jefe: ${e.message}"
-                                )
-
+                                    }
                             }
-                    }
+                            .setNegativeButton("No") { dialog, _ -> // Si se pulsa "NO", se cierra el diálogo sin completar la operación
+                                dialog.dismiss()
+                            }
+                            .show()
 
-                }?.addOnFailureListener {
-                    snackBar(
-                        binding.root,
-                        "Contraseña incorrecta. No se ha creado ningún usuario"
-                    )
+                    } else {
+                        snackBar(
+                            binding.root,
+                            "Contraseña incorrecta. Ingrese bien la contraseña"
+                        )
+                    }
                 }
         } else {
             snackBar(
@@ -591,8 +623,10 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                     val section = document.getString("seccion")
                     val resultText =
                         "Nombre completo: ${name} ${surname}\nSección: ${rol} en ${section}." //Y se muestra el resultado
-                    binding.includeDeleteEmployee.textResult.text = resultText // Se imprime el resultado por pantalla
-                    binding.includeDeleteEmployee.btnDelete.visibility = View.VISIBLE // Y se muestra el boton de borrar para que se pueda borrar
+                    binding.includeDeleteEmployee.textResult.text =
+                        resultText // Se imprime el resultado por pantalla
+                    binding.includeDeleteEmployee.btnDelete.visibility =
+                        View.VISIBLE // Y se muestra el boton de borrar para que se pueda borrar
                 } else {
                     snackBar(
                         binding.root,
@@ -600,7 +634,8 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                     )
 
                     binding.includeDeleteEmployee.textResult.setText("Sin resultados") // Si no se encuentra ningún empleado con ese número, se muestra este mensaje por pantalla
-                    binding.includeDeleteEmployee.btnDelete.visibility = View.GONE // Y se oculta el botón delete para evitar posibles errores
+                    binding.includeDeleteEmployee.btnDelete.visibility =
+                        View.GONE // Y se oculta el botón delete para evitar posibles errores
                 }
             }
     }
@@ -632,7 +667,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                             binding.root,
                             "No puedes borrar el jefe de tienda. Para borrarlo contacta con Central."
                         )
-                    }else{
+                    } else {
                         builder.setTitle("!Atención¡") // Dialogo de advertencia para asegurarnos de que el usuario quiere seguir con la operación
                             .setMessage("Estás seguro de querer dar de baja al empleado?")
                             .setPositiveButton("SI") { dialog, _ ->

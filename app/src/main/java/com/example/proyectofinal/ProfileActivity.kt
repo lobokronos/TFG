@@ -57,9 +57,9 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
             binding.includeOldEmailCardView.verifidedText.setText("Email verificado")
             binding.includeOldEmailCardView.verifidedText.setTextColor(Color.GREEN)
             binding.includeOldEmailCardView.btnVerify.visibility = View.GONE
-            binding.includeOldEmailCardView.btnEditMail.isEnabled = true
+            //binding.includeOldEmailCardView.btnEditMail.isEnabled = true
         } else {
-            binding.includeOldEmailCardView.btnEditMail.isEnabled = false
+            //binding.includeOldEmailCardView.btnEditMail.isEnabled = false
             binding.includeOldEmailCardView.btnVerify.visibility = View.VISIBLE
             binding.includeOldEmailCardView.verifiedIMG.visibility = View.GONE
         }
@@ -70,7 +70,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
      */
     private fun actions() {
         binding.includeOldEmailCardView.btnResetProfilePass.setOnClickListener(this)
-        binding.includeOldEmailCardView.btnEditMail.setOnClickListener(this)
+        //binding.includeOldEmailCardView.btnEditMail.setOnClickListener(this)
         binding.includerResetEmailCardView.btnResetAccept.setOnClickListener(this)
         binding.includerResetEmailCardView.btnCanelReset.setOnClickListener(this)
         binding.includeOldEmailCardView.btnVerify.setOnClickListener(this)
@@ -109,7 +109,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 name = resDoc.getString("nombre").toString()
                 surname = resDoc.getString("apellidos").toString()
                 email = resDoc.getString("email").toString()
-                rol = resDoc.getString("nombre").toString()
+                rol = resDoc.getString("rol").toString()
                 val docNum = resDoc.getLong("numEmple")
                 numEmple = docNum.toString()
                 section = resDoc.getString("seccion").toString()
@@ -137,6 +137,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             /**
+            /**
              * Botón para editar el mail
              */
             binding.includeOldEmailCardView.btnEditMail.id -> {
@@ -144,6 +145,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 binding.cardOldMail.visibility = View.GONE
                 binding.cardNewMail.visibility = View.VISIBLE
             }
+
             /**
              * Botón de "cancelar editado
              */
@@ -151,7 +153,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 // cuando es pulsado, oculta la cardview actual y vuelve a mostrar la de verificación
                 binding.cardOldMail.visibility = View.VISIBLE
                 binding.cardNewMail.visibility = View.GONE
-            }
+            }*/
             /**
              * Botón para restablecer la contraseña
              */
@@ -160,9 +162,12 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 startActivity(Intent(applicationContext, ResetPassActivity::class.java))
             }
             /**
-             * Botón de restablecimiento de Email
+             * Botón de restablecimiento de Email, se quita porque se ha descubierto un fallo bastante grande, hay que repasarlo
+             * para implementarlo antes del lanzamiento
+             *
+             *
              */
-            binding.includerResetEmailCardView.btnResetAccept.id -> {
+           /* binding.includerResetEmailCardView.btnResetAccept.id -> {
                 //Primero recogemos los Strings de los editText (correo actual, contraseña y el nuevo)
                 val oldMail = binding.includerResetEmailCardView.cardEditOldEmail.text.toString()
                 val pass = binding.includerResetEmailCardView.cardEditPass.text.toString()
@@ -179,8 +184,9 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 } else if (newMail.isEmpty()) { // Si el nuevo correo no ha sido introducido salta un error
                     snackBar(binding.root, "Introduce tu nuevo correo por favor")
                 } else { // Si todos los campos estan correctos...
-                    db.collection("usuarios registrados").whereEqualTo("email", email).get()
+                    db.collection("usuarios registrados").whereEqualTo("email", newMail).get()
                         .addOnSuccessListener { query -> // Se hace una busqueda en la base de datos para saber si el correo ya existe
+                            Log.d("VERIFICAR_CORREO", "Correo introducido: $email - Resultados encontrados: ${query.size()}")
                             if (!query.isEmpty) { // Si existe, se le impide al usuario continuar hasta que introduzca uno que no exista
                                 snackBar(
                                     binding.root,
@@ -262,7 +268,7 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                             snackBar(binding.root, "Error al comprobar si el correo existe")
                         }
                 }
-            }
+            }*/
 
 
                     /**

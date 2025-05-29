@@ -73,6 +73,8 @@
             android:layout_marginTop="190dp"
             android:hint="@string/resetHint"
             style="@style/editTextInnerText"
+            android:textSize="17dp"
+            android:fontFamily="@font/classic_robot"
             android:singleLine="true"
             android:ellipsize="end"
             android:padding="8dp"

@@ -85,13 +85,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val password =
                     binding.editPass.text.toString() //variable que recoge el texto de la contraseña.
 
-                if (email.isEmpty()) { //Si el email está vacío, muestra una advertencia.
-                    snackBar(binding.root, "Ingrese un email")
-                }
-                if (password.isEmpty())  //Si la contraseña está vacía, muestra una advertencia.
-                    snackBar(binding.root, "Ingrese la contraseña")
-                else {  //Si todos los campos están rellenos, se procede a la llamada del método login.
-                    loginUser(email, password)
+                if (email.isEmpty() || password.isEmpty()) { //Si algun campo está vacío
+                    snackBar(binding.root, "Debes rellenar ambos campos")
+                } else {
+                    loginUser(email, password) // si no...entramos
                 }
             }
             /**
@@ -101,6 +98,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
              * de contraseña
              */
             binding.btnForgotPassword.id -> {
+                auth.signOut()
                 startActivity(Intent(this, ResetPassActivity::class.java))
             }
 
@@ -223,8 +221,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         snackBar(binding.root, "${e.message}.")
                     }
             }
-        }.addOnFailureListener { e -> // Error de credenciales incorrectas
-            snackBar(binding.root, "El usuario o contraseña no coinciden: ${e.message}.")
+        }.addOnFailureListener {   // Error de credenciales incorrectas
+            snackBar(binding.root, "El usuario o contraseña no coinciden.")
         }
     }
 
@@ -241,8 +239,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
-
-
 
 
     private fun snackBar(view: View, message: String) { //Función para simplificar Snackbars

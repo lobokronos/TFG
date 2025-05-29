@@ -74,7 +74,7 @@ class ResetPassActivity : AppCompatActivity(), View.OnClickListener {
                         auth.sendPasswordResetEmail(emailToSend).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 snackBar(binding.root, "Revisa la bandeja de entrada de tu correo")
-                                startActivity(Intent(this, MainActivity::class.java))
+
                             }
                         }.addOnFailureListener { e ->
                             snackBar(binding.root, "Error: ${e.message}")
