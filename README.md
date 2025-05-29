@@ -1,6 +1,6 @@
 # 📱 Freskomarkt Turnos
 
-**Freskomarkt Turnos** es una aplicación Android desarrollada como parte de mi **Trabajo de Fin de Grado (TFG)**. Está orientada a la **gestión de turnos para empleados** en el sector de la alimentación, facilitando la organización, asignación y seguimiento de los horarios laborales.
+**Freskomarkt Turnos** es una aplicación Android desarrollada como parte de mi **Trabajo de Fin de Grado (TFG)**. Está orientada a la **gestión de turnos para empleados** en el sector de la alimentación, ayudando a la organización, asignación y seguimiento de los horarios.
 
 ---
 
@@ -16,7 +16,7 @@
 
 ## 📦 Descarga la APK
 
-Puedes descargar directamente la última versión de la aplicación desde la sección de Releases de GitHub:
+Puedes descargar directamente la última versión de mi aplicación desde la sección de Releases de GitHub:
 
 👉 [Descargar APK (v1.0)](https://github.com/lobokronos/TFG/releases/download/v1.0/fsmktTurnos.apk)
 
@@ -24,7 +24,7 @@ Puedes descargar directamente la última versión de la aplicación desde la sec
 
 ## 📁 Clonar el repositorio
 
-Si prefieres explorar el código fuente o colaborar en el desarrollo, puedes clonar el proyecto con el siguiente comando:
+Si prefieres explorar el código fuente o ayudarme en el desarrollo, puedes clonar el proyecto con el siguiente comando:
 
 ```bash
 git clone https://github.com/lobokronos/TFG.git
@@ -34,7 +34,7 @@ git clone https://github.com/lobokronos/TFG.git
 
 ## 🔐 Cuentas de superusuario disponibles
 
-> Para acceder a la aplicación en esta versión de desarrollo, necesitas una cuenta de tipo **superusuario**.
+> Para acceder a la aplicación en esta versión de desarrollo, necesitaras una cuenta de tipo **superusuario**.
 
 Puedes utilizar alguna de las siguientes cuentas de prueba:
 
@@ -47,7 +47,7 @@ Puedes utilizar alguna de las siguientes cuentas de prueba:
 
 ## 🙌 Agradecimientos
 
-Gracias por leer, descargar y apoyar este proyecto.  
+¡Gracias por apoyarme leyendo y descargando este proyecto! 
 Cualquier sugerencia, comentario o idea para mejorar la aplicación será más que bienvenida.  
 
 ---
