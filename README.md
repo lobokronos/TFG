@@ -41,7 +41,7 @@ Puedes utilizar alguna de las siguientes cuentas de prueba:
 | Correo electrónico     | Contraseña |
 |------------------------|------------|
 | joga@gmail.com         | 365018     |
-| maca@gmail.com         | 365050     |
+| ramenen@gmail.com      | 365402     |
 
 ---
 
