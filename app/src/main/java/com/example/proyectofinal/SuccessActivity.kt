@@ -25,17 +25,19 @@ class SuccessActivity : BaseActivity() {
         binding = ActivitySuccessBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Esta función carga el "estilo" o animación que se ha prediseñado en la carpeta anim, en esta activity o contexto (this)
         val animation : Animation = AnimationUtils.loadAnimation(this,R.anim.anim_appear)
-        binding.imageView.startAnimation(animation)
+        binding.imageView.startAnimation(animation) // Y se la aplica a la imagen de este layout
 
 
-        recoveredData = intent.getBundleExtra("data")
+        recoveredData = intent.getBundleExtra("data") //recuperamos los datos del nuevo empleado creado
 
         val textName = recoveredData?.getString("name")
         val textSurname = recoveredData?.getString("surname")
         val textNumEmp = recoveredData?.getString("numEmp")
         val textPass = recoveredData?.getString("password")
 
+        // Y los mostramos simplemente como una cadena de texto en un editText
         binding.textUser.text = "${textName} ${textSurname} registrado. Su nuevo número de" +
                 " empleado es el ${textNumEmp} y " +
                     "su contraseña es la misma que el número de empleado (${textPass})."

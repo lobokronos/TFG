@@ -2,10 +2,6 @@ package com.example.proyectofinal
 
 /**
  * Completada
- *
- * Falta el comentario OK
- * Falta arreglar las vistas de los container OK
- * Falta que seaparezca el texto (sin revisar) de la sugerencia cuando se acepta o rechaza (FALTA)
  */
 
 import android.graphics.Color
@@ -167,17 +163,17 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                 } else {
                     container.dayNumber.setTextColor(Color.GRAY)
                 }
- // Se ha situado un escuchador en la celda de los dias para recoger su pulsación
+                // Se ha situado un escuchador en la celda de los dias para recoger su pulsación
                 container.dayNumber.setOnClickListener {
                     val text ="${data.date.dayOfMonth}/${data.date.monthValue}/${data.date.year}" //Se guarda la fecha en formato texto
                     binding.selectedDateText.text = text // Se muestrea la fecha en el textView
                     selectedDate=data.date //Se guarda la fecha en la variable local
-                    pickedDate = "${data.date.dayOfMonth}-${data.date.monthValue}-${data.date.year}" //String para mostrar en TextViews la fecha (día, mes, año)
+                    pickedDate = "${data.date.dayOfMonth}-${data.date.monthValue}-${data.date.year}" //String para mostrar en futuras operaciones la fecha (día, mes, año)
                     showNotesElements(data.date) // Se activa la funcion que muestra elementos con la fecha seleccionada
                 }
 
                 //binding.notesContainer.visibility=View.INVISIBLE
-                //Utilizamos la lista calve-valor que contiene la fecha/turno para ir pintando cada dia de un color cuando el método bind los construya
+                //Utilizamos la lista calve-valor (MutableMap) que contiene la fecha/turno para ir poniendo en cada día una imagen cuando el método bind los construya
                 val recoveredTurn = employeeTurns[data.date]
                 val showPublicDate=statusPublicEmp[data.date]
                 val showPrivateIcons=privateNoteList[data.date]
@@ -318,11 +314,11 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                 }
 
             }
-        binding.calendarView.notifyDateChanged(LocalDate.now())
+        //binding.calendarView.notifyDateChanged(LocalDate.now())
     }
 
     /**
-     * Esta función carga el número de empleado del usuario, el ccual es necesario para mostrar su calendario personalizado.
+     * Esta función carga el número de empleado del usuario, el cual es necesario para mostrar su calendario personalizado.
      */
     private fun loadUserData() {
         db.collection("users").whereEqualTo("uid", uid).get().addOnSuccessListener { result ->
@@ -343,17 +339,17 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
         val dateParts= pickedDate.split("-") //Deconstruimos el pickedDate para reconstruir la fecha en la siguiente variable con el orden de los elementos ordenado correctamente
         val dateForThisFunction=LocalDate.of(dateParts[2].toInt(),dateParts[1].toInt(),dateParts[0].toInt())
         when (v?.id) {
+            /** Botón para guardar las sugerencias creadas **/
             binding.btnSave.id -> {
                 val text =
                     binding.editNotes.text.toString() //variable que recoge el texto del editText
-                val noteStatus = "pendiente"
-                val createDoc =
-                    hashMapOf("generado" to "true") //Variable que introduce la fecha de creación
+                val noteStatus = "pendiente" //Guardamos en una variable el estado "pendiente" de la sugerencia creada
+                val createDoc = hashMapOf("generado" to "true") //Variable para poder crear un nuevo documento (no permite crearlos vacíos)
                 val existDate = db.collection("turnos")
-                    .document(pickedDate) //Variable con la ruta que apunta a la coleccion "numEmple"(no se ve)
+                    .document(pickedDate) //Variable con la ruta que apunta a la coleccion "numEmple"(no se ve). Se usa para acortar las posteriores consultas
                 val existNote = db.collection("turnos").document(pickedDate).collection(numEmple)
-                    .document("notas") //Variable con la ruta que apunta a la coleccion "notas"(no se ve)
-                if (text.isEmpty()) {
+                    .document("notas") //Variable con la ruta que apunta a la coleccion "notas"(no se ve). Se usa para acortar las posteriores consultas
+                if (text.isEmpty()) { // Si el texto de la sugerencia está vacío, se avisa al usuario para hacerle saber que no se pueden guardar sugerencias vacías
                     snackBar(binding.root, "No puedes guardar una nota vacía")
                 } else {
                     //Primero debemos comprobar que tanto la colección de la fecha seleccionada, como la de notas en su interior existen ya que
@@ -361,7 +357,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                     //con datos en su interior.
                     existDate.get().addOnSuccessListener { date ->
                         if (!date.exists()) {
-                            existDate.set(createDoc)  //Si la colección con la fecha seleccionada no existe la creamos con un campo (la fecha de creacion)
+                            existDate.set(createDoc)  //Si la colección con la fecha seleccionada no existe la creamos con un campo (la variable createDoc que guarda un campo simple con "true" para poder generar el documento)
                         }
                         existNote.get().addOnSuccessListener { note ->
                             if (!note.exists()) {
@@ -391,16 +387,16 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                                                         snackBar(
                                                             binding.root,
                                                             "Nota privada guardada"
-                                                        )
-                                                        privateNoteList[dateForThisFunction] = true
+                                                        ) //Avisamos de que la nota ha sido guardada correctamente
+                                                        privateNoteList[dateForThisFunction] = true  //Guardamos en un MutableMap la sugerencia con la fecha para que luego el bind() pueda reconocerla y pintarla en el calendario
                                                         binding.calendarView.notifyDateChanged(
                                                             dateForThisFunction
-                                                        )
+                                                        ) // Actualizamos el calendario con la fecha de creación para que redibuje dicha celda del día
                                                     }.addOnFailureListener { e ->
                                                         snackBar(
                                                             binding.root,
                                                             "Error al guardar la nota: ${e.message}"
-                                                        )
+                                                        ) // Si da error, mostramos dicho error
 
                                                     }
                                             }
@@ -429,11 +425,11 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                                                         binding.editNotes.text.clear()  //Borramos el editText de caracteres
                                                         snackBar(binding.root, "Nota guardada")
                                                         statusPublicEmp[dateForThisFunction] = "pendiente"//Con esto guardamos el valor pendiente en la fecha del hashmap
-                                                        status="pendiente"
-                                                        binding.textPublicResult.text="pendiente"
-                                                        binding.textPublicResult.setTextColor(Color.MAGENTA)
-                                                        binding.deletePublic.visibility=View.VISIBLE
-                                                        binding.imageResult.setImageResource(R.drawable.questionpublic)
+                                                        status="pendiente" // Forzamos la variable del estado a pendiente, ya que al crearla, siempre tendrá este estado
+                                                        binding.textPublicResult.text="pendiente" // Mostramos el texto con el estado
+                                                        binding.textPublicResult.setTextColor(Color.MAGENTA) // Pintamos el texto del estado de su color correspondiente
+                                                        binding.deletePublic.visibility=View.VISIBLE // Mostramos el botón para borrar la sugerencia
+                                                        binding.imageResult.setImageResource(R.drawable.questionpublic) // Mostramos el icono correspondiente al estado "pendiente"
 
                                                         binding.calendarView.notifyDateChanged(dateForThisFunction) //actualizamos el calendario con la fecha que hemos seleccionado para que muestre el color
                                                     }.addOnFailureListener { e ->
@@ -495,10 +491,11 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                     }
                     .show()
             }
-
+            /** Botón para mostrar la leyenda **/
             binding.btnLegend.id-> {
                 binding.legendLayout.visibility=View.VISIBLE
             }
+            /** Botón para ocultar la leyenda **/
             binding.btnExitLegend.id->{
                 binding.legendLayout.visibility=View.GONE
             }

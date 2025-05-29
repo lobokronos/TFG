@@ -8,6 +8,7 @@
     android:background="@drawable/gradient_main_background"
     tools:context=".MainActivity">
 
+    <!-- Dentro de este Frame se guardan los campos para el login -->
     <FrameLayout
         android:id="@+id/orangeContainer"
         android:layout_width="280dp"
@@ -92,7 +93,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
+    <!-- Lógica para el botón de Google -->
     <!--<ImageView
         android:id="@+id/btnGoogle"
         android:layout_width="180dp"
@@ -121,10 +122,12 @@
         app:layout_constraintTop_toBottomOf="@+id/btnForgotPassword"
         app:layout_constraintVertical_bias="0.595" />
 
+    <!-- TextView que será invisible a menos que el usuario haga el primer login -->
     <TextView
         android:id="@+id/warningPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:padding="20sp"
         android:text="@string/warningLogin"
         style="@style/instructionsText"
@@ -132,9 +135,9 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGoogle" />"
+        app:layout_constraintStart_toStartOf="parent" />"
 
+    <!-- Botón para el restablecimiento de contraseña -->
     <Button
         android:id="@+id/btnForgotPassword"
         android:layout_width="wrap_content"

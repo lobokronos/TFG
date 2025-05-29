@@ -118,6 +118,8 @@
     </style>
 
     <!-- Estilos para botones -->
+    <!-- AllCaps indica si todas las letras deben mostrarse en mayusculas. Por defecto, MaterialButton las muestra en mayusculas -->
+
     <style name="RectangularMaterialButton" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/naranjaPersonalOscuro</item>
         <item name="strokeColor">@color/naranjaPersonalOscuro</item>

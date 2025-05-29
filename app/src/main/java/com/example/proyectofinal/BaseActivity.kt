@@ -3,7 +3,6 @@ package com.example.proyectofinal
 /**
  * Completada
  *
- * Quitado el item de HomeActivity ya que no se iba a utilizar
  */
 
 import android.content.Intent
@@ -40,7 +39,7 @@ open class BaseActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         variables()
-        verifyEmployeeType()
+        verifyEmployeeType() // Función que comprueba el rol del usuario que ha iniciado sesión
 
 
 
@@ -97,14 +96,17 @@ open class BaseActivity : AppCompatActivity() {
                         )
                     )//Lleva hacia Agregar/Quitar Empleado
                 }
-
+/**
+ *
+ *  Este item del menú cierra la sesión actual, cortando de raíz el funcionamiento de la activity actual y redirigiendo al usuario a la pantalla de login
+ *  */
                 R.id.menu_closeSession -> {
                     auth.signOut()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
             }
-
+            //Esta función cierra automáticamente el menú cuando un item es pulsado
             binding.drawerLayout.closeDrawers()
             true
         }

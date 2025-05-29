@@ -22,7 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--Este LinearLayout mete los encabezados de los dias de la semana -->
+    <!--Este LinearLayout mete los encabezados de los dias de la semana
+        con include, recogiendolos del titlesContainer-->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -331,6 +332,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/notesTitle" />
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -344,6 +346,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/legendLayout" />
 
+    <!-- Contenedor para mostrar las públicas existentes -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerShowExistPublicNotes"
         android:layout_width="match_parent"
@@ -393,6 +396,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textShowPublic" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Contenedor para mostrar las privadas existentes -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerShowExistPrivateNotes"
         android:layout_width="match_parent"
@@ -423,6 +427,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Contenedor donde el usuario elegirá y escribirá las notas -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/notesContainer"
         android:layout_width="match_parent"

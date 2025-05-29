@@ -1,12 +1,7 @@
 package com.example.proyectofinal
 
 /**
- * No completado
- *
- * Falta editar colores correctamente
- * Añadida verificación de usuario y lógica para cambiar el mail. Importante el metodo verifyBeforeUpdateMail() 4H OK
- * Añadida una excepción para que, en caso de que de fallo la conexión a Firestore para recopilar los datos del
- *  usuario, aparezca un mensaje de error tanto en los campos de texto como en el SnackBar OK
+ * Completada
  */
 import android.content.Intent
 import android.graphics.Color
@@ -184,9 +179,9 @@ class ProfileActivity : BaseActivity(), View.OnClickListener {
                 } else if (newMail.isEmpty()) { // Si el nuevo correo no ha sido introducido salta un error
                     snackBar(binding.root, "Introduce tu nuevo correo por favor")
                 } else { // Si todos los campos estan correctos...
-                    db.collection("users").whereEqualTo("email", email).get()
-                        .addOnSuccessListener { query ->
-                            if (!query.isEmpty) {
+                    db.collection("usuarios registrados").whereEqualTo("email", email).get()
+                        .addOnSuccessListener { query -> // Se hace una busqueda en la base de datos para saber si el correo ya existe
+                            if (!query.isEmpty) { // Si existe, se le impide al usuario continuar hasta que introduzca uno que no exista
                                 snackBar(
                                     binding.root,
                                     "Este correo ya existe, por favor introduce otro"

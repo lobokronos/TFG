@@ -14,9 +14,6 @@
 
     <!-- ********************************************************************************************* -->
 
-    <!-- activity_home.xml -->
-    <!-- ********************************************************************************************* -->
-
     <!--Aactivity_add_quit_employee.xml -->
     <string name="rBtnAdd">Añadir empleado</string>
     <string name="rBtnDelete">Borrar empleado</string>
@@ -88,14 +85,7 @@
     <string name="NumTitle">Número de empleado</string>
     <!-- ********************************************************************************************* -->
 
-    <!-- activity_home.xml -->
-    <string name="welcomeProfileTitle">Hola</string>
-    <string name="turnTitle">Tu turno de hoy</string>
-    <string name="tomorrowTurnTitle">Tu turno de mañana</string>
-    <string name="weekTutnTitle">Tu turno de la semana</string>
-    <!-- ********************************************************************************************* -->
-
-    <!-- (deprecated) activity_reset_pass.xml (deprecated) -->
+    <!--  activity_reset_pass.xml  -->
     <string name="caution">Restablecer contraseña</string>
     <string name="changePassTitle">Introduzca su correo electrónico</string>
     <string name="changePassInstruction">Se va a proceder a enviar un mail para que puedas restablecer tu contraseña. Por favor, ingresa tu correo electrónico</string>
@@ -111,7 +101,7 @@
     <string name="otherScheduleTitle">Resto de turnos de la sección</string>
     <!-- ********************************************************************************************* -->
 
-    <!-- dialog_schedule_notes.xml -->
+    <!-- Notes & Schedules -->
     <string name="turn_assignment">Asigna un turno</string>
     <string-array name="Turns">
         <item> ----- </item>
@@ -126,14 +116,11 @@
     <string name="radio_free">Libre</string>
     <string name="radio_festive">Fiesta</string>
     <string name="btn_save">Guardar</string>
-   <string name="notesTitle">Anotaciones</string>
-   <string name="dailyNotes">Peticiones/Sugerencias:</string>
-   <string name="btnAcceptNote">Aceptar</string>
-   <string name="btnRejectNote">Rechazar</string>
-   <string name="remember">Recuerda que tus anotaciones podrán ser vistas por el jefe de tienda. No escribas nada de caracter personal</string>
-    <!-- ********************************************************************************************* -->
-
-    <!-- notes_employee.layout -->
+    <string name="notesTitle">Anotaciones</string>
+    <string name="dailyNotes">Peticiones/Sugerencias:</string>
+    <string name="btnAcceptNote">Aceptar</string>
+    <string name="btnRejectNote">Rechazar</string>
+    <string name="remember">Recuerda que tus anotaciones podrán ser vistas por el jefe de tienda. No escribas nada de caracter personal</string>
     <string name="cardviewTitle">Anotaciones/Propuestas</string>
     <string name="profileNotes">Mis anotaciones</string>
     <string name="titleSpinner">¿Que tipo de anotación vas a escribir?</string>

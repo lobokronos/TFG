@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 <!--Fondo cuando se selecciona-->
     <item
-        android:state_checked="true">
+        android:state_checked="true"> <!--Características para cuando está seleccionado-->
         <shape android:shape="rectangle">
             <solid android:color="@color/selected"/>
             <corners android:radius="30dp"/>
@@ -12,6 +12,7 @@
     <!--Fondo deseleccionado-->
     <item>
         <shape android:shape="rectangle">
+
             <solid android:color="@android:color/transparent"/>
             <stroke
                 android:width="2dp"

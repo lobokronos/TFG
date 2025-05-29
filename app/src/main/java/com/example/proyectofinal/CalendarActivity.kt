@@ -1,15 +1,8 @@
 package com.example.proyectofinal
 
 /**
- * No completada
+ * Completada
  *
- * Añadido sistema para no mostrar nada si no se ha seleccionado sección, y si la sección está vacía mostrar (vacío). OK
- * Falta esconder el calendario si no se ha seleccionado ningún empleado. OK
- * Falta la corona.
- * Falta dar color a la fecha seleccionada OK
- * Falta dar color a la lista de turnos de empleados OK
- * Falta dar color al spinner de turnos OK
- * falta dar color al TextView de Anotaciones OK
  */
 
 import android.graphics.Color
@@ -65,18 +58,18 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarBinding.inflate(layoutInflater)
 
-        val navDrawer = findViewById<FrameLayout>(R.id.content_frame)
-        navDrawer.addView(binding.root)
+        val navDrawer = findViewById<FrameLayout>(R.id.content_frame) // buscamos la vista del frameLayout donde vamos a cargar esta activity
+        navDrawer.addView(binding.root)// Añadimos esta vista de la activity a la del menú
 
-        binding.calendarView.visibility=View.GONE
+        binding.calendarView.visibility=View.GONE // Nada mas empezar, mostramos el calendario oculto
 
 
         variables()
         actions()
-        buildCalendar()
-        binding.allContainer.visibility=View.GONE
-        binding.legendLayout.visibility=View.GONE
-        binding.btnLegend.visibility=View.GONE
+        buildCalendar() // Iniciamos nada mas empezar la construcción del calendario
+        binding.allContainer.visibility=View.GONE //Ocultamos el Layout donde se encuentran el selector de turnos y las sugerencias
+        binding.legendLayout.visibility=View.GONE //Ocultamos la leyenda
+        binding.btnLegend.visibility=View.GONE //Ocultamos el botón de la leyenda
     }
     /**
      * Función que recoge las acciones de los elementos
@@ -138,7 +131,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         /**
          * Método monthScrollListener y override invoke
          *
-         * Con la llamada al metodo monthScrollListener vamos a conseguir que escuche el mes en el que esta cuando Scrolleamos. Le decimos que es un objeto de tipo
+         * Con la llamada al metodo monthScrollListener vamos a conseguir que escuche el mes en el que esta cuando hacemos scroll. Le decimos que es un objeto de tipo
          * MonthScrollListener. Al hacer esto, nos pide implementar los miembros "invoke" para sobreescribir esta funcion. En la funcion invoke recogemos el texto de
          * el mes correspondiente actual y se lo pasamos al textView donde lo mostrará. Es importante usar getDisplayName(TextStyle.FULL, Locale.getDefault()) ya que
          * este metodo nos devuelve el nombre del mes en Castellano. Podriamos utilizar el de java.time que sería "monthName=month.yearMonth.month.name.lowercase()
@@ -173,25 +166,25 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 container.day = data //Esta variable recoge toda la información obtenida en el DayViewContainer al seleccionar un día.
                 container.dayNumber.text = data.date.dayOfMonth.toString() //Aqui asignamos el numero a la vista de cada zelda de día.
 
-                if (data.date.monthValue == currentMonth.monthValue) {
+                if (data.date.monthValue == currentMonth.monthValue) { // Si el calendario muestra el mes actual, pintamos los numeros en negro
                     container.dayNumber.setTextColor(Color.BLACK)
-                } else {
+                } else { // Si no, los pintamos en gris
                     container.dayNumber.setTextColor(Color.GRAY)
                 }
 
-                container.dayNumber.setOnClickListener {
-                    val text ="${data.date.dayOfMonth}/${data.date.monthValue}/${data.date.year}"
-                    binding.selectedDateText.text = text
-                    selectedDate=data.date
-                    pickedDate = "${data.date.dayOfMonth}-${data.date.monthValue}-${data.date.year}" //String para mostrar en TextViews la fecha (día, mes, año)
-                    showScheduleNotesItems(data.date)
+                container.dayNumber.setOnClickListener { //Este "Listener" se activa cuando el usuario pulsa una celda del calendario
+                    val text ="${data.date.dayOfMonth}/${data.date.monthValue}/${data.date.year}" //Recogemos la fecha seleccionada y la guardamos en tipo String en una variable
+                    binding.selectedDateText.text = text // Pasasmos la variable que contiene la fecha al TextView donde la mostrará
+                    selectedDate=data.date // Guardamos en la variable local la fecha recogida en la pulsación para utilizarla despues
+                    pickedDate = "${data.date.dayOfMonth}-${data.date.monthValue}-${data.date.year}" //String para utilizar la fecha en futuras operaciones con la base de datos
+                    showScheduleNotesItems(data.date) // Activamos el método que activa las vistas de los Layout de notas y turnos pasándole la fecha pulsada
                 }
                 //Utilizamos la lista calve-valor que contiene la fecha/turno para ir pintando cada dia de un color cuando el método bind los construya
-                val recoveredTurn = employeeTurns[data.date]
-                val showPublicDate = statusPublicEmp[data.date]
+                val recoveredTurn = employeeTurns[data.date] // Comprobará si en la colección de los turnos se encuentra algún turno en la fecha pasada como parámetro
+                val showPublicDate = statusPublicEmp[data.date]  //Comprobará si en la colección de las sugerencias se encuentra algún turno en la fecha pasada como parámetro
 
                 /**
-                 * dependiendo de lso turnos recogidos en la lista recoveredTurn se pintaran unos u otros colores
+                 * dependiendo de lso turnos recogidos en la lista recoveredTurn se mostrará la imagen correspondiente al turno
                  */
                 when (recoveredTurn) {
                     "Mañana" -> { container.dayNumber.setBackgroundResource(R.drawable.turnomananaopacity) }
@@ -249,10 +242,10 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             .addOnSuccessListener { document ->
                 if (document.exists()) { // Si el documento existe
                     val publicText = document.getString("nota")
-                    status = document.getString("estado").toString()
-                    binding.publicNotesContainer.visibility = View.VISIBLE
-                    when (status) {
-                        "pendiente" -> {
+                    status = document.getString("estado").toString() //Se recoge el estado de la sugerencia
+                    binding.publicNotesContainer.visibility = View.VISIBLE //Y se muestra el contenedor de las  notas
+                    when (status) { // dependiendo del valor del estado de las sugerencias...
+                        "pendiente" -> { // Si esta en "pendiente", se muestra el contenido, los botones de aceptar o rechazar, el estado de la sugerencia y la imagen correspondiente
                             val finalPublicText = "${publicText} "
                             binding.btnAccept.visibility=View.VISIBLE
                             binding.btnReject.visibility=View.VISIBLE
@@ -260,7 +253,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                             binding.imageResult.setImageResource(R.drawable.questionpublic)
                             binding.textResult.text=status
                         }
-                        "aceptado" -> {
+                        "aceptado" -> { // Si está aceptada, se muestra el contenido de la sugerencia, el estado y la imagen correspondiente. También se ocultan los botones de aceptar o rechazar
                             val finalPublicText = "${publicText}"
                             binding.btnAccept.visibility=View.GONE
                             binding.btnReject.visibility=View.GONE
@@ -269,7 +262,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                             binding.textResult.text=status
 
                         }
-                        "rechazado" -> {
+                        "rechazado" -> { // Pasa lo mismo que cuando la sugerencia está aceptada, solo que aquí se muestran los elementos correspondientes a cuando el estado es rechazado
                             val finalPublicText = "${publicText}"
                             binding.publicNoteText.text = finalPublicText
                             binding.imageResult.setImageResource(R.drawable.dislikepublic)
@@ -279,10 +272,10 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                         }
                     }
 
-                } else {
+                } else { // Si no hay notas, se oculta el contenedor de s sugerencias
                     binding.publicNotesContainer.visibility = View.GONE
                 }
-                loadPickedSectionEmployees()
+                loadPickedSectionEmployees() //y llamamos a la función que muestra los turnos del resto de la sección
             }
     }
 
@@ -299,10 +292,10 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         db.collection("users").whereEqualTo("seccion", selectedSection).get()
             .addOnSuccessListener { userQuery -> //Consulta para saber cuantos empleados hay en la seccion (X) de la coleccion usuarios.
                 if (userQuery.size() == 0) {  //Si el tamaño de la consulta o resultado = 0, ponemos un texto por defecto.
-                    binding.otherScheduleTitle.text = "Resto de turnos de ${selectedSection}"
-                    binding.showOtherSchedule.text = "No hay empleados en esta sección"
+                    binding.otherScheduleTitle.text = "Resto de turnos de ${selectedSection}" // Título de esta sección
+                    binding.showOtherSchedule.text = "No hay empleados en esta sección" // Si no hay empleados en esa sección, se muesrta este mensaje
                 } else { //Si no comenzamos con la extracción de datos y la introducción de estos en la lista.
-                    for (doc in userQuery) { //Bucle para actuar sobre cada uno de los resultados de la consulta.
+                    for (doc in userQuery) { //Bucle para ir guardando cada uno de los valores mostrados a continuación en cada uno de los resultados encontrados
                         val nameList = doc.getString("nombre")
                         val surnameList = doc.getString("apellidos")
                         val rolList = doc.getString("rol")
@@ -311,15 +304,15 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                         db.collection("turnos").document(pickedDate)
                             .collection(empNumList)
                             .document("turno").get()
-                            .addOnSuccessListener { documentSchedule -> //Ahora, por cada resultado, extraemos su turno usando su numero de empleado.
+                            .addOnSuccessListener { documentSchedule -> //Ahora, por cada resultado, extraemos su turno usando su numero de empleado. Si el empleado es jefe de sección, tambien lo recogemos
                                 val scheduleDoc = documentSchedule.getString("turno") ?: "Sin turno"
                                 val sectionBossText= if (rolList=="Jefe de sección") "(Jefe)" else ""
 
                                 finalSheduleList += "\n ${empNumList} - ${nameList} ${surnameList} ${sectionBossText} : ${scheduleDoc}" //Metemos los datos del usuario y turno al String.
                                 counter++ //Sumamos +1 al contador para que vaya controlando los usuarios de la consulta que ya se han terminado de tratar.
                                 if (counter == userQuery.size()) { //Cuando el contador iguale al tamaño de la consulta, mostramos la lista ya completa.
-                                    binding.otherScheduleTitle.text = "Turnos de ${selectedSection}"
-                                    binding.showOtherSchedule.text = finalSheduleList
+                                    binding.otherScheduleTitle.text = "Turnos de ${selectedSection}" // Titulo de la sección
+                                    binding.showOtherSchedule.text = finalSheduleList //Mostramos el String construido con todos los resultados de los empleados encontrados
                                 }
 
                             }
@@ -331,7 +324,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     /**
      * Función loadEmployeeTurns la cual carga los turnos del empleado seleccionado
      *
-     * Esta función carga los turnos del empleado pasado como parámetro en el hashmap "employeeTurns", asignando a cada turno
+     * Esta función carga los turnos del empleado pasado como parámetro en el muatbleMap "employeeTurns", asignando a cada turno
      * la fecha seleccionada. Es importante recalcar que ha de limpiarse los datos de los hashMap primero, ya que si no
      * mostrará siempre los mismos turnos y notas.
      */
@@ -353,7 +346,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                                 doc.getString("turno") //Hacemos una entrada a la base de datos para recoger el String del turno y guardarlo en una variable
                             if (idTurn != null) {       //Necesitamos contener la excepción de que idTurn no sea nulo, si no no dejará construir la siguiente linea
                                 employeeTurns[rebuildLocalDate] = idTurn //Asignamos el valor a la fecha en la Lista mutable (Clave->rebuildLocaldate(11-0-25) / valor-> idTurn("Mañana"))
-                                binding.calendarView.notifyDateChanged(rebuildLocalDate) //Refrescamos el calendario para que se posicione sobre nuestra fecha, para posteriormente incluirla colores
+                                binding.calendarView.notifyDateChanged(rebuildLocalDate) //Refrescamos el calendario para que se posicione sobre nuestra fecha, para posteriormente asignarle imágenes
                             }
                         }
                     //Aqui cargamos las sugerencias del día
@@ -370,19 +363,20 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                         }
                 }
             }
-        binding.calendarView.notifyDateChanged(LocalDate.now())
+        //binding.calendarView.notifyDateChanged(LocalDate.now()) // recarga la fecha actual para evitar errores de carga mientras se ejecutan las llamadas asíncronas anteriores
     }
 
     /**
-     * Funcion loadSpinnerEmployee que rellena de empleados el spinner dependiendo de la sección seleccionada
+     * Funcion loadSpinnerEmployee que rellena de empleados el spinner dependiendo de la sección seleccionada. Esta se activa cada vez
+     * que un item del spinner es selecionado
      */
     private fun loadSpinnerEmployee(section: String) {
         Log.d("parametroSección", "Parámetro section: '$section'") //Log realizado para comprobar que se pasaba como parámetro ya que me daba error los espacios de (-----)
         db.collection("users").whereEqualTo("seccion", section).get()
             .addOnSuccessListener { document -> //Hacemos una consulta a la coleccion "users" y sacaremos su numEmple, nombre y rol
                 val employees = mutableListOf<String>() //Creamos una lista donde recogeremos todos los datos obtenidos para luego mostrarla en el adapter (como en clase)
-                if(document.isEmpty) { //Si el documento está vacío.
-                    if (section == "-----") { // Y si seccion es la primera posición (-----)...
+                if(document.isEmpty) { //Si el documento está vacío puede sedr por dos motivos:
+                    if (section == "-----") { // Porque se seleccione la primera posición del spinner (-----)...Evidentemente aquí no hay resultados que mostrar
                         binding.employeeSelectedText.text = "" //Ponemos el titulo del texto vacío para que al iniciar la activity no muestre nada
 
                     } else {
@@ -402,7 +396,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     }
                 }
 
-            // Ahora damos forma al spinner con un elemento editado, ya que, al ser "dinamico" no dejaba editarlo normal desde el layout.
+            // Ahora damos forma al spinner con un elemento editado, ya que, al ser "dinamico" no dejaba editarlo de manera simplificada desde el layout.
                 val employeeAdapter = ArrayAdapter(this, R.layout.spinner_edited_item, employees)
                 employeeAdapter.setDropDownViewResource(R.layout.spinner_edited_item)
                 binding.spinnerEmployeeSelected.adapter = employeeAdapter
@@ -472,9 +466,9 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     firstEmployee = true
                     binding.employeeSelectedText.text =
                         employeeName //Se muestra en el textView el nombre del empleado.
-                    //falta revisar.
 
-                    binding.calendarView.notifyCalendarChanged() //Refrescamos el calendario
+
+                    binding.calendarView.notifyCalendarChanged() //Redibujamos el calendario completo ya que se ha cambiado de usuario seleccionado para que el método bind() vuelva a redibujar sus turnos y demas
                 }
 
             /**
@@ -587,9 +581,12 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
             }
 
+            /** Botón para mostrar la leyenda **/
             binding.btnLegend.id-> {
                 binding.legendLayout.visibility=View.VISIBLE
             }
+
+            /** Botón para ocultar la leyenda**/
             binding.btnExitLegend.id->{
                 binding.legendLayout.visibility=View.GONE
             }

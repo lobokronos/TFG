@@ -1,13 +1,7 @@
 package com.example.proyectofinal
 
 /**
- * No Completada
- *
- * Detectado un error: Se podía introducir cualquier correo exisitiera ono. Solucionado haciendo una
- * llamada a la base de datos para consultar si exisste el correo. OK
- * Falta ensanchar el TexView
- * Falta dar color a las letras del textView (negro)
- * Falta ajustar en Snackbar cuando se resetea la contraseña (algun Thread.sleep o algo)
+ * Completada
  */
 
 import android.content.Intent
