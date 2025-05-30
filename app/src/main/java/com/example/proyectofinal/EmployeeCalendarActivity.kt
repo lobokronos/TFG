@@ -30,19 +30,19 @@ import java.util.Locale
 
 class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
     AdapterView.OnItemSelectedListener {
-    private lateinit var binding: ActivityEmployeeCalendarBinding
-    private var selectedDate: LocalDate? = null
-    private lateinit var pickedDate: String
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
-    private lateinit var uid: String
-    private lateinit var numEmple: String
-    private var selectedPosition: Int = 0
-    private lateinit var builder: AlertDialog.Builder
-    private var employeeTurns: MutableMap<LocalDate, String> = mutableMapOf()
-    private var statusPublicEmp:MutableMap <LocalDate, String> = mutableMapOf()
-    private var privateNoteList:MutableMap <LocalDate, Boolean> = mutableMapOf()
-    private var status:String=""
+    private lateinit var binding: ActivityEmployeeCalendarBinding // variable para el binding
+    private var selectedDate: LocalDate? = null //Guarda la fecha seleccionada en el calendario en el formato "fecha". Se pone en null porque al iniciar no hay fecha seleccionada.
+    private lateinit var pickedDate: String // Variable para guardar la fecha seleccionada en formato String (dia-mes-año) y para hacer consultas en Firestore
+    private lateinit var auth: FirebaseAuth // Variable para inicializar Authentication
+    private lateinit var db: FirebaseFirestore // Variable para iniciar despues la conexion con Firestore
+    private lateinit var uid: String // Variable para guardar el uid del usuario
+    private lateinit var numEmple: String  //Variable para guardar el número de empleado del usuario
+    private var selectedPosition: Int = 0 //Variable para guardar la posición del spinner de notas. Por defecto, empezará en 0 ( ----- )
+    private lateinit var builder: AlertDialog.Builder //Variable para crear los alertDialogs
+    private var employeeTurns: MutableMap<LocalDate, String> = mutableMapOf() //Mapa clave-valor para guardar los turnos de empleados en fechas concretas
+    private var statusPublicEmp:MutableMap <LocalDate, String> = mutableMapOf() // Variable para guardar los estados de las notas publicas en dias concretos
+    private var privateNoteList:MutableMap <LocalDate, Boolean> = mutableMapOf() //Variable clave-valor para indicar si hay nota privada o no, la cual activará o no el icono de anotacion
+    private var status:String="" // Variable para guardar el estado de las sugerencias. Se le asigna "" porque si no da error al tener un valor desde el principio
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)

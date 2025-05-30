@@ -25,13 +25,13 @@ import com.google.firebase.firestore.FirebaseFirestore
  */
 
 open class BaseActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityBaseBinding
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
-    private lateinit var uid: String
-    private lateinit var employeeType: String
-    private lateinit var employeeName: String
-    private lateinit var numEmple: String
+    private lateinit var binding: ActivityBaseBinding // Variable del binding
+    private lateinit var auth: FirebaseAuth // Variable que guarda la instancia de Authentication
+    private lateinit var db: FirebaseFirestore // Variable para hacer la conexión con Firebase
+    private lateinit var uid: String // Variable que guardará el uid del usuario
+    private lateinit var employeeType: String // Variable que guarda el tipo de empleado (rol)
+    private lateinit var employeeName: String // Variable para guardar el nombre del empleado
+    private lateinit var numEmple: String // Variable para guardar el número de empleado
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,7 +150,7 @@ open class BaseActivity : AppCompatActivity() {
         private fun selectCalendarActivity() {
             if (employeeType == "Jefe de tienda") { //Si el usuario es Jefe de Tienda...
                 startActivity(Intent(this, CalendarActivity::class.java))//Lleva hacia el calendario del Jefe
-            } else if(employeeType=="Empleado") {
+            } else if(employeeType=="Empleado"|| employeeType == "Jefe de sección") {
                 startActivity(Intent(this, EmployeeCalendarActivity::class.java)) // Lleva hacia el calendario de usuario
             }
         }

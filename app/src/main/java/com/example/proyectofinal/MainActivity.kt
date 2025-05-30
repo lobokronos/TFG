@@ -23,13 +23,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var db: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
-    private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var progressDialog: ProgressDialog
-    private var firebaseUser: FirebaseUser? = null
-    private var userRol: String? = null
+    private lateinit var binding: ActivityMainBinding // variable para el binding
+    private lateinit var db: FirebaseFirestore //variable para la conexion con Firestore
+    private lateinit var auth: FirebaseAuth // Variable que guarda la instancia de Authentication
+    private lateinit var googleSignInClient: GoogleSignInClient //Variable para iniciar sesión con Google
+    private lateinit var progressDialog: ProgressDialog // Dialogo de progreso que se mosrtará para la acción de Google mientras se carga el procedimiento
+    private var firebaseUser: FirebaseUser? = null //Guarga el usuario autenticado (si lo hay)
+    private var userRol: String? = null // Guarda el rol del usuario actual
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

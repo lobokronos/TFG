@@ -17,8 +17,8 @@ import android.view.animation.AnimationUtils
  */
 
 class SuccessActivity : BaseActivity() {
-    private var recoveredData: Bundle? = null
-    private lateinit var binding: ActivitySuccessBinding
+    private var recoveredData: Bundle? = null //Variable para recoger los datos contenidos en el Bundle
+    private lateinit var binding: ActivitySuccessBinding //Variable para el binding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

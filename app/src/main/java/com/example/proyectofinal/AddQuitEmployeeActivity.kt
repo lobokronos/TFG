@@ -22,18 +22,16 @@ import com.google.firebase.firestore.Query
 
 class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListener,
     View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private lateinit var db: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
-    private var positionSection: Int =
-        0    //variable para guardar la posicion del Spiner de secciones.
-    private var positionJob: Int =
-        0        //variable para guardar la posicion del spinner de puesto.
-    private var job: String = ""            //variable para guargar el puesto.
-    private var section: String = ""           //variable para guardar la sección.
-    private lateinit var binding: ActivityAddQuitEmployeeBinding
-    private lateinit var builder: AlertDialog.Builder
-    private var firstLoadSpinnerSections: Boolean = false
-    private var firstLoadSpinnerJob: Boolean = false
+    private lateinit var db: FirebaseFirestore //Variable para iniciar la conexion con Firebase posteriormente
+    private lateinit var auth: FirebaseAuth //Variable para inicializar la instancia de Authentication
+    private var positionSection: Int = 0    //variable para guardar la posicion del Spiner de secciones. Empieza en la psoicion 0
+    private var positionJob: Int = 0        //variable para guardar la posicion del spinner de puesto. Empieza en 0
+    private var job: String = ""            //variable para guargar el puesto. Empieza con valor vacío
+    private var section: String = ""           //variable para guardar la sección. Empieza con valor vacío
+    private lateinit var binding: ActivityAddQuitEmployeeBinding // variable para inicializar binding despues
+    private lateinit var builder: AlertDialog.Builder // variable para inicializar los alertDialog despues
+    private var firstLoadSpinnerSections: Boolean = false // Sirve para saber si el usuario ha interactuado con el spinner de secciones. Estando en false evita que salte el snackbar de seleccionar seccion nada mas abrir la pantalla
+    private var firstLoadSpinnerJob: Boolean = false // Sirve para saber si el usuario ha interactuado con el spinner de puesto. Estando en false evita que salte el snackbar de seleccionar puesto nada mas abrir la pantalla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddQuitEmployeeBinding.inflate(layoutInflater)
@@ -745,7 +743,7 @@ class AddQuitEmployeeActivity : BaseActivity(), RadioGroup.OnCheckedChangeListen
                                                 )
                                             }
                                     }
-                                }
+                                } // cerramos el dialogo
                             }.setNegativeButton("NO") { dialog, _ ->
                                 dialog.dismiss()
                             }

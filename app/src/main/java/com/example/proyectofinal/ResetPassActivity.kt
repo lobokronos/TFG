@@ -15,9 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ResetPassActivity : AppCompatActivity(), View.OnClickListener {
-    private lateinit var binding: ActivityResetPassBinding
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
+    private lateinit var binding: ActivityResetPassBinding //Variable para el binding
+    private lateinit var auth: FirebaseAuth //Variable para inicializar la instancia de Authentication
+    private lateinit var db: FirebaseFirestore //Variable para realizar la conexion con Firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
