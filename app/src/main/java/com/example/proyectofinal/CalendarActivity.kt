@@ -148,6 +148,8 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         )        // Configura el calendario con el rango de meses y el primer dia de la semana)
         binding.calendarView.scrollToMonth(currentMonth)                        // Cuando se abre la pantalla, muestra el mes actual por defecto
 
+        val monthName = currentMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).uppercase()
+        binding.monthTitle.text = monthName
         /**
          * Método monthScrollListener y override invoke
          *
@@ -448,8 +450,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         ) //Log realizado para comprobar que se pasaba como parámetro ya que me daba error los espacios de (-----)
         db.collection("users").whereEqualTo("seccion", section).get()
             .addOnSuccessListener { document -> //Hacemos una consulta a la coleccion "users" y sacaremos su numEmple, nombre y rol
-                val employees =
-                    mutableListOf<String>() //Creamos una lista donde recogeremos todos los datos obtenidos para luego mostrarla en el adapter (como en clase)
+                val employees = mutableListOf<String>() //Creamos una lista donde recogeremos todos los datos obtenidos para luego mostrarla en el adapter (como en clase)
                 if (document.isEmpty) { //Si el documento está vacío puede sedr por dos motivos:
                     if (section == "-----") { // Porque se seleccione la primera posición del spinner (-----)...Evidentemente aquí no hay resultados que mostrar
                         binding.employeeSelectedText.text =
@@ -610,6 +611,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 employeeTurns[dateForThisFunction] =
                     turn //Asignamos el turno a su fecha correspondiente del hashmap "EmployeeTurns" para usarlo en el bind.
                 binding.calendarView.notifyDateChanged(dateForThisFunction) //refrescamos el día del calendario con la fecha creada anteriormente.
+                loadPickedSectionEmployees()
             }
 
             /**
@@ -636,6 +638,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                                 binding.btnAccept.visibility = View.GONE //Ocultamos los botones.
                                 binding.btnReject.visibility = View.GONE
                                 binding.imageResult.setImageResource(R.drawable.likepublic)
+                                binding.textResult.text = "aceptado"
                             }.addOnFailureListener { e ->
                                 snackBar(binding.root, "Error: ${e.message}")
                             }
@@ -662,6 +665,7 @@ class CalendarActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                                 statusPublicEmp[dateForThisFunction] = "rechazado"
                                 binding.calendarView.notifyDateChanged(dateForThisFunction)
                                 binding.imageResult.setImageResource(R.drawable.dislikepublic)
+                                binding.textResult.text = "rechazado"
 
                             }.addOnFailureListener { e ->
                                 snackBar(binding.root, "Error: ${e.message}")

@@ -191,8 +191,6 @@ open class BaseActivity : AppCompatActivity() {
 
                 else -> "No Title"
             }
-
         }
-
     }
 

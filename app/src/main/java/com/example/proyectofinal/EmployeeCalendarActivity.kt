@@ -426,7 +426,7 @@ class EmployeeCalendarActivity : BaseActivity(), View.OnClickListener,
                                                         snackBar(binding.root, "Nota guardada")
                                                         statusPublicEmp[dateForThisFunction] = "pendiente"//Con esto guardamos el valor pendiente en la fecha del hashmap
                                                         status="pendiente" // Forzamos la variable del estado a pendiente, ya que al crearla, siempre tendrá este estado
-                                                        binding.textPublicResult.text="pendiente" // Mostramos el texto con el estado
+                                                        binding.textPublicResult.text="Pendiente" // Mostramos el texto con el estado
                                                         binding.textPublicResult.setTextColor(Color.MAGENTA) // Pintamos el texto del estado de su color correspondiente
                                                         binding.deletePublic.visibility=View.VISIBLE // Mostramos el botón para borrar la sugerencia
                                                         binding.imageResult.setImageResource(R.drawable.questionpublic) // Mostramos el icono correspondiente al estado "pendiente"

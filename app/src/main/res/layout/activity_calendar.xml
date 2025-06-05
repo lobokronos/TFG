@@ -268,7 +268,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
-                android:text="@string/holidayText"
+                android:text="Vacaciones"
                 app:layout_constraintBottom_toBottomOf="@+id/holidayImage"
                 app:layout_constraintStart_toEndOf="@+id/holidayImage"
                 app:layout_constraintTop_toTopOf="@+id/holidayImage" />
